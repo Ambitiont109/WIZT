@@ -15,7 +15,7 @@ export const EditConfig = {
     },
     routes  : [
         {
-            path     : '/app/pages/users/edit',
+            path     : '/app/users/edit',
             component: Edit
         }
     ]

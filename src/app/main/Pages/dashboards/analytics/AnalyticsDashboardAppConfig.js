@@ -3,7 +3,11 @@ import {FuseLoadable} from '@fuse';
 export const AnalyticsDashboardAppConfig = {
     settings: {
         layout: {
-            config: {}
+            config: {
+                footer:{
+                    display: false,
+                }
+            }
         }
     },
     routes  : [

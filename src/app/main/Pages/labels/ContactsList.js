@@ -6,9 +6,6 @@ import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
-// import {Link} from 'react-router-dom';
-
-// import { confirmDialog } from './store/actions';
 
 class ContactsList extends Component {
 
@@ -32,13 +29,10 @@ class ContactsList extends Component {
     closeSelectedContactsMenu = () => {
         this.setState({selectedContactsMenu: null});
     };
-    onClickEdit = () => {
-        this.props.history.push('/app/pages/profile')
-    }
 
     render()
     {
-        const { contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred, confirmDialog} = this.props;
+        const { contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
 
@@ -149,7 +143,6 @@ class ContactsList extends Component {
                                                     </ListItemIcon>
                                                     <ListItemText inset primary="Unstarred"/>
                                                 </MenuItem>
-
                                             </MenuList>
                                         </Menu>
                                     </React.Fragment>
@@ -203,18 +196,19 @@ class ContactsList extends Component {
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            // toggleStarredContact(row.original.id)
-                                            this.onClickEdit();
+                                            toggleStarredContact(row.original.id)
                                         }}
                                     >
-                                            <Icon>edit</Icon>
+                                        {user.starred && user.starred.includes(row.original.id) ? (
+                                            <Icon>star</Icon>
+                                        ) : (
+                                            <Icon>star_border</Icon>
+                                        )}
                                     </IconButton>
-                                   
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                             //removeContact(row.original.id);
-                                             confirmDialog(row.original.id);
+                                            removeContact(row.original.id);
                                         }}
                                     >
                                         <Icon>delete</Icon>
@@ -246,9 +240,7 @@ function mapDispatchToProps(dispatch)
         toggleStarredContact    : Actions.toggleStarredContact,
         toggleStarredContacts   : Actions.toggleStarredContacts,
         setContactsStarred      : Actions.setContactsStarred,
-        setContactsUnstarred    : Actions.setContactsUnstarred,
-        confirmDialog           : Actions.confirmDialog,        //added by myself
-
+        setContactsUnstarred    : Actions.setContactsUnstarred
     }, dispatch);
 }
 
