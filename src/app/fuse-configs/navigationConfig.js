@@ -31,7 +31,7 @@ const navigationConfig = [
                 'title': 'Transactions',
                 'type' : 'item',
                 'icon' : 'payment',
-                'url'  : '/app/pages/subscribes'
+                'url'  : '/app/pages/transaction'
             },
             {
                 'id'   : 'plans',
@@ -45,7 +45,7 @@ const navigationConfig = [
                 'title': 'Settings',
                 'type' : 'item',
                 'icon' : 'show_chart',
-                'url'  : '/app/pages/subscribes'
+                'url'  : '/setting'
             },
         ]
     }

@@ -8,7 +8,7 @@ import withReducer from 'app/store/withReducer';
 import _ from '@lodash';
 import ContactsList from './ContactsList';
 import ContactsHeader from './ContactsHeader';
-//import ContactsSidebarContent from './ContactsSidebarContent';
+// import ContactsSidebarContent from './ContactsSidebarContent';
 import ContactDialog from './ContactDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
@@ -22,7 +22,7 @@ const styles = theme => ({
     }
 });
 
-class LabelsApp extends Component {
+class ContactsApp extends Component {
 
     componentDidMount()
     {
@@ -100,4 +100,4 @@ function mapStateToProps({contactsApp})
     }
 }
 
-export default withReducer('contactsApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(LabelsApp))));
+export default withReducer('contactsApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactsApp))));

@@ -24,11 +24,11 @@ class ConfirmDialog extends React.Component {
   };
 
   render() {
-    const { removeContact, closeConfirmDialog } = this.props;
+    const { removeContact, closeConfirmDialog, confirmDialog } = this.props;
     return (
 
       <Dialog
-        open={this.props.confirmDialog.props.open} // added by myself
+        open={confirmDialog.props.open} // added by myself
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

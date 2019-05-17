@@ -7,8 +7,8 @@ import {connect} from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import _ from '@lodash';
 import ContactsList from './ContactsList';
-import ContactsHeader from './ContactsHeader';
-//import ContactsSidebarContent from './ContactsSidebarContent';
+// import ContactsHeader from './ContactsHeader';
+// import ContactsSidebarContent from './ContactsSidebarContent';
 import ContactDialog from './ContactDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
@@ -50,9 +50,9 @@ class LabelsApp extends Component {
                         leftSidebar       : "w-256 border-0",
                         header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
                     }}
-                    header={
-                        <ContactsHeader pageLayout={() => this.pageLayout}/>
-                    }
+                    // header={
+                    //     <ContactsHeader pageLayout={() => this.pageLayout}/>
+                    // }
                     content={
                         <ContactsList/>
                     }

@@ -11,11 +11,15 @@ export const ProfilePageConfig = {
                     folded  : false,
                     position: 'left'
                 },
+                footer:{
+                    display: false,
+                }
             }
         }
     },
     routes  : [
         {
+            exact    : true,
             path     : '/app/pages/profile',
             component: FuseLoadable({
                 loader: () => import('./ProfilePage')

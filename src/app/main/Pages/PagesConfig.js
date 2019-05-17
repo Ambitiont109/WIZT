@@ -7,7 +7,12 @@ import {AnalyticsDashboardAppConfig} from './dashboards/analytics/AnalyticsDashb
 import {ContactsAppConfig} from './contacts/ContactsAppConfig';
 import {EditConfig} from './contacts/edit/EditConfig';
 import {ProfilePageConfig} from './profile/ProfilePageConfig';
-import {LabelsConfig} from './labels/labels/LabelsConfig';
+import {LabelsConfig} from './labels/LabelsConfig';
+import {LabelsTabConfig} from './profile/tabs/labels/LabelsTabConfig';
+import {FriendsTabConfig} from './profile/tabs/friends/FriendsTabConfig';
+import {FloorPlansTabConfig} from "./profile/tabs/floorplans/FloorPlansTabConfig";
+import {TransactionAppConfig} from "./transaction/TransactionAppConfig";
+import {SettingConfig} from "./setting/SettingConfig";
 
 
 export const PagesConfig = [
@@ -20,6 +25,11 @@ export const PagesConfig = [
       ContactsAppConfig,
       EditConfig,
       ProfilePageConfig,
+      LabelsTabConfig,
+      FriendsTabConfig,
+      FloorPlansTabConfig,
+      TransactionAppConfig,
+      SettingConfig,
 ];
   
 

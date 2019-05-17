@@ -4,11 +4,14 @@ import {FusePageSimple, FuseAnimate} from '@fuse';
 import TimelineTab from './tabs/TimelineTab';
 import PhotosVideosTab from './tabs/PhotosVideosTab';
 import AboutTab from './tabs/AboutTab';
+import LabelsApp from './tabs/labels/LabelsApp';
+import FriendsApp from './tabs/friends/FriendsApp';
+import FloorPlansApp from './tabs/floorplans/FloorPlansApp';
 
 const styles = theme => ({
     layoutHeader : {
-        height                        : 150,
-        minHeight                     : 150,
+        height   : 150,
+        minHeight: 150,
         [theme.breakpoints.down('md')]: {
             height   : 240,
             minHeight: 240
@@ -90,12 +93,15 @@ class ProfilePage extends Component {
                         {value === 0 && (
                             <AboutTab/>
                         )}
-                        {value === 1 &&
-                        (
-                            <TimelineTab/>
+                        {value === 1 && (
+                            <LabelsApp />
                         )}
-                        {value === 2 && (
-                            <PhotosVideosTab/>
+                        {value === 2 &&
+                        (
+                            <FloorPlansApp/>
+                        )}
+                        {value === 3 && (
+                            <FriendsApp/>
                         )}
                     </div>
                 }

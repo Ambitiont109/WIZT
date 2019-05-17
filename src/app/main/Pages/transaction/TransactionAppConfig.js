@@ -2,26 +2,26 @@ import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {FuseLoadable} from '@fuse';
 
-export const LabelsConfig = {
+export const TransactionAppConfig = {
     settings: {
         layout: {
             config: {
                 footer:{
-                    display: false,
+                    display: false
                 }
             }
         }
     },
     routes  : [
         {
-            path     : '/app/pages/labels',
+            path     : '/app/pages/transaction',
             component: FuseLoadable({
                 loader: () => import('./ContactsApp')
             })
         },
         {
-            path     : '/app/pages/labels',
-            component: () => <Redirect to="/app/pages/labels"/>
+            path     : '/apps/contacts',
+            component: () => <Redirect to="/app/pages/transaction"/>
         }
     ]
 };
