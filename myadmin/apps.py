@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class MyadminConfig(AppConfig):
+class SecondadminConfig(AppConfig):
     name = 'myadmin'
