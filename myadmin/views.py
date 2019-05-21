@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 # Create your views here.
 
 @api_view(['POST'])
@@ -31,8 +31,8 @@ def login(request):
     token = Token.objects.get_or_create(user=user)
 
 
-class UsersViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+class UsersViewSet(viewsets.ModelViewSet,):
+    permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = UserSerializer
 
     def get_queryset(self):
