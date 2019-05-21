@@ -16,6 +16,7 @@ from rest_framework.decorators import api_view, permission_classes,action
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from botocore.exceptions import ClientError
+
 from django.http import Http404
 from rest_framework.viewsets import ModelViewSet
 
@@ -30,7 +31,14 @@ def login(request):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     access_token = request.headers.get("Authorization")
     client = boto3.client('cognito-idp', region_name='ap-southeast-1')
-    user_dic = client.get_user(AccessToken=access_token.replace('Bearer ', ''))
+    try:
+            # HTTP HEAD request
+        user_dic = client.get_user(AccessToken=access_token.replace('Bearer ', ''))
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'EntityAlreadyExists':
+            return Response("User already exists",status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Unexpected error: %s" % e,status=status.HTTP_400_BAD_REQUEST)
     serializer_data = {}
 
     for item in user_dic['UserAttributes']:
@@ -47,7 +55,7 @@ def login(request):
 
     token = Token.objects.get_or_create(user=user)
 
-    return Response(token[0].key)
+    return Response(token[0].key,status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])

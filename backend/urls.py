@@ -3,6 +3,8 @@ from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 from backend import views
 from backend.views import *
+from backend import stripe
+
 
 router = DefaultRouter()
 router.register('labels', LabelViewSet, basename='label')
@@ -19,6 +21,13 @@ urlpatterns = [
     path('users/friends/', FriendsList.as_view({'get': 'list'})),
     path('profile/',show_profile),
     path('address/',AddressViewSet.as_view()),
+    path('stripe/getCustomer/',stripe.getCustomer),
+    path('stripe/createCustomer/',stripe.createCustomer),
+    path('stripe/addCardToCustomer/',stripe.addCardToCustomer),
+    path('stripe/createCustomerKey/',stripe.createCustomerKey),
+    path('stripe/doPayment/',stripe.doPayment),
+    path('stripe/doSubscription/',stripe.doSubscription),
+    path('stripe/deleteSubscription/',stripe.deleteSubscription),
     path('', include(router.urls)),
 
 ]

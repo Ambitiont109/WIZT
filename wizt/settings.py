@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,10 +39,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'backend',
-    'myadmin'
+    'myadmin',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -138,3 +141,24 @@ COGNITO_USER_POOL_ID = ''
 COGNITO_APP_ID = ''
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOW_CREDENTIALS = False
+
+# CORS_ORIGIN_WHITELIST = (
+#     'localhost:4200',
+#     'localhost:8080'
+# )
+
+
+# CORS_ALLOW_HEADERS = default_headers + (
+#     'No-Auth',
+#     'Cache-Control'
+# )
+
+CORS_ALLOW_HEADERS = default_headers + (
+    'No-Auth',
+    'Cache-Control'
+)

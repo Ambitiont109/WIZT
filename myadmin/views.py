@@ -4,7 +4,7 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
-from rest_framework import viewsets
+from rest_framework import viewsets,status
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 # Create your views here.
 
@@ -21,18 +21,17 @@ def login(request):
         	user = User.objects.get(email=email)
         	if user.check_password(pwd) and user.is_superuser:
         		token = Token.objects.get_or_create(user=user)
-        		return Response(token[0].key)
+        		return Response(token[0].key,status=status.HTTP_200_OK)
         	else:
-        		return Response("email or password invalid")	
+        		return Response("email or password invalid",status=status.HTTP_400_BAD_REQUEST)	
         except User.DoesNotExist:
-        	return Response("email or password invalid")
+        	return Response("email or password invalid",status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response(serializer.errors)
-    token = Token.objects.get_or_create(user=user)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
 class UsersViewSet(viewsets.ModelViewSet,):
-    permission_classes = (IsAuthenticated,IsAdminUser)
+    # permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = UserSerializer
 
     def get_queryset(self):
