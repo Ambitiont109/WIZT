@@ -4,7 +4,8 @@ import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
 import {connect} from 'react-redux';
 import _ from '@lodash';
-
+import Stepper from "./Stepper";
+import ChipsArray from './chips/ChipsArray';
 const newContactState = {
     id      : '',
     name    : '',
@@ -25,7 +26,7 @@ class ContactDialog extends Component {
     state = {...newContactState};
 
     componentDidUpdate(prevProps, prevState, snapshot)
-    {
+    {   
         /**
          * After Dialog Open
          */
@@ -72,6 +73,7 @@ class ContactDialog extends Component {
 
     render()
     {
+        console.log('this is contactDialog')
         const {contactDialog, addContact, updateContact, removeContact} = this.props;
 
         return (
@@ -84,15 +86,8 @@ class ContactDialog extends Component {
                 fullWidth
                 maxWidth="xs"
             >
-
-                <AppBar position="static" elevation={1}>
-                    <Toolbar className="flex w-full">
-                        <Typography variant="subtitle1" color="inherit">
-                            {contactDialog.type === 'new' ? 'New Contact' : 'Edit Contact'}
-                        </Typography>
-                    </Toolbar>
-                    <div className="flex flex-col items-center justify-center pb-24">
-                        <Avatar className="w-96 h-96" alt="contact avatar" src={this.state.avatar}/>
+                 <AppBar position="static" elevation={1}>
+                    <div className="flex flex-col items-center justify-center pb-20 pt-16">
                         {contactDialog.type === 'edit' && (
                             <Typography variant="h6" color="inherit" className="pt-8">
                                 {this.state.name}
@@ -100,6 +95,7 @@ class ContactDialog extends Component {
                         )}
                     </div>
                 </AppBar>
+                <Stepper />
 
                 <DialogContent classes={{root: "p-24"}}>
                     <div className="flex">
@@ -114,7 +110,7 @@ class ContactDialog extends Component {
                             id="name"
                             name="name"
                             value={this.state.name}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             required
                             fullWidth
@@ -130,7 +126,7 @@ class ContactDialog extends Component {
                             id="lastName"
                             name="lastName"
                             value={this.state.lastName}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
@@ -146,7 +142,7 @@ class ContactDialog extends Component {
                             id="nickname"
                             name="nickname"
                             value={this.state.nickname}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
@@ -162,7 +158,7 @@ class ContactDialog extends Component {
                             id="phone"
                             name="phone"
                             value={this.state.phone}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
@@ -178,7 +174,7 @@ class ContactDialog extends Component {
                             id="email"
                             name="email"
                             value={this.state.email}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
@@ -194,7 +190,7 @@ class ContactDialog extends Component {
                             id="company"
                             name="company"
                             value={this.state.company}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
@@ -210,7 +206,7 @@ class ContactDialog extends Component {
                             id="jobTitle"
                             name="jobTitle"
                             value={this.state.jobTitle}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
@@ -226,7 +222,7 @@ class ContactDialog extends Component {
                             label="Birthday"
                             type="date"
                             value={this.state.birthday}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             InputLabelProps={{
                                 shrink: true
                             }}
@@ -245,7 +241,7 @@ class ContactDialog extends Component {
                             id="address"
                             name="address"
                             value={this.state.address}
-                            onChange={this.handleChange}
+                            // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
@@ -255,18 +251,17 @@ class ContactDialog extends Component {
                         <div className="min-w-48 pt-20">
                             <Icon color="action">note</Icon>
                         </div>
-                        <TextField
-                            className="mb-24"
-                            label="Notes"
-                            id="notes"
-                            name="notes"
-                            value={this.state.notes}
-                            onChange={this.handleChange}
-                            variant="outlined"
-                            multiline
-                            rows={5}
-                            fullWidth
-                        />
+                        
+                        <fieldset style={{border:"1px solid #c4c4c4", borderRadius: 4, width:253
+                        }} >
+                            <legend style={{color:"#757575", marginLeft: 10, fontSize: 12
+                        }}>Tags</legend>
+                            <div>
+                                <ChipsArray/>
+                            </div>
+                            
+                        </fieldset>
+                    
                     </div>
                 </DialogContent>
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Avatar, Checkbox, Icon, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Typography} from '@material-ui/core';
+import { Typography} from '@material-ui/core';
 import {FuseUtils, FuseAnimate} from '@fuse';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
@@ -65,38 +65,9 @@ class ContactsList extends Component {
                     }}
                     data={data}
                     columns={[
-                        // {
-                        //     Header   : () => (
-                        //         <Checkbox
-                        //             onClick={(event) => {
-                        //                 event.stopPropagation();
-                        //             }}
-                        //             onChange={(event) => {
-                        //                 event.target.checked ? selectAllContacts() : deSelectAllContacts();
-                        //             }}
-                        //             checked={selectedContactIds.length === Object.keys(contacts).length && selectedContactIds.length > 0}
-                        //             indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
-                        //         />
-                        //     ),
-                        //     accessor : "",
-                        //     Cell     : row => {
-                        //         return (<Checkbox
-                        //                 onClick={(event) => {
-                        //                     event.stopPropagation();
-                        //                 }}
-                        //                 checked={selectedContactIds.includes(row.value.id)}
-                        //                 onChange={() => toggleInSelectedContacts(row.value.id)}
-                        //             />
-                        //         )
-                        //     },
-                        //     className: "justify-center",
-                        //     sortable : false,
-                        //     width    : 64
-                        // },
-                      
                         {
                             Header    : "No",
-                            accessor  : "",
+                            accessor  : "no",
                             filterable: false,
                             Cell      : row => (
                                     <span>{row.index+1}</span>
@@ -124,50 +95,13 @@ class ContactsList extends Component {
                         },
                         {
                             Header    : "Tags",
-                            accessor  : "",
+                            accessor  : "tags",
                             Cell      : row => (
                                 <ChipsArray />
                             ),
                             filterable: false
                         },
-                        // {
-                        //     Header    : "Email",
-                        //     accessor  : "email",
-                        //     filterable: false
-                        // },
-                        // {
-                        //     Header    : "Phone",
-                        //     accessor  : "phone",
-                        //     filterable: false
-                        // },
-                        // {
-                        //     Header: "",
-                        //     width : 128,
-                        //     Cell  : row => (
-                        //         <div className="flex items-center">
-                        //             <IconButton
-                        //                 onClick={(ev) => {
-                        //                     ev.stopPropagation();
-                        //                     toggleStarredContact(row.original.id)
-                        //                 }}
-                        //             >
-                        //                 {user.starred && user.starred.includes(row.original.id) ? (
-                        //                     <Icon>star</Icon>
-                        //                 ) : (
-                        //                     <Icon>star_border</Icon>
-                        //                 )}
-                        //             </IconButton>
-                        //             <IconButton
-                        //                 onClick={(ev) => {
-                        //                     ev.stopPropagation();
-                        //                     removeContact(row.original.id);
-                        //                 }}
-                        //             >
-                        //                 <Icon>delete</Icon>
-                        //             </IconButton>
-                        //         </div>
-                        //     )
-                        // }
+                       
                     ]}
                     defaultPageSize={10}
                     noDataText="No contacts found"

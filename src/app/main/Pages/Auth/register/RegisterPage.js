@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withStyles, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, TextField, Typography} from '@material-ui/core';
+import {withStyles, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, Typography} from '@material-ui/core';
 import {darken} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimate} from '@fuse';
 import classNames from 'classnames';
@@ -43,7 +43,7 @@ class RegisterPage extends Component {
     render()
     {
         const {classes} = this.props;
-        const {name, email, password, passwordConfirm, acceptTermsConditions} = this.state;
+        const {acceptTermsConditions} = this.state;
 
         return (
             <div className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>

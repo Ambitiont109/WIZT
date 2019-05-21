@@ -13,6 +13,7 @@ import {FriendsTabConfig} from './profile/tabs/friends/FriendsTabConfig';
 import {FloorPlansTabConfig} from "./profile/tabs/floorplans/FloorPlansTabConfig";
 import {TransactionAppConfig} from "./transaction/TransactionAppConfig";
 import {SettingConfig} from "./setting/SettingConfig";
+import {PlansConfig} from "./plans/PlansConfig";
 
 
 export const PagesConfig = [
@@ -30,6 +31,7 @@ export const PagesConfig = [
       FloorPlansTabConfig,
       TransactionAppConfig,
       SettingConfig,
+      PlansConfig,
 ];
   
 

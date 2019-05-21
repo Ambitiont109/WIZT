@@ -26,10 +26,10 @@ class ContactsHeader extends Component {
 
                     <div className="flex items-center">
                         <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <Icon className="text-32 mr-12">account_box</Icon>
+                            <Icon className="text-32 mr-12">payment</Icon>
                         </FuseAnimate>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                            <Typography variant="h6" className="hidden sm:flex">Contacts</Typography>
+                            <Typography variant="h6" className="hidden sm:flex">Transaction</Typography>
                         </FuseAnimate>
                     </div>
                 </div>

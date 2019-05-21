@@ -23,7 +23,7 @@ const navigationConfig = [
                 'id'   : 'labels',
                 'title': 'Labels',
                 'type' : 'item',
-                'icon' : 'label',
+                'icon' : 'format_align_left',
                 'url'  : '/app/pages/labels'
             },
             {
@@ -37,14 +37,14 @@ const navigationConfig = [
                 'id'   : 'plans',
                 'title': 'Plans',
                 'type' : 'item',
-                'icon' : 'show_chart',
-                'url'  : '/app/pages/subscribes'
+                'icon' : 'assessment',
+                'url'  : '/app/pages/plans'
             },
             {
                 'id'   : 'settings',
                 'title': 'Settings',
                 'type' : 'item',
-                'icon' : 'show_chart',
+                'icon' : 'settings',
                 'url'  : '/setting'
             },
         ]

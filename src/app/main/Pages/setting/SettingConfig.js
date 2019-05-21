@@ -3,7 +3,11 @@ import Setting from './Setting';
 export const SettingConfig = {
     settings: {
         layout: {
-            config: {}
+            config: {
+                footer:{
+                    display: false
+                }
+            }
         }
     },
     routes  : [

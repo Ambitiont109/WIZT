@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withStyles, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, TextField, Typography} from '@material-ui/core';
+import {withStyles, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Typography} from '@material-ui/core';
 import {darken} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimate} from '@fuse';
 import classNames from 'classnames';
@@ -77,15 +77,15 @@ class LoginPage extends Component {
                                     <Divider className="w-32"/>
                                 </div>
 
-                                <Button variant="contained" color="secondary" size="small"
+                                {/* <Button variant="contained" color="secondary" size="small"
                                         className="normal-case w-192 mb-8">
                                     Log in with Google
-                                </Button>
+                                </Button> */}
 
-                                <Button variant="contained" color="primary" size="small"
+                                {/* <Button variant="contained" color="primary" size="small"
                                         className="normal-case w-192">
                                     Log in with Facebook
-                                </Button>
+                                </Button> */}
 
                                 <div className="flex flex-col items-center justify-center pt-32 pb-24">
                                     <span className="font-medium">Don't have an account?</span>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Divider, Typography, InputAdornment, Icon} from '@material-ui/core';
+import {Button, InputAdornment, Icon} from '@material-ui/core';
 import {TextFieldFormsy} from '@fuse';
 import Formsy from 'formsy-react';
 import {bindActionCreators} from 'redux';

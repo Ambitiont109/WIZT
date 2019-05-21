@@ -17,7 +17,7 @@ const styles = theme => ({
     addButton: {
         position: 'absolute',
         right   : 12,
-        bottom  : 12,
+        bottom  : 90,
         zIndex  : 99
     }
 });
