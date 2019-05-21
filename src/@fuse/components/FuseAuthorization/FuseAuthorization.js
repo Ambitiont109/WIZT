@@ -11,14 +11,15 @@ class FuseAuthorization extends Component {
         super(props);
         const {routes} = context;
         this.state = {
+            login:false,
             accessGranted: true,
-            routes
+            // routes
         };
     }
 
     componentDidMount()
     {
-        if ( !this.state.accessGranted )
+        if (!this.state.accessGranted)
         {
             this.redirectRoute(this.props);
         }
@@ -26,43 +27,41 @@ class FuseAuthorization extends Component {
 
     componentDidUpdate()
     {
-        if ( !this.state.accessGranted )
-        {
-            this.redirectRoute(this.props);
-        }
+        console.log('DidUpdate')
+        this.redirectRoute(this.props);
     }
 
     static getDerivedStateFromProps(props, state)
     {
-        const {location, user} = props;
-        const {pathname} = location;
-
-        const matched = matchRoutes(state.routes, pathname)[0];
-
-        const accessGranted = (matched && matched.route.auth && matched.route.auth.length > 0) ? matched.route.auth.includes(user.role) : true;
-
+        const {location, user, login} = props;
+        console.log(login.success)
+        // this.redirectPage(this.props);
         return {
-            accessGranted
+            login:login.success,
+            
         };
     }
 
     shouldComponentUpdate(nextProps, nextState)
     {
-        return nextState.accessGranted !== this.state.accessGranted;
+        console.log('shouldComponentUpdate')
+        return nextState.login !== this.state.login;
     }
 
     redirectRoute(props)
     {
-        const {location, user, history} = props;
+        console.log('this is redirectRoute')
+        const {location, user, history, login} = props;
+        console.log("login")
         const {pathname, state} = location;
         /*
         User is guest
         Redirect to Login Page
         */
-        if ( user.role === 'guest' )
+        if ( login.success === false )
         {
             history.push({
-                pathname: '/login',
+                pathname: '/app/pages/auth/login',
                 state   : {redirectUrl: pathname}
             });
         }
@@ -74,6 +73,7 @@ class FuseAuthorization extends Component {
         else
         {
             const redirectUrl = state && state.redirectUrl ? state.redirectUrl : '/';
+            console.log(redirectUrl)
 
             history.push({
                 pathname: redirectUrl
@@ -83,6 +83,7 @@ class FuseAuthorization extends Component {
 
     render()
     {
+        console.log('rendering')
         const {children} = this.props;
         const {accessGranted} = this.state;
         // console.info('Fuse Authorization rendered', accessGranted);
@@ -93,7 +94,8 @@ class FuseAuthorization extends Component {
 function mapStateToProps({fuse, auth})
 {
     return {
-        user: auth.user
+        user: auth.user,
+        login: auth.login
     }
 }
 

@@ -43,55 +43,17 @@ class LoginPage extends Component {
 
                             <CardContent className="flex flex-col items-center justify-center p-32">
 
-                                <img className="w-128 m-32" src="assets/images/logos/fuse.svg" alt="logo"/>
+                                <img className="w-128 m-32" src="assets/images/logos/logo.svg" alt="logo"/>
 
                                 <Typography variant="h6" className="mt-16 mb-32">LOGIN TO YOUR ACCOUNT</Typography>
 
-                                
-
                                     <JWTLoginTab/>
-                                    <div className="flex items-center justify-between">
-
-                                        <FormControl>
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        name="remember"
-                                                        checked={remember}
-                                                        onChange={this.handleChange}/>
-                                                }
-                                                label="Remember Me"
-                                            />
-                                        </FormControl>
-
-                                        <Link className="font-medium" to="/app/pages/auth/forgot-password">
-                                            Forgot Password?
-                                        </Link>
-                                    </div>
-
-                             
 
                                 <div className="my-24 flex items-center justify-center">
                                     <Divider className="w-32"/>
                                     <span className="mx-8 font-bold">OR</span>
                                     <Divider className="w-32"/>
                                 </div>
-
-                                {/* <Button variant="contained" color="secondary" size="small"
-                                        className="normal-case w-192 mb-8">
-                                    Log in with Google
-                                </Button> */}
-
-                                {/* <Button variant="contained" color="primary" size="small"
-                                        className="normal-case w-192">
-                                    Log in with Facebook
-                                </Button> */}
-
-                                <div className="flex flex-col items-center justify-center pt-32 pb-24">
-                                    <span className="font-medium">Don't have an account?</span>
-                                    <Link className="font-medium" to="/app/pages/auth/register">Create an account</Link>
-                                </div>
-
                             </CardContent>
                         </Card>
                     </FuseAnimate>

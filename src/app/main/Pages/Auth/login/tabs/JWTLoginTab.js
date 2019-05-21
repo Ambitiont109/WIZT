@@ -59,7 +59,7 @@ class JWTLoginTab extends Component {
                         className="mb-16"
                         type="text"
                         name="email"
-                        label="Username/Email"
+                        label="Email"
                         validations="isEmail"
                         validationErrors={{
                             

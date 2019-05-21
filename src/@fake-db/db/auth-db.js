@@ -18,7 +18,7 @@ let authDB = {
             data    : {
                 'displayName': 'Abbott Keitch',
                 'photoURL'   : 'assets/images/avatars/Abbott.jpg',
-                'email'      : 'admin',
+                'email'      : 'admin@gmail.com',
                 settings     : {
                     layout          : {
                         style : 'layout1',
@@ -35,7 +35,7 @@ let authDB = {
                                 position: 'below'
                             },
                             footer : {
-                                display : true,
+                                display : false,
                                 style   : 'fixed',
                                 position: 'below'
                             },
@@ -44,10 +44,10 @@ let authDB = {
                     },
                     customScrollbars: true,
                     theme           : {
-                        main   : 'defaultDark',
-                        navbar : 'defaultDark',
-                        toolbar: 'defaultDark',
-                        footer : 'defaultDark'
+                        main   : 'default',
+                        navbar : 'default',
+                        toolbar: 'default',
+                        footer : 'default'
                     }
                 },
                 shortcuts    : [

@@ -21,7 +21,7 @@ class UserMenu extends Component {
 
     render()
     {
-        const {user, logout} = this.props;
+        const {user, logout, login} = this.props;
         const {userMenu} = this.state;
 
         return (
@@ -68,7 +68,7 @@ class UserMenu extends Component {
                         paper: "py-8"
                     }}
                 >
-                    {user.role === 'guest' ? (
+                    {login.success === false ? (
                         <React.Fragment>
                             <MenuItem component={Link} to="/app/pages/auth/login">
                                 <ListItemIcon>
@@ -90,12 +90,6 @@ class UserMenu extends Component {
                                     <Icon>account_circle</Icon>
                                 </ListItemIcon>
                                 <ListItemText className="pl-0" primary="My Profile"/>
-                            </MenuItem>
-                            <MenuItem component={Link} to="/apps/mail" onClick={this.userMenuClose}>
-                                <ListItemIcon>
-                                    <Icon>mail</Icon>
-                                </ListItemIcon>
-                                <ListItemText className="pl-0" primary="Inbox"/>
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {
@@ -126,7 +120,8 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({auth})
 {
     return {
-        user: auth.user
+        user: auth.user,
+        login: auth.login
     }
 }
 

@@ -158,37 +158,38 @@ export function removeUserData()
  */
 export function logoutUser()
 {
-
     return (dispatch, getState) => {
-
+        
         const user = getState().auth.user;
+        const login = getState().auth.login;
+        console.log(login.success)
 
-        if ( user.role === 'guest' )
+        if ( login.success === 'guest' )
         {
             return null;
         }
 
         history.push({
-            pathname: '/'
+            pathname: '/app/pages/auth/login'
         });
 
-        switch ( user.from )
-        {
-            case 'firebase':
-            {
-                firebaseService.signOut();
-                break;
-            }
-            case 'auth0':
-            {
-                auth0Service.logout();
-                break;
-            }
-            default:
-            {
+        // switch ( user.from )
+        // {
+        //     case 'firebase':
+        //     {
+        //         firebaseService.signOut();
+        //         break;
+        //     }
+        //     case 'auth0':
+        //     {
+        //         auth0Service.logout();
+        //         break;
+        //     }
+        //     default:
+        //     {
                 jwtService.logout();
-            }
-        }
+        //     }
+        // }
 
         dispatch(setInitialSettings());
 

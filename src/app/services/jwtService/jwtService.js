@@ -66,22 +66,26 @@ class jwtService extends FuseUtils.EventEmitter {
 
     signInWithEmailAndPassword = (email, password) => {
         return new Promise((resolve, reject) => {
-            axios.get('/api/auth', {
-                data: {
-                    email,
-                    password
-                }
+            axios.post("http://192.168.100.22:8000/api/v1/admin/login/", {
+                email,
+                password
             }).then(response => {
-                if ( response.data.user )
+                console.log(response)
+                if ( response.status === 200 )
                 {
-                    this.setSession(response.data.access_token);
-                    resolve(response.data.user);
+                    console.log(response.status)
+                    this.setSession(response.data);
+                   
+                    resolve(response.data);
                 }
-                else
+                if(response.status === 400 )
                 {
-                    reject(response.data.error);
+                    // reject(response.data.error);
+                    console.log(response.data)
                 }
-            });
+            }).catch((err) => {
+                console.log(err)
+            })
         });
     };
 
@@ -115,8 +119,9 @@ class jwtService extends FuseUtils.EventEmitter {
     setSession = access_token => {
         if ( access_token )
         {
+            console.log(access_token);
             localStorage.setItem('jwt_access_token', access_token);
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+            axios.defaults.headers.common['Authorization'] = 'Token ' + access_token;
         }
         else
         {

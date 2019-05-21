@@ -5,7 +5,7 @@ const initialState = {
     error  : {
         username: null,
         password: null
-    }
+    },
 };
 
 const login = function (state = initialState, action) {
