@@ -31,7 +31,7 @@ def login(request):
 
 
 class UsersViewSet(viewsets.ModelViewSet,):
-    # permission_classes = (IsAuthenticated,IsAdminUser)
+    permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = UserSerializer
 
     def get_queryset(self):
@@ -42,3 +42,11 @@ class UsersViewSet(viewsets.ModelViewSet,):
         user = get_object_or_404(queryset, pk=pk)
         serializer = UserDetailSerializer(user)
         return Response(serializer.data)
+
+
+class LabelViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    serializer_class = LabelSerializer
+
+    def get_queryset(self):
+        return Label.objects.order_by('-updated_at').all()

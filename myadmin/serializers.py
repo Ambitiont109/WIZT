@@ -20,3 +20,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('name', 'email', 'email_verified', 'phone_number', 'phone_number_verified', 'picture', 'username','id','friends','labels')
+
+class LabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Label
+        fields = '__all__'

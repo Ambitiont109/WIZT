@@ -16,6 +16,8 @@ urlpatterns = [
     path('login/', login),
     path('users/<int:pk>/',UsersViewSet.as_view({'get':'retrieve'})),
     path('users/',UsersViewSet.as_view({'get':'list'})),
+    path('labels/',LabelViewSet.as_view({'get':'list'})),
+    path('labels/<int:pk>/',LabelViewSet.as_view({'get':'retrieve'})),
     
     
     

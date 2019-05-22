@@ -25,6 +25,13 @@ class UserSerializerForFriend(serializers.ModelSerializer):
         fields = ('name', 'email', 'phone_number', 'picture', 'username', 'id')
 
 
+class UserSerializerForRead(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name', 'email', 'phone_number', 'picture', 'username', 'id')
+
+
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
@@ -40,13 +47,29 @@ class LabelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FriendSerializer(serializers.ModelSerializer):
+class FriendReadSerializer(serializers.ModelSerializer):
+    from_user = UserSerializerForFriend()
+    to_user = UserSerializerForFriend()
     class Meta:
         model = Friend
         fields = '__all__'
 
 
-class NotificationSerizlier(serializers.ModelSerializer):
+class FriendWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = '__all__'        
+
+class NotificationWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
+
+
+class NotificationReadSerializer(serializers.ModelSerializer):
+    send_by = UserSerializerForRead()
+    send_to = UserSerializerForRead()
     class Meta:
         model = Notification
         fields = '__all__'

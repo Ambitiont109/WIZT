@@ -113,7 +113,13 @@ class FriendsList(viewsets.ModelViewSet):
 
 class FriendViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    serializer_class = FriendSerializer
+    serializer_class = FriendWriteSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return FriendReadSerializer
+        else:
+            return FriendWriteSerializer
 
     def get_queryset(self):
         # return Friend.objects.all()
@@ -124,16 +130,23 @@ class FriendViewSet(viewsets.ModelViewSet):
         request.data['from_user'] = request.user.id
         if self.request.data.get('status', None) is None:
             self.request.data['status'] = False
-        serializer = FriendSerializer(data=request.data)
+        serializer = FriendWriteSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         friend = serializer.save()
+        serializer = FriendReadSerializer(instance=friend)
         return Response(serializer.data)
 
 
 class NotificaionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    serializer_class = NotificationSerizlier
+    serializer_class = NotificationWriteSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return NotificationReadSerializer
+        else:
+            return NotificationWriteSerializer
 
     def get_queryset(self):
         # self.request.data['send_by'] = self.request.user.id
@@ -143,8 +156,9 @@ class NotificaionViewSet(viewsets.ModelViewSet):
         request.data['send_by'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        notification = serializer.save()
         headers = self.get_success_headers(serializer.data)
+        serializer = NotificationReadSerializer(instance = notification)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(methods=['delete'], detail=False,url_path='clear')
