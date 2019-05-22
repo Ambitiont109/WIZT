@@ -26,7 +26,8 @@ class FriendsApp extends Component {
 
     componentDidMount()
     {
-        this.props.getContacts(this.props.match.params);
+        var item_id = localStorage.getItem('item_id')
+        this.props.getContacts(item_id);
         this.props.getUserData();
     }
 

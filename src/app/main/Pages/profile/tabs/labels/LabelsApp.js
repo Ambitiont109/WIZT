@@ -26,7 +26,9 @@ class LabelsApp extends Component {
 
     componentDidMount()
     {
-        this.props.getContacts(this.props.match.params);
+        console.log('this is labelsApp DidMount')
+        var item_id = localStorage.getItem('item_id')
+        this.props.getContacts(item_id);
         this.props.getUserData();
     }
 

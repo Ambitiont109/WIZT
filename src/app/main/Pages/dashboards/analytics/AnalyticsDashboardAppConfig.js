@@ -1,4 +1,5 @@
 import {FuseLoadable} from '@fuse';
+import {authRoles} from 'app/auth';
 
 export const AnalyticsDashboardAppConfig = {
     settings: {
@@ -10,6 +11,7 @@ export const AnalyticsDashboardAppConfig = {
             }
         }
     },
+    // auth    : authRoles.onlyGuest,
     routes  : [
         {
             path     : '/app/pages/dashboards',

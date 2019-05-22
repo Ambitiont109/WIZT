@@ -1,6 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {FuseLoadable} from '@fuse';
+import {authRoles} from 'app/auth';
 
 export const ContactsAppConfig = {
     settings: {
@@ -12,6 +13,7 @@ export const ContactsAppConfig = {
             }
         }
     },
+    // auth    : authRoles.admin,
     routes  : [
         {
             path     : '/app/pages/users/:id',

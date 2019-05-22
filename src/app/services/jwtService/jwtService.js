@@ -1,6 +1,7 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import FuseUtils from '@fuse/FuseUtils';
+import requestConfig from "../../main/config/requestConfig";
 
 class jwtService extends FuseUtils.EventEmitter {
 
@@ -66,7 +67,7 @@ class jwtService extends FuseUtils.EventEmitter {
 
     signInWithEmailAndPassword = (email, password) => {
         return new Promise((resolve, reject) => {
-            axios.post("http://192.168.100.22:8000/api/v1/admin/login/", {
+            axios.post(requestConfig.baseUrl+"/admin/login/", {
                 email,
                 password
             }).then(response => {
@@ -96,17 +97,17 @@ class jwtService extends FuseUtils.EventEmitter {
                     access_token: this.getAccessToken()
                 }
             })
-                .then(response => {
-                    if ( response.data.user )
-                    {
-                        this.setSession(response.data.access_token);
-                        resolve(response.data.user);
-                    }
-                    else
-                    {
-                        reject(response.data.error);
-                    }
-                });
+            .then(response => {
+                if ( response.data.user )
+                {
+                    this.setSession(response.data.access_token);
+                    resolve(response.data.user);
+                }
+                else
+                {
+                    reject(response.data.error);
+                }
+            });
         });
     };
 
@@ -120,13 +121,13 @@ class jwtService extends FuseUtils.EventEmitter {
         if ( access_token )
         {
             console.log(access_token);
-            localStorage.setItem('jwt_access_token', access_token);
-            axios.defaults.headers.common['Authorization'] = 'Token ' + access_token;
+            localStorage.setItem('jwt_access_token', `Token ${access_token}`);
+            axios.defaults.headers.common['Authorization'] = `Token ${access_token}`;
         }
         else
         {
-            localStorage.removeItem('jwt_access_token');
-            delete axios.defaults.headers.common['Authorization'];
+            // localStorage.removeItem('jwt_access_token');
+            // delete axios.defaults.headers.common['Authorization'];
         }
     };
 

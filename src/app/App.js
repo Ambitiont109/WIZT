@@ -30,7 +30,7 @@ const App = () => {
         >
             <JssProvider jss={jss} generateClassName={generateClassName}>
                 <Provider store={store}>
-                    {/* <Auth> */}
+                    <Auth>
                         <Router history={history}>
                             <FuseAuthorization>
                                 <FuseTheme>
@@ -38,7 +38,7 @@ const App = () => {
                                 </FuseTheme>
                             </FuseAuthorization>
                         </Router>
-                    {/* </Auth> */}
+                    </Auth>
                 </Provider>
             </JssProvider>
         </AppContext.Provider>

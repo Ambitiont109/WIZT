@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {getUserData} from './user.actions';
+import requestConfig from "../../../../config/requestConfig"
 
 export const GET_CONTACTS = '[CONTACTS APP] GET CONTACTS';
 export const SET_SEARCH_TEXT = '[CONTACTS APP] SET SEARCH TEXT';
@@ -23,22 +24,20 @@ export const CLOSE_CONFIRM_DIALOG = '[CONTACTS APP] CLOSE CONFIRM DIALOG';
 
 export function getContacts(routeParams)
 {
-    const request = axios.get('/api/contacts-app/contacts', {
-        params: routeParams
-    });
-
+    const request = axios.get(requestConfig.baseUrl+"/admin/users/");
     return (dispatch) =>
-        request.then((response) =>
+        request.then((response) => {
+            console.log(response.data.results)
             dispatch({
                 type   : GET_CONTACTS,
-                payload: response.data,
-                routeParams
-            })
-        );
+                payload: response.data.results,
+            })}
+        ).catch(err => console.log("Axios err: ", err.message));
 }
 
+
 export function setSearchText(event)
-{
+    {
     return {
         type      : SET_SEARCH_TEXT,
         searchText: event.target.value

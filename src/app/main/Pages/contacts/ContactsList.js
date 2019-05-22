@@ -32,7 +32,8 @@ class ContactsList extends Component {
     closeSelectedContactsMenu = () => {
         this.setState({selectedContactsMenu: null});
     };
-    onClickEdit = () => {
+    onClickEdit = (e) => {
+        localStorage.setItem('item_id', e)
         this.props.history.push('/app/pages/profile')
     }
 
@@ -138,7 +139,7 @@ class ContactsList extends Component {
                                     </React.Fragment>
                                 )
                             ),
-                            accessor : "avatar",
+                            accessor : "picture",
                             Cell     : row => (
                                 <Avatar className="mr-8" alt={row.original.name} src={row.value}/>
                             ),
@@ -149,22 +150,22 @@ class ContactsList extends Component {
                         {
                             Header    : "Name",
                             accessor  : "name",
-                            filterable: true,
+                            filterable: false,
                             className : "font-bold justify-center"
                         },
                         {
                             Header    : "Email",
                             accessor  : "email",
-                            filterable: true,
+                            filterable: false,
                             className : "justify-center"
                         },
                         {
                             Header    : "Phone number",
-                            accessor  : "phone",
+                            accessor  : "phone_number",
                             Cell      : row => (
                                 <span style={{color:'#000'}}>{row.value}</span>
                             ),
-                            filterable: true,
+                            filterable: false,
                             className : "justify-center"
                         },
                         {
@@ -176,7 +177,7 @@ class ContactsList extends Component {
                                         onClick={(ev) => {
                                             ev.stopPropagation();
                                             // toggleStarredContact(row.original.id)
-                                            this.onClickEdit();
+                                            this.onClickEdit(row.original.id);
                                         }}
                                     >
                                             <Icon>edit</Icon>

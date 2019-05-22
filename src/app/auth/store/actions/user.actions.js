@@ -11,6 +11,7 @@ import jwtService from 'app/services/jwtService';
 export const SET_USER_DATA = '[USER] SET DATA';
 export const REMOVE_USER_DATA = '[USER] REMOVE DATA';
 export const USER_LOGGED_OUT = '[USER] LOGGED OUT';
+export const ADMIN_LOGGED_OUT = '[ADMIN] LOGGED OUT';
 
 /**
  * Set user data from Auth0 token data
@@ -164,7 +165,7 @@ export function logoutUser()
         const login = getState().auth.login;
         console.log(login.success)
 
-        if ( login.success === 'guest' )
+        if ( login.success === false )
         {
             return null;
         }
@@ -172,29 +173,13 @@ export function logoutUser()
         history.push({
             pathname: '/app/pages/auth/login'
         });
-
-        // switch ( user.from )
-        // {
-        //     case 'firebase':
-        //     {
-        //         firebaseService.signOut();
-        //         break;
-        //     }
-        //     case 'auth0':
-        //     {
-        //         auth0Service.logout();
-        //         break;
-        //     }
-        //     default:
-        //     {
-                jwtService.logout();
-        //     }
-        // }
+        
+        jwtService.logout();
 
         dispatch(setInitialSettings());
 
         dispatch({
-            type: USER_LOGGED_OUT
+            type: ADMIN_LOGGED_OUT
         })
     }
 }

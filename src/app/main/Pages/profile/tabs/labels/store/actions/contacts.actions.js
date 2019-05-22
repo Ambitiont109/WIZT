@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {getUserData} from './user.actions';
+import requestConfig from "../../../../../../config/requestConfig"
 
 export const GET_CONTACTS = '[CONTACTS APP] GET CONTACTS';
 export const SET_SEARCH_TEXT = '[CONTACTS APP] SET SEARCH TEXT';
@@ -18,19 +19,21 @@ export const TOGGLE_STARRED_CONTACT = '[CONTACTS APP] TOGGLE STARRED CONTACT';
 export const TOGGLE_STARRED_CONTACTS = '[CONTACTS APP] TOGGLE STARRED CONTACTS';
 export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
 
-export function getContacts(routeParams)
-{
-    const request = axios.get('/api/contacts-app/contacts', {
-        params: routeParams
-    });
 
+export function getContacts(item_id)
+{
+    console.log('this is getcontasts of labels actions')
+    console.log(item_id)
+    const request = axios.get(requestConfig.baseUrl+"/admin/users/"+item_id+"/");
+    console.log(request);
     return (dispatch) =>
-        request.then((response) =>
+        request.then((response) =>{
+            console.log(response.data.labels);
             dispatch({
                 type   : GET_CONTACTS,
-                payload: response.data,
-                routeParams
+                payload: response.data.labels,
             })
+        }
         );
 }
 

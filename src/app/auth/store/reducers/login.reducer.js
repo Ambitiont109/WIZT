@@ -25,6 +25,13 @@ const login = function (state = initialState, action) {
                 error  : action.payload
             };
         }
+        case Actions.ADMIN_LOGGED_OUT:
+        {
+            return {
+                ...initialState,
+                success: false,
+            };
+        }
         default:
         {
             return state

@@ -13,46 +13,36 @@ class FuseAuthorization extends Component {
         this.state = {
             login:false,
             accessGranted: true,
-            // routes
         };
     }
 
     componentDidMount()
     {
-        if (!this.state.accessGranted)
-        {
-            this.redirectRoute(this.props);
-        }
+        this.redirectRoute(this.props);
     }
 
     componentDidUpdate()
     {
-        console.log('DidUpdate')
         this.redirectRoute(this.props);
     }
 
     static getDerivedStateFromProps(props, state)
     {
         const {location, user, login} = props;
-        console.log(login.success)
-        // this.redirectPage(this.props);
         return {
             login:login.success,
-            
         };
     }
 
     shouldComponentUpdate(nextProps, nextState)
     {
-        console.log('shouldComponentUpdate')
+        console.log(nextState.login)
         return nextState.login !== this.state.login;
     }
 
     redirectRoute(props)
     {
-        console.log('this is redirectRoute')
         const {location, user, history, login} = props;
-        console.log("login")
         const {pathname, state} = location;
         /*
         User is guest
@@ -72,9 +62,7 @@ class FuseAuthorization extends Component {
         */
         else
         {
-            const redirectUrl = state && state.redirectUrl ? state.redirectUrl : '/';
-            console.log(redirectUrl)
-
+            const redirectUrl =  '/';
             history.push({
                 pathname: redirectUrl
             });
@@ -83,10 +71,8 @@ class FuseAuthorization extends Component {
 
     render()
     {
-        console.log('rendering')
         const {children} = this.props;
         const {accessGranted} = this.state;
-        // console.info('Fuse Authorization rendered', accessGranted);
         return accessGranted ? <React.Fragment>{children}</React.Fragment> : null;
     }
 }
