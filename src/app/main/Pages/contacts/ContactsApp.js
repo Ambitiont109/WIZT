@@ -28,7 +28,7 @@ class ContactsApp extends Component {
 
     componentDidMount()
     {
-        this.props.getContacts(this.props.match.params);
+        // this.props.getContacts(this.props.match.params);
         this.props.getUserData();
     }
 

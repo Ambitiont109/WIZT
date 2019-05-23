@@ -18,18 +18,22 @@ export const REMOVE_CONTACTS = '[CONTACTS APP] REMOVE CONTACTS';
 export const TOGGLE_STARRED_CONTACT = '[CONTACTS APP] TOGGLE STARRED CONTACT';
 export const TOGGLE_STARRED_CONTACTS = '[CONTACTS APP] TOGGLE STARRED CONTACTS';
 export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
+export const OPEN_CONFIRM_DIALOG = '[CONTACTS APP] OPEN CONFIRM DIALOG';
+export const CLOSE_CONFIRM_DIALOG = '[CONTACTS APP] CLOSE CONFIRM DIALOG';
 
-export function getContacts()
+
+export function getContacts(params)
 {
-    console.log("this is getContacs of friendsApp")
-    const request = axios.get(requestConfig.baseUrl+"/admin/labels/");
-
+    // console.log("this is get contacts of labels"+params)
+    const request = axios.get(requestConfig.baseUrl+"/admin/labels/", {params});
     return (dispatch) =>
-        request.then((response) =>
+        request.then((response) => {
             dispatch({
                 type   : GET_CONTACTS,
-                payload: response.data.results,
+                payload: response.data.results, 
+                params,
             })
+        }
         );
 }
 
@@ -154,6 +158,20 @@ export function removeContact(contactId)
     };
 }
 
+export function confirmDialog(user_id) 
+{
+    return {
+        type: OPEN_CONFIRM_DIALOG,
+        data: user_id
+    }
+}
+
+export function closeConfirmDialog() 
+{
+    return {
+        type: CLOSE_CONFIRM_DIALOG,
+    }
+}
 
 export function removeContacts(contactIds)
 {

@@ -36,7 +36,6 @@ class FuseAuthorization extends Component {
 
     shouldComponentUpdate(nextProps, nextState)
     {
-        console.log(nextState.login)
         return nextState.login !== this.state.login;
     }
 

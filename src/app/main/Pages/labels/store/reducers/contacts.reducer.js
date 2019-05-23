@@ -3,7 +3,8 @@ import _ from '@lodash';
 
 const initialState = {
     entities          : [],
-    searchText        : '',
+    page              : {},
+    searchText        : "",
     selectedContactIds: [],
     routeParams       : {},
     contactDialog     : {
@@ -12,6 +13,12 @@ const initialState = {
             open: false
         },
         data : null
+    },
+    confirmDialog: {
+        props: {
+            open: false
+        },
+        user_id : null
     }
 };
 
@@ -22,8 +29,9 @@ const contactsReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                entities   : [...action.payload],
-                routeParams: action.routeParams
+                entities   : action.payload,
+                routeParams: action.routeParams,
+                page       : action.params
             };
         }
         case Actions.SET_SEARCH_TEXT:
@@ -121,6 +129,32 @@ const contactsReducer = function (state = initialState, action) {
                         open: false
                     },
                     data : null
+                }
+            };
+        }
+
+        case Actions.OPEN_CONFIRM_DIALOG:  /**This part is added by myself */
+        {
+            return {
+                ...state,
+                confirmDialog: {
+                    props: {
+                        open: true
+                    },
+                    user_id : action.data
+                }
+            };
+        }
+
+        case Actions.CLOSE_CONFIRM_DIALOG: /**This part is added by myself */
+        {
+            return {
+                ...state,
+                confirmDialog: {
+                    props: {
+                        open: false
+                    },
+                    user_id : null
                 }
             };
         }

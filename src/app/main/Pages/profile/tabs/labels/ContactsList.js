@@ -141,29 +141,29 @@ class ContactsList extends Component {
                         {
                             Header    : "Name",
                             accessor  : "name",
-                            filterable: true,
+                            filterable: false,
                             className : "font-bold"
                         },
-                        // // {
-                        // //     Header    : "Company",
-                        // //     accessor  : "company",
-                        // //     filterable: true
-                        // // },
+                        {
+                            Header    : "Location",
+                            accessor  : "location",
+                            filterable: false
+                        },
+                        {
+                            Header    : "Created_at",
+                            accessor  : "created_at",
+                            filterable: false
+                        },
+                        {
+                            Header    : "Updated_at",
+                            accessor  : "updated_at",
+                            filterable: false
+                        },
                         // {
-                        //     Header    : "Job Title",
-                        //     accessor  : "jobTitle",
+                        //     Header    : "Phone Number",
+                        //     accessor  : "phone",
                         //     filterable: true
                         // },
-                        {
-                            Header    : "Email",
-                            accessor  : "email",
-                            filterable: true
-                        },
-                        {
-                            Header    : "Phone Number",
-                            accessor  : "phone",
-                            filterable: true
-                        },
                         {
                             Header: "",
                             width : 128,

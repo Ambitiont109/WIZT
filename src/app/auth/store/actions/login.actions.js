@@ -8,25 +8,22 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 export function submitLogin({email, password})
 {
-    console.log( "this is login.actions"+"email"+email+","+ "password"+password)
     return (dispatch) =>
     jwtService.signInWithEmailAndPassword(email, password)
     .then((user) => {
-        console.log(user)
-                    // dispatch(setUserData(user));
-                    
-                    return dispatch({
-                        type: LOGIN_SUCCESS,
-                        payload: user
-                    });
-                }
-            )
-            .catch(error => {
                 return dispatch({
-                    type   : LOGIN_ERROR,
-                    payload: error
+                    type: LOGIN_SUCCESS,
+                    payload: user
                 });
+            }
+        )
+        .catch(error => {
+            console.log(error)
+            return dispatch({
+                type   : LOGIN_ERROR,
+                payload: error
             });
+        });
 }
 
 export function submitLoginWithFireBase({username, password})

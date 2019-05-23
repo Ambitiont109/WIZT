@@ -23,7 +23,7 @@ const newContactState = {
 
 class ContactDialog extends Component {
 
-    state = {...newContactState};
+    state = {...newContactState, disableEdit: true };
 
     componentDidUpdate(prevProps, prevState, snapshot)
     {   
@@ -40,7 +40,7 @@ class ContactDialog extends Component {
                 this.props.contactDialog.data &&
                 !_.isEqual(this.props.contactDialog.data, prevState) )
             {
-                this.setState({...this.props.contactDialog.data});
+                this.setState({...this.props.contactDialog.data, disableEdit: true});
             }
 
             /**
@@ -71,11 +71,16 @@ class ContactDialog extends Component {
         );
     }
 
+    edit = () => {
+        this.setState({
+            disableEdit: false
+        })
+    }
+
     render()
     {
-        console.log('this is contactDialog')
         const {contactDialog, addContact, updateContact, removeContact} = this.props;
-
+  
         return (
             <Dialog
                 classes={{
@@ -95,15 +100,13 @@ class ContactDialog extends Component {
                         )}
                     </div>
                 </AppBar>
-                <Stepper />
+                {/* this is the part for stepper */}
+                <Stepper images={this.state.images} /> 
 
                 <DialogContent classes={{root: "p-24"}}>
                     <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">account_circle</Icon>
-                        </div>
-
                         <TextField
+                            disabled = {this.state.disableEdit}
                             className="mb-24"
                             label="Name"
                             autoFocus
@@ -118,150 +121,41 @@ class ContactDialog extends Component {
                     </div>
 
                     <div className="flex">
-                        <div className="min-w-48 pt-20">
-                        </div>
                         <TextField
+                            disabled = {this.state.disableEdit}
                             className="mb-24"
-                            label="Last name"
-                            id="lastName"
-                            name="lastName"
-                            value={this.state.lastName}
+                            label="Created by"
+                            id="created_by"
+                            name="created_by"
+                            value={this.state.id}
                             // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
                     </div>
-
                     <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">star</Icon>
-                        </div>
                         <TextField
-                            className="mb-24"
-                            label="Nickname"
-                            id="nickname"
-                            name="nickname"
-                            value={this.state.nickname}
-                            // onChange={this.handleChange}
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
-
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">phone</Icon>
-                        </div>
-                        <TextField
-                            className="mb-24"
-                            label="Phone"
-                            id="phone"
-                            name="phone"
-                            value={this.state.phone}
-                            // onChange={this.handleChange}
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
-
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">email</Icon>
-                        </div>
-                        <TextField
-                            className="mb-24"
-                            label="Email"
-                            id="email"
-                            name="email"
-                            value={this.state.email}
-                            // onChange={this.handleChange}
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
-
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">domain</Icon>
-                        </div>
-                        <TextField
-                            className="mb-24"
-                            label="Company"
-                            id="company"
-                            name="company"
-                            value={this.state.company}
-                            // onChange={this.handleChange}
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
-
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">work</Icon>
-                        </div>
-                        <TextField
-                            className="mb-24"
-                            label="Job title"
-                            id="jobTitle"
-                            name="jobTitle"
-                            value={this.state.jobTitle}
-                            // onChange={this.handleChange}
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
-
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">cake</Icon>
-                        </div>
-                        <TextField
-                            className="mb-24"
-                            id="birthday"
-                            label="Birthday"
-                            type="date"
-                            value={this.state.birthday}
-                            // onChange={this.handleChange}
-                            InputLabelProps={{
-                                shrink: true
-                            }}
-                            variant="outlined"
-                            fullWidth
-                        />
-                    </div>
-
-                    <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">home</Icon>
-                        </div>
-                        <TextField
+                            disabled = {this.state.disableEdit}
                             className="mb-24"
                             label="Address"
                             id="address"
                             name="address"
-                            value={this.state.address}
+                            value={this.state.location}
                             // onChange={this.handleChange}
                             variant="outlined"
                             fullWidth
                         />
                     </div>
-
                     <div className="flex">
-                        <div className="min-w-48 pt-20">
-                            <Icon color="action">note</Icon>
-                        </div>
-                        
                         <fieldset style={{border:"1px solid #c4c4c4", borderRadius: 4, width:253
                         }} >
                             <legend style={{color:"#757575", marginLeft: 10, fontSize: 12
                         }}>Tags</legend>
                             <div>
-                                <ChipsArray/>
+                                <ChipsArray data={this.state.tags} isEdit={true} />
                             </div>
                             
                         </fieldset>
-                    
                     </div>
                 </DialogContent>
 
@@ -285,12 +179,13 @@ class ContactDialog extends Component {
                             variant="contained"
                             color="primary"
                             onClick={() => {
-                                updateContact(this.state);
-                                this.closeComposeDialog();
+                                this.edit();
+                                // updateContact(this.state);
+                                // this.closeComposeDialog();
                             }}
                             disabled={!this.canBeSubmitted()}
                         >
-                            Save
+                            {this.state.disableEdit? "Edit" : "Save"}
                         </Button>
                         <IconButton
                             onClick={() => {

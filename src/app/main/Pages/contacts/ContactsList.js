@@ -37,6 +37,27 @@ class ContactsList extends Component {
         this.props.history.push('/app/pages/profile')
     }
 
+    fetchData = (state, instance) => {
+        //Running when changes occure on table.
+        // Request the data however you want.  Here, we'll use our mocked service we created earlier
+        var params = {
+            page: ""
+        }
+
+        if(state.page === 0){
+            params = {
+                page: 1
+            }
+            this.props.getContacts(params);
+        }
+        else{
+            params = {
+                page:state.page
+            }
+            this.props.getContacts(params)
+        }
+    } 
+
     render()
     {
         const { contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred, confirmDialog} = this.props;
@@ -78,6 +99,7 @@ class ContactsList extends Component {
                                 <span style={{color:'#555'}}>{row.index+1}</span>
                             ),
                             filterable: false,
+                            sortable  : false,
                             className : "font-bold justify-center",
                             width     : 64,
                            
@@ -141,7 +163,7 @@ class ContactsList extends Component {
                             ),
                             accessor : "picture",
                             Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value}/>
+                                <Avatar  alt={row.original.name} src={row.value}/>
                             ),
                             className: "justify-center",
                             width    : 64,
@@ -151,12 +173,14 @@ class ContactsList extends Component {
                             Header    : "Name",
                             accessor  : "name",
                             filterable: false,
+                            sortable  : false,
                             className : "font-bold justify-center"
                         },
                         {
                             Header    : "Email",
                             accessor  : "email",
                             filterable: false,
+                            sortable  : false,
                             className : "justify-center"
                         },
                         {
@@ -166,6 +190,7 @@ class ContactsList extends Component {
                                 <span style={{color:'#000'}}>{row.value}</span>
                             ),
                             filterable: false,
+                            sortable  : false,
                             className : "justify-center"
                         },
                         {
@@ -196,6 +221,9 @@ class ContactsList extends Component {
                             )
                         }
                     ]}
+                    pages={30}
+                    manual
+                    onFetchData={this.fetchData}
                     defaultPageSize={10}
                     noDataText="No contacts found"
                 />
@@ -220,7 +248,7 @@ function mapDispatchToProps(dispatch)
         toggleStarredContacts   : Actions.toggleStarredContacts,
         setContactsStarred      : Actions.setContactsStarred,
         setContactsUnstarred    : Actions.setContactsUnstarred,
-        confirmDialog           : Actions.confirmDialog,        //added by myself
+        confirmDialog           : Actions.confirmDialog,        
 
     }, dispatch);
 }

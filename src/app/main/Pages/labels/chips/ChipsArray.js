@@ -18,13 +18,14 @@ const styles = theme => ({
 });
 
 class ChipsArray extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   state = {
     chipData: [
       { key: 0, label: 'Angular' },
       { key: 1, label: 'jQuery' },
       { key: 2, label: 'Polymer' },
-      { key: 3, label: 'React' },
-      { key: 4, label: 'Vue.js' },
     ],
   };
 
@@ -43,23 +44,36 @@ class ChipsArray extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, data, isEdit } = this.props;
+    if(data === undefined){
+      var tags =[];
+    }
+    else{
+      var tags = data.split(',');
+    }
     return (
+      
       <div className={classes.root}>
-        {this.state.chipData.map(data => {
+        {tags.map((name, index) => {
           let icon = null;
-
-          if (data.label === 'React') {
-            icon = <TagFacesIcon />;
-          }
-
           return (
+            isEdit? 
             <Chip
-              key={data.key}
+              key={index}
               icon={icon}
-              label={data.label}
-              onDelete={this.handleDelete(data)}
+              label={name}
+              style={{height:20}}
+              onDelete={this.handleDelete(tags)}
               className={classes.chip}
+              clickable
+            />
+            : <Chip
+              key={index}
+              icon={icon}
+              label={name}
+              style={{height:20}}
+              className={classes.chip}
+              clickable = {false}
             />
           );
         })}

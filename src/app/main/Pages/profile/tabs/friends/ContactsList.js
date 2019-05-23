@@ -130,9 +130,9 @@ class ContactsList extends Component {
                                     </React.Fragment>
                                 )
                             ),
-                            accessor : "avatar",
+                            accessor : "picture",
                             Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value}/>
+                                <Avatar  alt={row.original.name} src={row.value} style={{borderRadius:0}} />
                             ),
                             className: "justify-center",
                             width    : 64,
@@ -141,28 +141,34 @@ class ContactsList extends Component {
                         {
                             Header    : "Name",
                             accessor  : "name",
-                            filterable: true,
+                            filterable: false,
                             className : "font-bold"
                         },
-                        // // {
-                        // //     Header    : "Company",
-                        // //     accessor  : "company",
-                        // //     filterable: true
-                        // // },
-                        // {
-                        //     Header    : "Job Title",
-                        //     accessor  : "jobTitle",
-                        //     filterable: true
-                        // },
+                        {
+                            Header    : "User name",
+                            accessor  : "username",
+                            filterable: false,
+                            className : "font-bold"
+                        },
                         {
                             Header    : "Email",
                             accessor  : "email",
-                            filterable: true
+                            filterable: false
+                        },
+                        {
+                            Header    : "Email verified",
+                            accessor  : "email_verified",
+                            filterable: false
                         },
                         {
                             Header    : "Phone Number",
-                            accessor  : "phone",
-                            filterable: true
+                            accessor  : "phone_number",
+                            filterable: false
+                        },
+                        {
+                            Header    : "Phone Number verified",
+                            accessor  : "Phone_number_verified",
+                            filterable: false
                         },
                         {
                             Header: "",

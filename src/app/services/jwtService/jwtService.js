@@ -71,7 +71,6 @@ class jwtService extends FuseUtils.EventEmitter {
                 email,
                 password
             }).then(response => {
-                console.log(response)
                 if ( response.status === 200 )
                 {
                     console.log(response.status)
@@ -86,6 +85,8 @@ class jwtService extends FuseUtils.EventEmitter {
                 }
             }).catch((err) => {
                 console.log(err)
+                const error = "invailid username or email"
+                reject(error);
             })
         });
     };

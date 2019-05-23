@@ -19,21 +19,6 @@ const tutorialSteps = [
     imgPath:
       'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
   },
-  {
-    label: 'Bali, Indonesia',
-    imgPath:
-      'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250&q=80',
-  },
-  {
-    label: 'NeONBRAND Digital Marketing, Las Vegas, United States',
-    imgPath:
-      'https://images.unsplash.com/photo-1518732714860-b62714ce0c59?auto=format&fit=crop&w=400&h=250&q=60',
-  },
-  {
-    label: 'Goč, Serbia',
-    imgPath:
-      'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
-  },
 ];
 
 const styles = theme => ({
@@ -61,10 +46,20 @@ const styles = theme => ({
 });
 
 class TextMobileStepper extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      imgURL: [],
+      activeStep: 0
+    }
+     
+   
+  }
   
-  state = {
-    activeStep: 0,
-  };
+  // state = {
+  //   activeStep: 0,
+  // };
 
   handleNext = () => {
     this.setState(prevState => ({
@@ -77,22 +72,28 @@ class TextMobileStepper extends React.Component {
       activeStep: prevState.activeStep - 1,
     }));
   };
+  static getDerivedStateFromProps(props, state) {
+    return {
+      imgURL: props.images
+    }
+  }
 
   render() {
- 
+    
+    const {imgURL} = this.state;
+    if(imgURL.length == 0){
+      console.log(imgURL)
+    }
     const { classes, theme } = this.props;
     const { activeStep } = this.state;
-    const maxSteps = tutorialSteps.length;
+    const maxSteps = imgURL.length;
 
     return (
       <div className={classes.root}>
-        {/* <Paper square elevation={0} className={classes.header}>
-          <Typography className={classes.color} >{tutorialSteps[activeStep].label}</Typography>
-        </Paper> */}
         <img
           className={classes.img}
-          src={tutorialSteps[activeStep].imgPath}
-          alt={tutorialSteps[activeStep].label}
+          src={ imgURL.length == 0? "dfdf" : imgURL[activeStep].url}
+          // alt={imgURL[activeStep].label}
         />
         <MobileStepper
           steps={maxSteps}
@@ -112,8 +113,6 @@ class TextMobileStepper extends React.Component {
             </Button>
           }
         />
-        {/* Under Part is added my coder */}
-        
       </div>
     );
   }

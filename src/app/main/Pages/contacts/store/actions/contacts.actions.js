@@ -22,12 +22,11 @@ export const OPEN_CONFIRM_DIALOG = '[CONTACTS APP] OPEN CONFIRM DIALOG';
 export const CLOSE_CONFIRM_DIALOG = '[CONTACTS APP] CLOSE CONFIRM DIALOG';
 
 
-export function getContacts(routeParams)
+export function getContacts(params)
 {
-    const request = axios.get(requestConfig.baseUrl+"/admin/users/");
+    const request = axios.get(requestConfig.baseUrl+"/admin/users/", {params});
     return (dispatch) =>
         request.then((response) => {
-            console.log(response.data.results)
             dispatch({
                 type   : GET_CONTACTS,
                 payload: response.data.results,
@@ -82,14 +81,13 @@ export function confirmDialog(user_id)
         data: user_id
     }
 }
+
 export function closeConfirmDialog() 
 {
     return {
         type: CLOSE_CONFIRM_DIALOG,
     }
 }
-
-
 
 export function closeNewContactDialog()
 {

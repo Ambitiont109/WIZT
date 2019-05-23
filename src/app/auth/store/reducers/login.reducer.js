@@ -2,10 +2,7 @@ import * as Actions from '../actions';
 
 const initialState = {
     success: false,
-    error  : {
-        username: null,
-        password: null
-    },
+    error  : ""
 };
 
 const login = function (state = initialState, action) {
@@ -20,6 +17,7 @@ const login = function (state = initialState, action) {
         }
         case Actions.LOGIN_ERROR:
         {
+            console.log(action.payload)
             return {
                 success: false,
                 error  : action.payload

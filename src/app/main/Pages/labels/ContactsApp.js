@@ -8,8 +8,8 @@ import withReducer from 'app/store/withReducer';
 import _ from '@lodash';
 import ContactsList from './ContactsList';
 import ContactsHeader from './ContactsHeader';
-//import ContactsSidebarContent from './ContactsSidebarContent';
 import ContactDialog from './ContactDialog';
+import ConfirmDialog from './ConfirmDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 
@@ -26,7 +26,7 @@ class LabelsApp extends Component {
 
     componentDidMount()
     {
-        this.props.getContacts(this.props.match.params);
+        // this.props.getContacts(this.props.match.params);
         this.props.getUserData();
     }
 
@@ -76,6 +76,7 @@ class LabelsApp extends Component {
                     </Fab>
                 </FuseAnimate>
                 <ContactDialog/>
+                <ConfirmDialog/>
             </React.Fragment>
         )
     };

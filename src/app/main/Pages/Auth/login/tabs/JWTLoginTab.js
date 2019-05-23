@@ -29,10 +29,12 @@ class JWTLoginTab extends Component {
 
     componentDidUpdate(prevProps, prevState)
     {
-        if ( this.props.login.error && (this.props.login.error.email || this.props.login.error.password) )
+        if ( this.props.login.error)
         {
+            console.log('login error')
             this.form.updateInputsWithError({
-                ...this.props.login.error
+                email: "The email is invalid",
+                password: "The password is invalid"
             });
 
             this.props.login.error = null;
@@ -108,7 +110,6 @@ class JWTLoginTab extends Component {
         );
     }
 }
-
 
 function mapDispatchToProps(dispatch)
 {
