@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
+import ChipsArray from '../floorplans/chips/ChipsArray';
 
 class ContactsList extends Component {
 
@@ -28,6 +29,23 @@ class ContactsList extends Component {
 
     closeSelectedContactsMenu = () => {
         this.setState({selectedContactsMenu: null});
+    };
+
+    avatar = (row) => {
+        if(row.value) {
+            var jsObjects = row.value;
+            var result = jsObjects.filter(obj => {
+                    return obj.is_cover === true
+                })
+            let results = result.map(a => a.url);
+            return  <Avatar  alt={row.original.name} src={results[0]} style={{borderRadius:0}} />
+        }
+    };
+
+    dateFormat = (date) => {
+        var d = new Date(date);
+        d = (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+(d.getHours() > 12 ? d.getHours() - 12 : d.getHours())+':'+d.getMinutes()+' '+(d.getHours() >= 12 ? "PM" : "AM");
+        return <div>{d}</div>
     };
 
     render()
@@ -130,9 +148,9 @@ class ContactsList extends Component {
                                     </React.Fragment>
                                 )
                             ),
-                            accessor : "avatar",
-                            Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value}/>
+                            accessor : "images",
+                            Cell      : row => (
+                                this.avatar(row)
                             ),
                             className: "justify-center",
                             width    : 64,
@@ -150,37 +168,27 @@ class ContactsList extends Component {
                             filterable: false
                         },
                         {
+                            Header    : "Tags",
+                            accessor  : "tags",
+                            filterable: false,
+                            Cell      : row => (
+                                <ChipsArray data={row.value} isEdit={false} />
+                            ),
+                        },
+                        {
                             Header    : "Created_at",
                             accessor  : "created_at",
-                            filterable: false
+                            filterable: false,
+                            Cell      : row => (
+                                this.dateFormat(row.value)
+                            )
                         },
-                        {
-                            Header    : "Updated_at",
-                            accessor  : "updated_at",
-                            filterable: false
-                        },
-                        // {
-                        //     Header    : "Phone Number",
-                        //     accessor  : "phone",
-                        //     filterable: true
-                        // },
                         {
                             Header: "",
-                            width : 128,
+                            width : 64,
+                            className : "justify-center",
                             Cell  : row => (
                                 <div className="flex items-center">
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            toggleStarredContact(row.original.id)
-                                        }}
-                                    >
-                                        {user.starred && user.starred.includes(row.original.id) ? (
-                                            <Icon>star</Icon>
-                                        ) : (
-                                            <Icon>star_border</Icon>
-                                        )}
-                                    </IconButton>
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();

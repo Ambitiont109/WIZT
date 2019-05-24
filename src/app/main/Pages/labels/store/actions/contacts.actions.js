@@ -30,8 +30,10 @@ export function getContacts(params)
         request.then((response) => {
             dispatch({
                 type   : GET_CONTACTS,
-                payload: response.data.results, 
+                payload: response.data.results,
                 params,
+                loading: false,
+                
             })
         }
         );

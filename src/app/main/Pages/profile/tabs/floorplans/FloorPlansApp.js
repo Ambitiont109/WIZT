@@ -26,7 +26,8 @@ class FloorPlansApp extends Component {
 
     componentDidMount()
     {
-        this.props.getContacts(this.props.match.params);
+        let item_id = localStorage.getItem("item_id")
+        this.props.getContacts(item_id);
         this.props.getUserData();
     }
 
@@ -50,15 +51,9 @@ class FloorPlansApp extends Component {
                         leftSidebar       : "w-256 border-0",
                         header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
                     }}
-                    // header={
-                    //     <ContactsHeader pageLayout={() => this.pageLayout}/>
-                    // }
                     content={
                         <ContactsList/>
                     }
-                    // leftSidebarContent={
-                    //     <ContactsSidebarContent/>
-                    // }
                     sidebarInner
                     onRef={instance => {
                         this.pageLayout = instance;

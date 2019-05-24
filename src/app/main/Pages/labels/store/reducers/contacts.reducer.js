@@ -4,6 +4,7 @@ import _ from '@lodash';
 const initialState = {
     entities          : [],
     page              : {},
+    loading           : true,
     searchText        : "",
     selectedContactIds: [],
     routeParams       : {},
@@ -31,7 +32,8 @@ const contactsReducer = function (state = initialState, action) {
                 ...state,
                 entities   : action.payload,
                 routeParams: action.routeParams,
-                page       : action.params
+                page       : action.params,
+                loading    : false,
             };
         }
         case Actions.SET_SEARCH_TEXT:

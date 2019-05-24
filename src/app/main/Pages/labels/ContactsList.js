@@ -79,7 +79,7 @@ class ContactsList extends Component {
 
     render()
     {
-        const { contacts, page, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, confirmDialog } = this.props;
+        const { contacts, loading, page, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, confirmDialog } = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
         if(page)
@@ -122,7 +122,7 @@ class ContactsList extends Component {
                     columns={[
                         {
                             Header    : "No",
-                            headerClassName: 'h-68 text-16 font-bold',
+                            headerClassName: 'h-52 text-16 font-bold',
                             accessor  : "no",
                             filterable: false,
                             Cell      : row => (
@@ -133,7 +133,7 @@ class ContactsList extends Component {
                         },
                         {
                             Header    : "",
-                            headerClassName: 'h-68 text-16 font-bold',
+                            headerClassName: 'h-52 text-16 font-bold',
                             accessor  : "images",
                             filterable: false,
                             sortable  : false,
@@ -145,7 +145,7 @@ class ContactsList extends Component {
                         },
                         {
                             Header    : "Name",
-                            headerClassName: 'h-68 text-16 font-bold',
+                            headerClassName: 'h-52 text-16 font-bold',
                             accessor  : "name",
                             filterable: false,
                             sortable  : false,
@@ -154,14 +154,14 @@ class ContactsList extends Component {
                         },
                         {
                             Header    : "Location",
-                            headerClassName: 'h-68 text-16 font-bold',
+                            headerClassName: 'h-52 text-16 font-bold',
                             accessor  : "location",
                             filterable: false,
                             sortable  : false,
                         },
                         {
                             Header    : "Tags",
-                            headerClassName: 'h-68 text-16 font-bold',
+                            headerClassName: 'h-52 text-16 font-bold',
                             accessor  : "tags",
                             Cell      : row => (
                                 <ChipsArray data={row.value} isEdit={false} />
@@ -171,14 +171,14 @@ class ContactsList extends Component {
                         },
                         {
                             Header    : "Created_by",
-                            headerClassName: 'h-68 text-16 font-bold',
+                            headerClassName: 'h-52 text-16 font-bold',
                             accessor  : "id",
                             filterable: false,
                             sortable  : false,
                         },
                         {
                             Header    : "Created_at",
-                            headerClassName: 'h-68 text-16 font-bold',
+                            headerClassName: 'h-52 text-16 font-bold',
                             accessor  : "created_at",
                             Cell      : row => (
                                 this.dateFormat(row.value)
@@ -188,7 +188,7 @@ class ContactsList extends Component {
                         },
                         {
                             Header: "",
-                            width : 128,
+                            width : 64,
                             className: "justify-center",
                             Cell  : row => (
                                 <div className="flex items-center">
@@ -205,6 +205,7 @@ class ContactsList extends Component {
                             )
                         }
                     ]}
+                    loading={loading}
                     pages={30}
                     manual
                     onFetchData={this.fetchData}

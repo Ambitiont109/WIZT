@@ -32,8 +32,10 @@ class ContactsList extends Component {
     closeSelectedContactsMenu = () => {
         this.setState({selectedContactsMenu: null});
     };
-    onClickEdit = (e) => {
-        localStorage.setItem('item_id', e)
+    onClickEdit = (id, name, imgURL) => {
+        localStorage.setItem('item_id', id)
+        localStorage.setItem('name', name)
+        localStorage.setItem('imgURL', imgURL)
         this.props.history.push('/app/pages/profile')
     }
 
@@ -56,13 +58,28 @@ class ContactsList extends Component {
             }
             this.props.getContacts(params)
         }
-    } 
+    };
+
+    dateFormat = (date) => {
+        var d = new Date(date);
+        d = (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+(d.getHours() > 12 ? d.getHours() - 12 : d.getHours())+':'+d.getMinutes()+' '+(d.getHours() >= 12 ? "PM" : "AM");
+        return <div>{d}</div>
+    };
 
     render()
     {
-        const { contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred, confirmDialog} = this.props;
+        const { contacts, user, page, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred, confirmDialog} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
+
+        if(page)
+        {
+            var pageNum = page.page-1;
+        }
+        else
+        {
+            var pageNum = 0;
+        }
 
         if ( !data && data.length === 0 )
         {
@@ -96,7 +113,7 @@ class ContactsList extends Component {
                             Header    : "No",
                             accessor  : "",
                             Cell      : row => (
-                                <span style={{color:'#555'}}>{row.index+1}</span>
+                                    <span>{ row.index + 1 + 10*pageNum }</span>
                             ),
                             filterable: false,
                             sortable  : false,
@@ -194,6 +211,44 @@ class ContactsList extends Component {
                             className : "justify-center"
                         },
                         {
+                            Header    : "Label in use",
+                            accessor  : "label_in_use",
+                            filterable: false,
+                            sortable  : false,
+                            className : "justify-center"
+                        },
+                        {
+                            Header    : "Photo in use",
+                            accessor  : "photo_in_use",
+                            filterable: false,
+                            sortable  : false,
+                            className : "justify-center"
+                        },
+                        {
+                            Header    : "Total label count",
+                            accessor  : "total_label_count",
+                            filterable: false,
+                            sortable  : false,
+                            className : "justify-center"
+                        },
+                        {
+                            Header    : "Friends count",
+                            accessor  : "friends_count",
+                            filterable: false,
+                            sortable  : false,
+                            className : "justify-center"
+                        },
+                        {
+                            Header    : "Created at",
+                            accessor  : "created_at",
+                            filterable: false,
+                            sortable  : false,
+                            className : "justify-center",
+                            Cell      : row => (
+                                this.dateFormat(row.value)
+                            )
+                        },
+                        {
                             Header: "",
                             width : 128,
                             Cell  : row => (
@@ -202,7 +257,7 @@ class ContactsList extends Component {
                                         onClick={(ev) => {
                                             ev.stopPropagation();
                                             // toggleStarredContact(row.original.id)
-                                            this.onClickEdit(row.original.id);
+                                            this.onClickEdit(row.original.id, row.original.name, row.original.picture);
                                         }}
                                     >
                                             <Icon>edit</Icon>

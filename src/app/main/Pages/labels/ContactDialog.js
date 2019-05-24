@@ -147,7 +147,7 @@ class ContactDialog extends Component {
                         />
                     </div>
                     <div className="flex">
-                        <fieldset style={{border:"1px solid #c4c4c4", borderRadius: 4, width:253
+                        <fieldset style={{border:"1px solid #c4c4c4", borderRadius: 4, width:312
                         }} >
                             <legend style={{color:"#757575", marginLeft: 10, fontSize: 12
                         }}>Tags</legend>

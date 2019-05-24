@@ -64,7 +64,6 @@ class JWTLoginTab extends Component {
                         label="Email"
                         validations="isEmail"
                         validationErrors={{
-                            
                             isEmail: 'Please enter a valid email'
                         }}
                         InputProps={{
@@ -103,7 +102,6 @@ class JWTLoginTab extends Component {
                     >
                         Login
                     </Button>
-
                 </Formsy>
 
             </div>

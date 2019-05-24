@@ -56,25 +56,13 @@ class LabelsApp extends Component {
                     content={
                         <ContactsList/>
                     }
-                    // leftSidebarContent={
-                    //     <ContactsSidebarContent/>
-                    // }
+                   
                     sidebarInner
                     onRef={instance => {
                         this.pageLayout = instance;
                     }}
                     innerScroll
                 />
-                <FuseAnimate animation="transition.expandIn" delay={300}>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        className={classes.addButton}
-                        onClick={openNewContactDialog}
-                    >
-                        <Icon>person_add</Icon>
-                    </Fab>
-                </FuseAnimate>
                 <ContactDialog/>
                 <ConfirmDialog/>
             </React.Fragment>

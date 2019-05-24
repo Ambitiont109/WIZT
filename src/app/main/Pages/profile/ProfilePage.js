@@ -3,7 +3,7 @@ import {withStyles, Avatar, Button, Tab, Tabs, Typography} from '@material-ui/co
 import {FusePageSimple, FuseAnimate} from '@fuse';
 import TimelineTab from './tabs/TimelineTab';
 import PhotosVideosTab from './tabs/PhotosVideosTab';
-import AboutTab from './tabs/AboutTab';
+import Profile from './tabs/Profile';
 import LabelsApp from './tabs/labels/LabelsApp';
 import FriendsApp from './tabs/friends/FriendsApp';
 import FloorPlansApp from './tabs/floorplans/FloorPlansApp';
@@ -33,6 +33,10 @@ class ProfilePage extends Component {
     {
         const {classes} = this.props;
         const {value} = this.state;
+        const user = {
+            name    : localStorage.getItem("name"),
+            imgURL  : localStorage.getItem("imgURL")
+        }
 
         return (
             <FusePageSimple
@@ -44,16 +48,11 @@ class ProfilePage extends Component {
                     <div className="p-24 flex flex-1 flex-col items-center justify-center md:flex-row">
                         <div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Avatar className="w-96 h-96" src="assets/images/avatars/Velazquez.jpg"/>
+                                <Avatar className="w-96 h-96" src={user.imgURL}/>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                <Typography className="md:ml-24" variant="h4" color="inherit">John Doe</Typography>
+                                <Typography className="md:ml-24" variant="h4" color="inherit">{user.name}</Typography>
                             </FuseAnimate>
-                        </div>
-
-                        <div className="flex items-center justify-end">
-                            <Button className="mr-8 normal-case" variant="contained" color="secondary" aria-label="Follow">Follow</Button>
-                            <Button className="normal-case" variant="contained" color="primary" aria-label="Send Message">Send Message</Button>
                         </div>
                     </div>
                 }
@@ -91,7 +90,7 @@ class ProfilePage extends Component {
                 content={
                     <div className="p-16 sm:p-24">
                         {value === 0 && (
-                            <AboutTab/>
+                            <Profile/>
                         )}
                         {value === 1 && (
                             <LabelsApp />

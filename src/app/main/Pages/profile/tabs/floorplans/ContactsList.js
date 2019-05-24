@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
+import ChipsArray from './chips/ChipsArray';
 
 class ContactsList extends Component {
 
@@ -28,6 +29,12 @@ class ContactsList extends Component {
 
     closeSelectedContactsMenu = () => {
         this.setState({selectedContactsMenu: null});
+    };
+
+    dateFormat = (date) => {
+        var d = new Date(date);
+        d = (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+(d.getHours() > 12 ? d.getHours() - 12 : d.getHours())+':'+d.getMinutes()+' '+(d.getHours() >= 12 ? "PM" : "AM");
+        return <div>{d}</div>
     };
 
     render()
@@ -130,9 +137,9 @@ class ContactsList extends Component {
                                     </React.Fragment>
                                 )
                             ),
-                            accessor : "avatar",
+                            accessor : "thumbnail",
                             Cell     : row => (
-                                <Avatar className="mr-8" alt={row.original.name} src={row.value}/>
+                                <Avatar className="mr-8" alt={row.original.name} src={row.value} style={{borderRadius: 0}} />
                             ),
                             className: "justify-center",
                             width    : 64,
@@ -141,46 +148,32 @@ class ContactsList extends Component {
                         {
                             Header    : "Name",
                             accessor  : "name",
-                            filterable: true,
+                            filterable: false,
                             className : "font-bold"
                         },
-                        // // {
-                        // //     Header    : "Company",
-                        // //     accessor  : "company",
-                        // //     filterable: true
-                        // // },
-                        // {
-                        //     Header    : "Job Title",
-                        //     accessor  : "jobTitle",
-                        //     filterable: true
-                        // },
                         {
-                            Header    : "Email",
-                            accessor  : "email",
-                            filterable: true
+                            Header    : "Created at",
+                            accessor  : "created_at",
+                            filterable: false,
+                            Cell      : row => (
+                                this.dateFormat(row.value)
+                            )
                         },
                         {
-                            Header    : "Phone Number",
-                            accessor  : "phone",
-                            filterable: true
+                            Header    : "Tags",
+                            accessor  : "tags",
+                            Cell      : row => (
+                                <ChipsArray data={row.value} isEdit={false} />
+                            ),
+                            filterable: false,
+                            sortable  : false,
                         },
                         {
                             Header: "",
-                            width : 128,
+                            width : 64,
+                            className : "justify-center",
                             Cell  : row => (
                                 <div className="flex items-center">
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            toggleStarredContact(row.original.id)
-                                        }}
-                                    >
-                                        {user.starred && user.starred.includes(row.original.id) ? (
-                                            <Icon>star</Icon>
-                                        ) : (
-                                            <Icon>star_border</Icon>
-                                        )}
-                                    </IconButton>
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();

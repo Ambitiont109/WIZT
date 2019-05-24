@@ -158,6 +158,9 @@ class ContactsList extends Component {
                         {
                             Header    : "Email verified",
                             accessor  : "email_verified",
+                            Cell      : row => (
+                                <div>{row.value === true? "Yes" : "No"}</div>
+                            ),
                             filterable: false
                         },
                         {
@@ -168,25 +171,27 @@ class ContactsList extends Component {
                         {
                             Header    : "Phone Number verified",
                             accessor  : "Phone_number_verified",
+                            Cell      : row => (
+                                <div>{row.value === true? "Yes" : "No"}</div>
+                            ),
+                            filterable: false
+                        },
+                        {
+                            Header    : "Label in use",
+                            accessor  : "label_in_use",
+                            filterable: false
+                        },
+                        {
+                            Header    : "Photo in use",
+                            accessor  : "photo_in_use",
                             filterable: false
                         },
                         {
                             Header: "",
-                            width : 128,
+                            width : 64,
+                            className : "justify-center",
                             Cell  : row => (
                                 <div className="flex items-center">
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            toggleStarredContact(row.original.id)
-                                        }}
-                                    >
-                                        {user.starred && user.starred.includes(row.original.id) ? (
-                                            <Icon>star</Icon>
-                                        ) : (
-                                            <Icon>star_border</Icon>
-                                        )}
-                                    </IconButton>
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
