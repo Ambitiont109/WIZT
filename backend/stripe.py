@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Plan,User,Transaction
+from .models import Plan,User#,Transaction
 import stripe
 from django.shortcuts import get_object_or_404
 stripe.api_key = "sk_test_gCC3ppShZfCsyYgOHZ2L22iN"
