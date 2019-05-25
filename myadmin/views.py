@@ -54,7 +54,7 @@ class LabelViewSet(viewsets.ModelViewSet):
 
 class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,IsAdminUser)
-    serializer_class = Transaction
+    serializer_class = TransactionSerializer
 
     def get_serializer_class(self):
         if self.action == 'list':

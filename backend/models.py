@@ -10,6 +10,8 @@ class User(AbstractUser):
     email_verified = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20, unique=True, null=True)
     phone_number_verified = models.BooleanField(default=False)
+    device_token = models.CharField(max_length=50)
+    device_type = models.CharField(max_length=50)
     picture = models.URLField(max_length=100, null=True)
     total_label_count = models.IntegerField(default=0)
     label_in_use = models.IntegerField(default=100)
@@ -33,6 +35,7 @@ class Label(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     tags = models.CharField(max_length=200)
+    ar_mark_image = models.CharField(max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -147,17 +150,24 @@ class ShareLabel(models.Model):
 
 class Plan(models.Model):
     id = models.BigAutoField(primary_key=True)
+    icon = models.CharField(max_length=100)
     price = models.FloatField()
-    plan_name = models.CharField(max_length=50)
+    currency = models.CharField(max_length=10,default='USD')
+    name = models.CharField(max_length=50)
+    sub_name = models.CharField(max_length=100,default='sub_name')
     photo_count = models.IntegerField()
     label_count = models.IntegerField()
+    description = models.TextField(default='description')
+    is_free = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "plans"
+        
 
 class Transaction(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     pay_amount = models.FloatField(blank=False,null=False)
