@@ -21,6 +21,7 @@ from django.http import Http404
 from rest_framework.viewsets import ModelViewSet
 
 from .serializers import *
+from myadmin.serializers import UserSerializer as OtherUserSerializer
 from .models import *
 import boto3
 
@@ -169,7 +170,13 @@ class NotificaionViewSet(viewsets.ModelViewSet):
 
 class ShareLabelViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    serializer_class = ShareLabelSerializer
+    serializer_class = ShareLabelWriteSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return ShareLabelReadSerializer
+        else:
+            return ShareLabelWriteSerializer
 
     def get_queryset(self):
         self.request.data['share_by'] = self.request.user.id
@@ -194,8 +201,9 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
         request.data['share_by'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        share_label = serializer.save()
         headers = self.get_success_headers(serializer.data)
+        serializer = ShareLabelReadSerializer(instance = share_label)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
@@ -211,7 +219,7 @@ class PlanViewSet(viewsets.GenericViewSet,mixins.ListModelMixin):
 @permission_classes((permissions.IsAuthenticated,))
 def show_profile(request):
     instance = request.user
-    serializer = UserSerializer(instance)
+    serializer = OtherUserSerializer(instance)
     return Response(serializer.data)
 
 
@@ -243,6 +251,31 @@ class AddressViewSet(APIView):
             address = serializer.save()
             return Response(serializer.data,status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FloorPlanViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = FloorPlanWriteSerializer
+    pagination_class = None
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return FloorPlanReadSerializer
+        else:
+            return FloorPlanWriteSerializer
+
+    def get_queryset(self):
+        self.request.data['user'] = self.request.user.id
+        return FloorPlan.objects.filter(user=self.request.user.id).order_by('-updated_at')
+
+    def create(self,request, *args, **kwargs):
+        request.data['user'] = self.request.user.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        share_label = serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        serializer = FloorPlanReadSerializer(instance = share_label)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

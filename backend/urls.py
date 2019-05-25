@@ -13,6 +13,7 @@ router.register('users', UserViewSet, basename='user')
 router.register('notifications',NotificaionViewSet,basename='notification')
 router.register('share/labels',ShareLabelViewSet,basename='sharelabel')
 router.register('plans',PlanViewSet,basename='plan')
+router.register('floorplans',FloorPlanViewSet,basename='floorplan')
 
 urlpatterns = [
     # Authentication

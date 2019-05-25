@@ -32,6 +32,8 @@ class UserSerializerForRead(serializers.ModelSerializer):
 
 
 
+
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
@@ -75,7 +77,16 @@ class NotificationReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ShareLabelSerializer(serializers.ModelSerializer):
+class ShareLabelWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShareLabel
+        fields = '__all__'
+
+
+class ShareLabelReadSerializer(serializers.ModelSerializer):
+    label = LabelSerializer()
+    share_by = UserSerializerForRead()
+    share_to = UserSerializerForRead()
     class Meta:
         model = ShareLabel
         fields = '__all__'
@@ -92,3 +103,15 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         fields = '__all__'
 
+
+class FloorPlanWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FloorPlan
+        fields = '__all__'
+
+
+class FloorPlanReadSerializer(serializers.ModelSerializer):
+    user = UserSerializerForRead()
+    class Meta:
+        model = FloorPlan
+        fields = '__all__'

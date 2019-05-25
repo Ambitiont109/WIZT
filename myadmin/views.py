@@ -50,3 +50,19 @@ class LabelViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Label.objects.order_by('-updated_at').all()
+
+
+class TransactionViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    serializer_class = Transaction
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return TransactionSerializer
+        elif self.action == 'retrieve':
+            return TransactionDetailSerializer
+        else:
+            return TransactionSerializer
+    def get_queryset(self):
+        return Transaction.objects.all()
+

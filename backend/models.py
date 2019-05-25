@@ -13,6 +13,7 @@ class User(AbstractUser):
     picture = models.URLField(max_length=100, null=True)
     total_label_count = models.IntegerField(default=0)
     label_in_use = models.IntegerField(default=100)
+    photo_in_use = models.IntegerField(default = 20)
     friends_count = models.IntegerField(default=0)
     friends = models.ManyToManyField('User', through='Friend', symmetrical=False, related_name='friends+')    
     created_at = models.DateTimeField(auto_now_add=True)
@@ -116,17 +117,19 @@ class Address(models.Model):
 
 class FloorPlan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, related_name='+', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='floor_plans', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    snapshot = models.URLField()
-    is_image_type = models.BooleanField(default=False)
-    shape_image = models.URLField()
-    shapes = models.TextField()
+    tags = models.CharField(max_length=300)
+    thumbnail = models.URLField()
+    image = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "floor_plans"
+        indexes = [
+            models.Index(fields=['-updated_at',])
+        ]
 
 
 class ShareLabel(models.Model):
@@ -144,7 +147,8 @@ class ShareLabel(models.Model):
 
 class Plan(models.Model):
     id = models.BigAutoField(primary_key=True)
-    price = models.IntegerField()
+    price = models.FloatField()
+    plan_name = models.CharField(max_length=50)
     photo_count = models.IntegerField()
     label_count = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -152,3 +156,20 @@ class Plan(models.Model):
 
     class Meta:
         db_table = "plans"
+
+class Transaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    pay_amount = models.FloatField(blank=False,null=False)
+    currency = models.CharField(max_length=50)
+    name = models.CharField(max_length = 100)
+    mobile_number = models.CharField(max_length = 100)
+    shipping_address = models.CharField(max_length = 100)
+    country = models.CharField(max_length = 100)
+    state = models.CharField(max_length = 100)
+    zip_code = models.CharField(max_length = 100)
+    token_id = models.CharField(max_length = 100)
+    ip_address = models.CharField(max_length = 100)
+    payment_status = models.CharField(max_length = 100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
