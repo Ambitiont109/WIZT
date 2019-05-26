@@ -2,7 +2,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Plan,User#,Transaction
+from .models import Plan,User,SubscribeTransaction,Transaction
+from .serializers import SubscribeSerializer
 import stripe
 from django.shortcuts import get_object_or_404
 stripe.api_key = "sk_test_gCC3ppShZfCsyYgOHZ2L22iN"
@@ -154,28 +155,97 @@ def doPayment(request):
 	return Response('success', status=status.HTTP_200_OK)
 
 
+# @api_view(['POST'])
+# @permission_classes((IsAuthenticated,))
+# def doSubscription(request):
+# 	try:
+# 		customer = request.data['customerId']
+# 		planId = request.data['planId']
+# 	except Exception as e:
+# 		return handle_input_error('{"customerId":"field_is_required","planId":"field_is_required"}')
+# 	try:
+# 		res = stripe.Subscription.create(
+# 			customer="cus_F6hg9lS1KHdpHr",
+# 			items=[
+# 				{
+# 				"plan": planId,
+# 				},
+# 			]
+# 		)
+# 	except Exception as e:
+# 		return handle_error(e)
+# 	return Response(res, status=status.HTTP_200_OK)
+
+
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
 def doSubscription(request):
-	try:
-		customer = request.data['customerId']
-		planId = request.data['planId']
-	except Exception as e:
-		return handle_input_error('{"customerId":"field_is_required","planId":"field_is_required"}')
-	try:
-		res = stripe.Subscription.create(
-			customer="cus_F6hg9lS1KHdpHr",
-			items=[
-				{
-				"plan": planId,
-				},
-			]
-		)
-	except Exception as e:
-		return handle_error(e)
-	return Response(res, status=status.HTTP_200_OK)
+	serializer = SubscribeSerializer(data=request.data)
+	serializer.is_valid(raise_exception = True)
+	customerId = request.user.subscribed_customer_id
+	plan = serializer.validated_data['plan']
+	if plan.is_free:
+		request.user.subscribed_plan = plan
+		request.user.save()
+		transaction = SubscribeTransaction.objects.create(plan=plan,user=request.user)
+		transaction.plan_name = plan.name
+		transaction.plan_price = plan.price
+		transaction.plan_product_id = plan.product_id
+		transaction.save()
+		
+		return Response('success')
+	# email = 
+	print(serializer.validated_data)
+	if not serializer.validated_data['email'] or not serializer.validated_data['tokenId']:	# If email or tokenId is not present, use the already existing cusmoter.		
+		if not customerId:
+			return Response({'email':'required','tokenId':'required'},status = status.HTTP_400_BAD_REQUEST)
 
+	try:
+		if not customerId:
+			res = stripe.Customer.create(email=serializer.validated_data['email'],source=serializer.validated_data['tokenId'])
+			customerId = res['id']
+		subscription_id = request.user.subscription_id
+		if not subscription_id:
+			print('create')
+			res = stripe.Subscription.create(
+				customer=customerId,
+				items = [{"plan":plan.product_id}])
+			request.user.subscription_id = res.id
+			request.user.subscribed_plan = plan
+			request.user.subscribed_token_id = serializer.validated_data['tokenId']
+			request.user.subscribed_customer_id = customerId
+			request.user.subscribed_email = serializer.validated_data['email']
 
+		else:
+			print('modify')
+			# res = stripe.Subscription.modify(
+			# 	subscription_id,
+			# 	items = [{"plan":plan.product_id}])
+
+			subscription = stripe.Subscription.retrieve('sub_F90njAzkpg0qab')
+			res = stripe.Subscription.modify(
+			  'sub_F90njAzkpg0qab',
+			  cancel_at_period_end=False,
+			  items=[{
+			    'id': subscription['items']['data'][0].id,
+			    'plan': 'plan_EwPdwJ4bIkLgWD',
+			  }]
+			)
+			request.user.subscription_id = res.id
+			request.user.subscribed_plan = plan 
+		request.user.save()
+		transaction = SubscribeTransaction.objects.create(plan=plan,user=request.user)
+		transaction.subscribe_email = request.user.subscribed_email
+		transaction.subscribed_token_id = request.user.subscribed_token_id
+		transaction.subscription_id = request.user.subscription_id
+		transaction.plan_name = plan.name
+		transaction.plan_price = plan.price
+		transaction.plan_product_id = plan.product_id
+		transaction.save()
+
+	except Exception as e:
+		return handle_error(e)		
+	return Response('success')		
 
 
 @api_view(['POST'])

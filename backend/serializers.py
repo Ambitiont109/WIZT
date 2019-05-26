@@ -115,3 +115,9 @@ class FloorPlanReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = FloorPlan
         fields = '__all__'
+
+
+class SubscribeSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=False,default=None)
+    tokenId = serializers.CharField(max_length = 50,required=False,default=None)
+    plan = serializers.PrimaryKeyRelatedField(queryset=Plan.objects.all())

@@ -45,14 +45,13 @@ def login(request):
     for item in user_dic['UserAttributes']:
         serializer_data[item['Name']] = item['Value']
 
-    serializer_data['name'] = serializer_data['email']
     serializer_data['username'] = serializer_data['email']
     serializer = UserSerializer(data=serializer_data)
 
     if serializer.is_valid():
         user = serializer.save()
     else:
-        user = User.objects.get(email=user_dic['Username'])
+        user = User.objects.get(email=serializer_data['email'])
 
     token = Token.objects.get_or_create(user=user)
 
@@ -102,13 +101,22 @@ class FriendsList(viewsets.ModelViewSet):
     def get_queryset(self):
         self.request.data['user'] = self.request.user.id
         is_friend = self.request.GET.get('is_friend', 'true')
+        user = self.request.user
         if is_friend == 'true':
-            return self.request.user.friends.all()
+            friends = Friend.objects.filter(Q(from_user=user)|Q(to_user=user),status=True).all()
+            friend_list = []
+            for friend in friends:
+                if(friend.to_user == user):
+                    friend_list.append(friend.from_user.id)
+                else:
+                    friend_list.append(friend.to_user.id)
+            return User.objects.filter(pk__in=friend_list)
         else:
             query = self.request.GET.get('query', '')
-            user = self.request.user
             friends = user.friends.all()
-            return User.objects.exclude(pk__in=[user.id for user in friends]).filter(
+            unfriend_list = [user.id for user in friends]
+            unfriend_list.append(user.id)
+            return User.objects.exclude(pk__in=unfriend_list).filter(
                 Q(username__contains=query) | Q(name__contains=query))
 
 
@@ -117,15 +125,16 @@ class FriendViewSet(viewsets.ModelViewSet):
     serializer_class = FriendWriteSerializer
 
     def get_serializer_class(self):
-        if self.action == 'list' or self.action == 'retrieve':
+        if self.action == 'list' or self.action == 'retrieve' or self.action == 'update':
+            self.request.data['to_user'] = self.request.user.id
             return FriendReadSerializer
         else:
             return FriendWriteSerializer
 
     def get_queryset(self):
         # return Friend.objects.all()
-        self.request.data['from_user'] = self.request.user.id
-        return Friend.objects.filter(from_user=self.request.user)
+        
+        return Friend.objects.filter(to_user=self.request.user,status=False)
 
     def create(self, request):
         request.data['from_user'] = request.user.id
@@ -185,9 +194,9 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
     def list(self,request, *args, **kwargs):
         me = self.request.GET.get('me','true')
         if me == 'true' :
-            queryset = ShareLabel.objects.filter(share_by=self.request.user.id)
-        else:
             queryset = ShareLabel.objects.filter(share_to=self.request.user.id)
+        else:
+            queryset = ShareLabel.objects.filter(share_by=self.request.user.id)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -215,12 +224,21 @@ class PlanViewSet(viewsets.GenericViewSet,mixins.ListModelMixin):
         return Plan.objects.all()
 
 
-@api_view(['GET'])
+@api_view(['GET','PATCH'])
 @permission_classes((permissions.IsAuthenticated,))
 def show_profile(request):
     instance = request.user
-    serializer = OtherUserSerializer(instance)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        serializer = OtherUserSerializer(instance)
+        return Response(serializer.data)
+    if request.method == 'PATCH':
+        pic_url = request.data.get('picture',None)
+        if(pic_url):
+            request.user.picture = pic_url  
+            request.user.save()      
+            return Response('',status=status.HTTP_200_OK)
+        else:
+            return Response('',status=status.HTTP_400_BAD_REQUEST)
 
 
 class AddressViewSet(APIView):

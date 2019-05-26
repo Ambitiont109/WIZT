@@ -11,7 +11,7 @@ class LoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('password','last_login','is_superuser','is_staff','is_active','date_joined','groups','user_permissions','friends')
+        exclude = ('password','last_login','is_superuser','is_staff','is_active','date_joined','groups','user_permissions','friends','subscribed_customer_id','subscribed_token_id','subscription_id')
 
 class TransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()

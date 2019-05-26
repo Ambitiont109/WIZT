@@ -1,0 +1,56 @@
+[
+  {
+    "model": "backend.plan",
+    "pk": 1,
+    "fields": {
+      "product_id": "plan_Emu7F1PNd1QiaX",
+      "icon":"https://s3-ap-southeast-1.amazonaws.com/wizt/site/plan_images/master.png",
+      "price":20.99,
+      "currency":"USD",
+      "name":"Master",
+      "sub_name":"Billed Monthly",
+      "photo_count":120,
+      "label_count":20,
+      "description":"Get 20 additional Labels, Take up to 200 Photos, Customisable Floorplans, Reusable Labels, Unlimited Tags, Billed Monthly",
+      "is_free":false,
+      "created_at":"2019-05-18 17:13:10-05",
+      "updated_at":"2019-05-18 17:13:10-05"
+    }
+  },
+  {
+    "model": "backend.plan",
+    "pk": 2,
+    "fields": {
+      "product_id": "plan_Emu9pnYeN6lkd2",
+      "icon":"https://s3-ap-southeast-1.amazonaws.com/wizt/site/plan_images/junior.png",
+      "price":10.99,
+      "currency":"USD",
+      "name":"Junior",
+      "sub_name":"Billed Monthly",
+      "photo_count":60,
+      "label_count":10,
+      "description":"Get 10 additional Labels, Take up to 100 Photos, Customisable Floorplans, Reusable Labels, Unlimited Tags, Billed Monthly",
+      "is_free":false,
+      "created_at":"2019-05-18 17:13:10-05",
+      "updated_at":"2019-05-18 17:13:10-05"
+    }
+  },
+  {
+    "model": "backend.plan",
+    "pk": 3,
+    "fields": {
+      "product_id": "",
+      "icon":"",
+      "price":0.00,
+      "currency":"USD",
+      "name":"Free",
+      "sub_name":"Free Plan",
+      "photo_count":10,
+      "label_count":5,
+      "description":"Get 5 Labels, Take up to 50 Photos",
+      "is_free":true,
+      "created_at":"2019-05-18 17:13:10-05",
+      "updated_at":"2019-05-18 17:13:10-05"
+    }
+  }
+]

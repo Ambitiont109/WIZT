@@ -17,9 +17,17 @@ class User(AbstractUser):
     label_in_use = models.IntegerField(default=100)
     photo_in_use = models.IntegerField(default = 20)
     friends_count = models.IntegerField(default=0)
-    friends = models.ManyToManyField('User', through='Friend', symmetrical=False, related_name='friends+')    
+    friends = models.ManyToManyField('User', through='Friend', symmetrical=False, related_name='friends+')
+    #subscription part
+    subscribed_email = models.EmailField(blank=True)
+    subscribed_customer_id = models.CharField(max_length=50, null=True)
+    subscribed_token_id = models.CharField(max_length=100,blank=True)   # customer source id
+    subscribed_plan = models.ForeignKey('Plan',related_name='users',on_delete=models.CASCADE,null=True)
+    subscription_id = models.CharField(max_length = 100,null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return "{}".format(self.name)
@@ -35,7 +43,7 @@ class Label(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     tags = models.CharField(max_length=200)
-    ar_mark_image = models.CharField(max_length=150)
+    ar_mark_image = models.CharField(max_length=150,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -140,16 +148,18 @@ class ShareLabel(models.Model):
     label = models.ForeignKey(Label, related_name='+', on_delete=models.CASCADE)
     share_by = models.ForeignKey(User, related_name='shared_labels_by_me', on_delete=models.CASCADE)
     share_to = models.ForeignKey(User, related_name='shared_labels_to_me', on_delete=models.CASCADE)
+
     edit_permission = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "share_labels"
-
+        unique_together = ('label', 'share_by','share_to')
 
 class Plan(models.Model):
     id = models.BigAutoField(primary_key=True)
+    product_id = models.CharField(max_length=100)   # represent the Product Id of the Stripe.
     icon = models.CharField(max_length=100)
     price = models.FloatField()
     currency = models.CharField(max_length=10,default='USD')
@@ -165,6 +175,17 @@ class Plan(models.Model):
     class Meta:
         db_table = "plans"
         
+class SubscribeTransaction(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    subscribe_email = models.EmailField()
+    subscribed_token_id = models.CharField(max_length=100)
+    subscription_id = models.CharField(max_length = 100)
+    plan_name = models.CharField(max_length=100)
+    plan_price = models.FloatField(null=True)
+    plan_product_id = models.CharField(max_length=100)
+
 
 class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

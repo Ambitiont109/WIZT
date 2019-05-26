@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from backend.models import *
 from .serializers import *
+from backend.serializers import PlanSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
@@ -66,3 +67,10 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Transaction.objects.all()
 
+
+class PlanViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    serializer_class = PlanSerializer
+
+    def get_queryset(self):
+        return Plan.objects.all()
