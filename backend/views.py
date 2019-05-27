@@ -193,7 +193,7 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
 
     def list(self,request, *args, **kwargs):
         me = self.request.GET.get('me','true')
-        if me == 'true' :
+        if me == 'true':
             queryset = ShareLabel.objects.filter(share_to=self.request.user.id)
         else:
             queryset = ShareLabel.objects.filter(share_by=self.request.user.id)
