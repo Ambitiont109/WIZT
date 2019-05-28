@@ -19,6 +19,59 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('name', 'email', 'email_verified', 'phone_number', 'phone_number_verified', 'picture', 'username')
 
 
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name','email','phone_number','password','email_verified','phone_number_verified')
+
+    def create(self,validated_data):
+        user = User.objects.create(**validated_data)
+        user.username = validated_data['email']
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
+
+class FaceBookLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name','email','phone_number','facebook_id','email_verified','phone_number_verified')
+
+    def create(self,validated_data):
+        email = validated_data['email']
+        user = User.objects.get_or_create(email=email)[0]
+        for key, value in validated_data.items():
+            setattr(user,key,value)
+        if user.phone_number == '':
+            user.phone_number = None
+        user.username = validated_data['email']
+        user.set_password('qCg8gwg2m7YKtWWrehYg')
+        user.save()
+        return user
+
+
+class GoogleLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name','email','phone_number','google_id','email_verified','phone_number_verified')
+
+    def create(self,validated_data):
+        email = validated_data['email']
+        user = User.objects.get_or_create(email=email)[0]
+        for key,val in validated_data.items():
+            setattr(user,key,val)
+        if user.phone_number == '':
+            user.phone_number = None
+        user.username = validated_data['email']
+        user.set_password('qCg8gwg2m7YKtWWrehYg')
+        user.save()
+        return user
+
+
+class PasswordNewSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=50)
+    password = serializers.CharField(max_length=50)
+        
 class UserSerializerForFriend(serializers.ModelSerializer):
     class Meta:
         model = User

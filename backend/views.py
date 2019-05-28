@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User, Group
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate
 from django.views import View
 from django.db.models import Q
 from rest_framework import viewsets,mixins
@@ -26,36 +28,97 @@ from .models import *
 import boto3
 
 
+# @api_view(['POST'])
+# def login(request):
+#     if request.method != 'POST':
+#         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+#     access_token = request.headers.get("Authorization")
+#     client = boto3.client('cognito-idp', region_name='ap-southeast-1')
+#     try:
+#             # HTTP HEAD request
+#         user_dic = client.get_user(AccessToken=access_token.replace('Bearer ', ''))
+#     except ClientError as e:
+#         if e.response['Error']['Code'] == 'EntityAlreadyExists':
+#             return Response("User already exists",status=status.HTTP_400_BAD_REQUEST)
+#         else:
+#             return Response("Unexpected error: %s" % e,status=status.HTTP_400_BAD_REQUEST)
+#     serializer_data = {}
+
+#     for item in user_dic['UserAttributes']:
+#         serializer_data[item['Name']] = item['Value']
+
+#     serializer_data['username'] = serializer_data['email']
+#     serializer = UserSerializer(data=serializer_data)
+
+#     if serializer.is_valid():
+#         user = serializer.save()
+#     else:
+#         user = User.objects.get(email=serializer_data['email'])
+
+#     token = Token.objects.get_or_create(user=user)
+
+#     return Response(token[0].key,status=status.HTTP_200_OK)
 @api_view(['POST'])
 def login(request):
-    if request.method != 'POST':
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    access_token = request.headers.get("Authorization")
-    client = boto3.client('cognito-idp', region_name='ap-southeast-1')
     try:
-            # HTTP HEAD request
-        user_dic = client.get_user(AccessToken=access_token.replace('Bearer ', ''))
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'EntityAlreadyExists':
-            return Response("User already exists",status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response("Unexpected error: %s" % e,status=status.HTTP_400_BAD_REQUEST)
-    serializer_data = {}
+        email = request.data['email']
+        pwd = request.data['password']
+    except Exception as e:
+        return Response('Must include "email" and "password"',status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = User.objects.get(email=email)    
+        if not user.check_password(pwd):
+            return Response('email or password is invalid',status=status.HTTP_400_BAD_REQUEST)
+        token = Token.objects.get_or_create(user=user)
+        return Response(token[0].key,status=status.HTTP_200_OK)
+    except ObjectDoesNotExist:
+        return Response('email or password is invalid',status=status.HTTP_400_BAD_REQUEST)
 
-    for item in user_dic['UserAttributes']:
-        serializer_data[item['Name']] = item['Value']
 
-    serializer_data['username'] = serializer_data['email']
-    serializer = UserSerializer(data=serializer_data)
-
+@api_view(['POST'])
+def register(request):
+    serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
-    else:
-        user = User.objects.get(email=serializer_data['email'])
+        serializer = UserSerializer(instance=user)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-    token = Token.objects.get_or_create(user=user)
+@api_view(['POST'])
+def login_facebook(request):
+    serializer = FaceBookLoginSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        token = Token.objects.get_or_create(user=user)
+        return Response(token[0].key,status=status.HTTP_200_OK)
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(token[0].key,status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def login_google(request):
+    serializer = GoogleLoginSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        token = Token.objects.get_or_create(user=user)
+        return Response(token[0].key,status=status.HTTP_200_OK)
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def password_new(request):
+    serializer = PasswordNewSerializer(data=request.data)
+    if serializer.is_valid():
+        email = serializer.validated_data['email']
+        pwd = serializer.validated_data['password']
+        try:
+            user = User.objects.get(email=email)    
+            user.set_password(pwd)
+            user.save()
+            serializer = UserSerializer(instance=user)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response('email is not exists',status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

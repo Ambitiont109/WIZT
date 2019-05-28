@@ -8,7 +8,7 @@ class User(AbstractUser):
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=50, unique=True)
     email_verified = models.BooleanField(default=False)
-    phone_number = models.CharField(max_length=20, unique=True, null=True)
+    phone_number = models.CharField(max_length=20, unique=True, null=True,blank=True)
     phone_number_verified = models.BooleanField(default=False)
     device_token = models.CharField(max_length=50)
     device_type = models.CharField(max_length=50)
@@ -24,7 +24,10 @@ class User(AbstractUser):
     subscribed_token_id = models.CharField(max_length=100,blank=True)   # customer source id
     subscribed_plan = models.ForeignKey('Plan',related_name='users',on_delete=models.CASCADE,null=True)
     subscription_id = models.CharField(max_length = 100,null=True)
-
+    #auth_part
+    facebook_id = models.CharField(max_length = 100, blank=True,null=True)
+    google_id = models.CharField(max_length=100,blank=True,null=True)
+    #
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

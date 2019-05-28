@@ -18,6 +18,10 @@ router.register('floorplans',FloorPlanViewSet,basename='floorplan')
 urlpatterns = [
     # Authentication
     path('login', views.login),
+    path('register/',views.register),
+    path('login/facebook/',views.login_facebook),
+    path('login/google/',views.login_google),
+    path('password/new/',views.password_new),
     path('logout', views.logout),
     path('users/friends/', FriendsList.as_view({'get': 'list'})),
     path('profile/',show_profile),
