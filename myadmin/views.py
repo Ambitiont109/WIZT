@@ -36,10 +36,10 @@ class UsersViewSet(viewsets.ModelViewSet,):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return User.objects.all()
+        return User.objects.all().exclude(is_superuser=True)
 
     def retrieve(self, request, pk=None):
-        queryset = User.objects.all()
+        queryset = User.objects.all().exclude(is_superuser=True)
         user = get_object_or_404(queryset, pk=pk)
         serializer = UserDetailSerializer(user)
         return Response(serializer.data)

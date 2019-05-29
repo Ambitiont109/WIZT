@@ -1,6 +1,8 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from django.core.exceptions import ObjectDoesNotExist
+from wizt.utils import randomString
 from .models import *
 
 
@@ -33,37 +35,69 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class FaceBookLoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=50, validators=[])
+    phone_number = serializers.CharField(max_length=20, validators=[])
     class Meta:
         model = User
-        fields = ('name','email','phone_number','facebook_id','email_verified','phone_number_verified')
+        fields = ('name','email','phone_number','facebook_id','email_verified','phone_number_verified','picture')
 
     def create(self,validated_data):
         email = validated_data['email']
-        user = User.objects.get_or_create(email=email)[0]
-        for key, value in validated_data.items():
-            setattr(user,key,value)
-        if user.phone_number == '':
-            user.phone_number = None
-        user.username = validated_data['email']
-        user.set_password('qCg8gwg2m7YKtWWrehYg')
+        user = None
+        try:
+            user = User.objects.get(email=email)
+            user.facebook_id = validated_data['facebook_id']
+            for key,val in validated_data.items():
+                pre_val = getattr(user,key)
+                if not pre_val or pre_val == '':
+                    setattr(user,key,val)
+        except ObjectDoesNotExist:
+            if User.objects.filter(phone_number=validated_data['phone_number']).exists():
+                raise serializers.ValidationError({"phone_number":["user with this phone_number already exists."]})
+            user = User.objects.create()
+            for key,val in validated_data.items():
+                setattr(user,key,val)
+            if user.phone_number == '':
+                user.phone_number = None
+            else:
+                user.phone_number_verified = True
+            user.username = validated_data['email']
+            user.set_password(randomString())
+        user.email_verified = True
         user.save()
         return user
 
 
 class GoogleLoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=50, validators=[])
+    phone_number = serializers.CharField(max_length=20, validators=[])
     class Meta:
         model = User
-        fields = ('name','email','phone_number','google_id','email_verified','phone_number_verified')
+        fields = ('name','email','phone_number','google_id','email_verified','phone_number_verified','picture')
 
     def create(self,validated_data):
         email = validated_data['email']
-        user = User.objects.get_or_create(email=email)[0]
-        for key,val in validated_data.items():
-            setattr(user,key,val)
-        if user.phone_number == '':
-            user.phone_number = None
-        user.username = validated_data['email']
-        user.set_password('qCg8gwg2m7YKtWWrehYg')
+        user = None
+        try:
+            user = User.objects.get(email=email)
+            user.google_id = validated_data['google_id']
+            for key,val in validated_data.items():
+                pre_val = getattr(user,key)
+                if not pre_val or pre_val == '':
+                    setattr(user,key,val)
+        except ObjectDoesNotExist:
+            if User.objects.filter(phone_number=validated_data['phone_number']).exists():
+                raise serializers.ValidationError({"phone_number":["user with this phone_number already exists."]})
+            user = User.objects.create()
+            for key,val in validated_data.items():
+                setattr(user,key,val)
+            if user.phone_number == '':
+                user.phone_number = None
+            else:
+                user.phone_number_verified = True
+            user.username = validated_data['email']
+            user.set_password(randomString())
+        user.email_verified = True
         user.save()
         return user
 

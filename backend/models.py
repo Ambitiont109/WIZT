@@ -12,7 +12,7 @@ class User(AbstractUser):
     phone_number_verified = models.BooleanField(default=False)
     device_token = models.CharField(max_length=50)
     device_type = models.CharField(max_length=50)
-    picture = models.URLField(max_length=100, null=True)
+    picture = models.URLField(max_length=100, null=True,blank=True)
     total_label_count = models.IntegerField(default=0)
     label_in_use = models.IntegerField(default=100)
     photo_in_use = models.IntegerField(default = 20)

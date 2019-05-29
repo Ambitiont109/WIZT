@@ -124,11 +124,12 @@ def password_new(request):
 @api_view(['POST'])
 @permission_classes((permissions.IsAuthenticated,))
 def logout(request):
-    pass
-
+    token = Token.objects.get(user=request.user)
+    token.delete()
+    return Response("",status=status.HTTP_200_OK)
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().exclude(is_superuser=True)
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -140,6 +141,20 @@ class LabelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         self.request.data['user'] = self.request.user.id
         return Label.objects.filter(user=self.request.user)
+
+    def update(self,request,pk):
+        label = self.get_object()
+        serializer = LabelSerializer(instance=label, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        for image in label.image_set.all():
+            image.delete()
+        images = request.data['images']
+        for image in images:
+            record = Image(label=label, url=image['url'], thumbnail=image['thumbnail'], is_cover=image['is_cover'])
+            record.save()
+
+        serializer = LabelSerializer(label)
+        return Response(serializer.data)
 
     def create(self, request):
         request.data['user'] = request.user.id
@@ -173,14 +188,14 @@ class FriendsList(viewsets.ModelViewSet):
                     friend_list.append(friend.from_user.id)
                 else:
                     friend_list.append(friend.to_user.id)
-            return User.objects.filter(pk__in=friend_list)
+            return User.objects.filter(pk__in=friend_list).exclude(is_superuser=True)
         else:
             query = self.request.GET.get('query', '')
             friends = user.friends.all()
             unfriend_list = [user.id for user in friends]
             unfriend_list.append(user.id)
             return User.objects.exclude(pk__in=unfriend_list).filter(
-                Q(username__contains=query) | Q(name__contains=query))
+                Q(username__contains=query) | Q(name__contains=query)).exclude(is_superuser=True)
 
 
 class FriendViewSet(viewsets.ModelViewSet):
