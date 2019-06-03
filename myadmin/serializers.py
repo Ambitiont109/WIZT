@@ -43,3 +43,23 @@ class LabelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserSerializerForRead(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name', 'email', 'phone_number', 'picture', 'username', 'id')
+
+
+class NotificationWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
+
+
+class NotificationReadSerializer(serializers.ModelSerializer):
+    send_by = UserSerializerForRead()
+    send_to = UserSerializerForRead()
+    class Meta:
+        model = Notification
+        fields = '__all__'
+

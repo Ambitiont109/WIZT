@@ -25,7 +25,7 @@ urlpatterns = [
     path('logout', views.logout),
     path('users/friends/', FriendsList.as_view({'get': 'list'})),
     path('profile/',show_profile),
-    
+    path('file_upload/',views.file_upload),
     path('address/',AddressViewSet.as_view()),
     path('stripe/getCustomer/',stripe.getCustomer),
     path('stripe/createCustomer/',stripe.createCustomer),

@@ -6,6 +6,7 @@ from django.db.models import Q
 from rest_framework import viewsets,mixins
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.exceptions import MethodNotAllowed,NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
@@ -14,8 +15,8 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.generics import DestroyAPIView
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes,action
-from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes,action,parser_classes
+from rest_framework import permissions,parsers
 from rest_framework.permissions import IsAuthenticated
 from botocore.exceptions import ClientError
 
@@ -56,8 +57,23 @@ import boto3
 #         user = User.objects.get(email=serializer_data['email'])
 
 #     token = Token.objects.get_or_create(user=user)
-
 #     return Response(token[0].key,status=status.HTTP_200_OK)
+def create_notification(send_by,send_to,message,message_type):
+    notification = Notification.objects.create(send_by=send_by,send_to=send_to,message_type=message_type,message=message)
+    notification.save()
+
+
+@api_view(['POST'])
+def file_upload(request):
+    print(request.data)
+    print(request.FILES)
+    file_serializer =FileSerializer(data=request.data)
+    file_serializer.is_valid(raise_exception=True)
+    print(request.data)
+    # print(request.data['file'])
+    return Response(file_serializer.data,status=status.HTTP_200_OK)
+
+
 @api_view(['POST'])
 def login(request):
     try:
@@ -143,8 +159,17 @@ class LabelViewSet(viewsets.ModelViewSet):
         return Label.objects.filter(user=self.request.user)
 
     def update(self,request,pk):
-        label = self.get_object()
-        serializer = LabelSerializer(instance=label, data=request.data)
+        try:
+            label = Label.objects.get(pk=pk)
+            if label.user != request.user:
+                share_label = ShareLabel.objects.filter(label=label,share_to=request.user).first()
+                print(share_label)
+                if share_label == None or share_label.edit_permission == False:
+                    raise MethodNotAllowed(request.method)
+        except Label.DoesNotExist:
+            raise NotFound()
+        serializer = LabelSerializer(instance=label, data=request.data,partial=True)
+        print(serializer.initial_data)
         serializer.is_valid(raise_exception=True)
         for image in label.image_set.all():
             image.delete()
@@ -152,7 +177,7 @@ class LabelViewSet(viewsets.ModelViewSet):
         for image in images:
             record = Image(label=label, url=image['url'], thumbnail=image['thumbnail'], is_cover=image['is_cover'])
             record.save()
-
+        label = serializer.save()
         serializer = LabelSerializer(label)
         return Response(serializer.data)
 
@@ -210,9 +235,24 @@ class FriendViewSet(viewsets.ModelViewSet):
             return FriendWriteSerializer
 
     def get_queryset(self):
-        # return Friend.objects.all()
-        
-        return Friend.objects.filter(to_user=self.request.user,status=False)
+        # return Friend.objects.all()      
+        if self.action == 'list':  
+            return Friend.objects.filter(to_user=self.request.user,status=False)
+        else:
+            return Friend.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request,*args,**kwargs)
+        friend = self.get_object()
+        if friend.status == True:
+            create_notification(friend.from_user,friend.to_user,"Fried Request Has Been Accepted",1)
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        friend = self.get_object()
+        response = super().destroy(request,*args,**kwargs)
+        create_notification(friend.from_user,friend.to_user,"Fried Request Has Been Deleted",1)
+        return response
 
     def create(self, request):
         request.data['from_user'] = request.user.id
@@ -222,6 +262,7 @@ class FriendViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         friend = serializer.save()
+        create_notification(friend.from_user,friend.to_user,"Fried Request Has Been Sent",1)
         serializer = FriendReadSerializer(instance=friend)
         return Response(serializer.data)
 
@@ -239,7 +280,7 @@ class NotificaionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # self.request.data['send_by'] = self.request.user.id
         return Notification.objects.filter(Q(send_to = self.request.user)|Q(message_type=0)) # get broad casted notifications and received notifications
-
+   
     def create(self, request, *args, **kwargs):
         request.data['send_by'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
@@ -249,7 +290,7 @@ class NotificaionViewSet(viewsets.ModelViewSet):
         serializer = NotificationReadSerializer(instance = notification)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    @action(methods=['delete'], detail=False,url_path='clear')
+    @action(methods=['delete'], detail=False,url_path='clear')  # delete_all_notifications
     def clear(self,request):
         Notification.objects.filter(Q(send_to = self.request.user)).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -268,6 +309,11 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         self.request.data['share_by'] = self.request.user.id
         return ShareLabel.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        share_label = self.get_object()
+        response = super().destroy(request,*args,**kwargs)
+        create_notification(share_label.share_by,share_label.share_to,"Label has been shared to %s " % (share_label.share_to.name,),1)
 
     def list(self,request, *args, **kwargs):
         me = self.request.GET.get('me','true')
@@ -289,6 +335,7 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         share_label = serializer.save()
+        create_notification(share_label.share_by,share_label.share_to,"Label has been shared to %s" % (share_label.share_to.name,),1)
         headers = self.get_success_headers(serializer.data)
         serializer = ShareLabelReadSerializer(instance = share_label)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

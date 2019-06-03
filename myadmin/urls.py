@@ -10,6 +10,7 @@ router = DefaultRouter()
 # router.register('notifications',NotificaionViewSet,basename='notification')
 # router.register('share/labels',ShareLabelViewSet,basename='sharelabel')
 router.register('plans',PlanViewSet,basename='plan')
+router.register('notifications',NotificaionViewSet,basename='notifications')
 
 urlpatterns = [
     # Authentication
@@ -20,7 +21,7 @@ urlpatterns = [
     path('labels/<int:pk>/',LabelViewSet.as_view({'get':'retrieve'})),
     path('transactions/',TransactionViewSet.as_view({'get':'list'})),
     path('transactions/<int:pk>/',TransactionViewSet.as_view({'get':'retrieve'})),
-    
+    path('dashboard/',dashboard),
     # path('logout', views.logout),
     # path('users/friends/', FriendsList.as_view({'get': 'list'})),
     # path('profile/',show_profile),

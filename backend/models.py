@@ -163,7 +163,8 @@ class ShareLabel(models.Model):
 class Plan(models.Model):
     id = models.BigAutoField(primary_key=True)
     product_id = models.CharField(max_length=100)   # represent the Product Id of the Stripe.
-    icon = models.CharField(max_length=100)
+    # icon = models.CharField(max_length=100)
+    icon = models.ImageField()
     price = models.FloatField()
     currency = models.CharField(max_length=10,default='USD')
     name = models.CharField(max_length=50)

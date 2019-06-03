@@ -17,7 +17,8 @@ from django.urls import include, path
 from rest_framework import routers
 from backend import views
 from django.contrib import admin
-
+from django.conf.urls.static import static # new
+from django.conf import settings
 
 router = routers.DefaultRouter()
 router.register(r'groups', views.GroupViewSet)
@@ -31,4 +32,6 @@ urlpatterns = [
 
     path('test', views.test1),
 ]
-# Additionally, we include login URLs for the browsable API.
+# Additionally, we include the media url for static file service
+if settings.DEBUG: # new
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
