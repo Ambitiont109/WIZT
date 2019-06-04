@@ -208,3 +208,13 @@ class Transaction(models.Model):
     payment_status = models.CharField(max_length = 100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Train(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    train_class = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    url = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

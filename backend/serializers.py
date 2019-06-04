@@ -129,11 +129,15 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class LabelSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True, read_only=True, source='image_set')
-
+    # images = ImageSerializer(many=True, read_only=True, source='image_set')
+    images = serializers.SerializerMethodField()    # this fields always read only field
     class Meta:
         model = Label
         fields = '__all__'
+
+    def get_images(self, instance):        
+        images = instance.image_set.all().order_by('-created_at')
+        return ImageSerializer(images, many=True).data
 
 
 class FriendReadSerializer(serializers.ModelSerializer):
@@ -213,3 +217,9 @@ class SubscribeSerializer(serializers.Serializer):
 class FileSerializer(serializers.Serializer):
     file = serializers.FileField()
     name = serializers.CharField()
+
+
+class TrainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Train
+        fields = '__all__'

@@ -420,6 +420,11 @@ class FloorPlanViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class TrainViewSet(viewsets.ModelViewSet):
+    serializer_class = TrainSerializer
+    queryset = Train.objects.all()
+
+    
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
