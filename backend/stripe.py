@@ -211,7 +211,7 @@ def doSubscription(request):
 		if not customerId:
 			res = stripe.Customer.create(email = email, source=serializer.validated_data['tokenId'])
 			customerId = res['id']
-		subscription_id = request.user.subscription_id
+		subscription_id = request.user.subscription_id		
 		if not subscription_id:
 			print('create')
 			res = stripe.Subscription.create(
@@ -229,14 +229,14 @@ def doSubscription(request):
 			# 	subscription_id,
 			# 	items = [{"plan":plan.product_id}])
 
-			# subscription = stripe.Subscription.retrieve('sub_F90njAzkpg0qab')
+			subscription = stripe.Subscription.retrieve(subscription_id)
 			res = stripe.Subscription.modify(
 			  subscription_id,
 			  # 'sub_F90njAzkpg0qab',
 			  cancel_at_period_end=False,
 			  items=[{
 			    'id': subscription['items']['data'][0].id,
-			    'plan': 'plan_EwPdwJ4bIkLgWD',
+			    'plan': plan.product_id,
 			  }]
 			)
 			request.user.subscription_id = res.id

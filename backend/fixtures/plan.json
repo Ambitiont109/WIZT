@@ -3,9 +3,9 @@
     "model": "backend.plan",
     "pk": 1,
     "fields": {
-      "product_id": "plan_Emu7F1PNd1QiaX",
+      "product_id": "plan_EwPfO61ETAM03m",
       "icon":"https://s3-ap-southeast-1.amazonaws.com/wizt/site/plan_images/master.png",
-      "price":20.99,
+      "price":130.00,
       "currency":"USD",
       "name":"Master",
       "sub_name":"Billed Monthly",
@@ -21,9 +21,9 @@
     "model": "backend.plan",
     "pk": 2,
     "fields": {
-      "product_id": "plan_Emu9pnYeN6lkd2",
+      "product_id": "plan_EwPfmvhX72lCn6",      
       "icon":"https://s3-ap-southeast-1.amazonaws.com/wizt/site/plan_images/junior.png",
-      "price":10.99,
+      "price":70.00,
       "currency":"USD",
       "name":"Junior",
       "sub_name":"Billed Monthly",
