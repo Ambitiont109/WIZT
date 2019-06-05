@@ -81,10 +81,10 @@ def login(request):
     try:
         email = request.data['email']
         pwd = request.data['password']
-        target_arn = request.data['arn']
+        target_arn = request.data['target_arn']
         device_type = request.data['device_type']
     except Exception as e:
-        return Response('Must include "email", "password", "arn" and "device_type"',status=status.HTTP_400_BAD_REQUEST)
+        return Response('Must include "email", "password", "target_arn" and "device_type"',status=status.HTTP_400_BAD_REQUEST)
     try:
         user = User.objects.get(email=email)    
         if not user.check_password(pwd):

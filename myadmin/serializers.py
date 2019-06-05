@@ -64,8 +64,11 @@ class NotificationReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UpdateAccountSerializer(serializers.Serializer):
+class UpdateProfileSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=150)
     email = serializers.CharField(max_length=150)
+
+
+class UpdatePasswordSerializer(serializers.Serializer):
     current_password = serializers.CharField(max_length=150)
     new_password = serializers.CharField(max_length=150)

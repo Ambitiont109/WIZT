@@ -74,25 +74,35 @@ def dashboard(request):
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,IsAdminUser))
-def updateAccount(request):
-    serializer = UpdateAccountSerializer(data=request.data)
+def updatePassword(request):
+    serializer = UpdatePasswordSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    name = serializer.data['name']
-    email = serializer.data['email']
     current_password = serializer.data['current_password']
     new_password = serializer.data['new_password']
     user = request.user
     if not user.check_password(current_password):
         return Response('current password is incorrect ',status=status.HTTP_400_BAD_REQUEST)
-    user.name = name
-    user.email = email
-    user.username = email
     user.set_password(new_password)
     user.save()
     serializer = UserSerializerForRead(instance=user)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
     
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,IsAdminUser))
+def updateProfile(request):
+    serializer = UpdateProfileSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    name = serializer.data['name']
+    email = serializer.data['email']
+    user = request.user
+    user.name = name
+    user.email = email
+    user.save()
+    serializer = UserSerializerForRead(instance=user)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+
 class UsersViewSet(viewsets.ModelViewSet,):
     permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = UserSerializer
