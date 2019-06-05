@@ -30,35 +30,7 @@ import boto3,datetime
 from dateutil.relativedelta import relativedelta
 from wizt.utils import send_push_notification
 
-# @api_view(['POST'])
-# def login(request):
-#     if request.method != 'POST':
-#         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-#     access_token = request.headers.get("Authorization")
-#     client = boto3.client('cognito-idp', region_name='ap-southeast-1')
-#     try:
-#             # HTTP HEAD request
-#         user_dic = client.get_user(AccessToken=access_token.replace('Bearer ', ''))
-#     except ClientError as e:
-#         if e.response['Error']['Code'] == 'EntityAlreadyExists':
-#             return Response("User already exists",status=status.HTTP_400_BAD_REQUEST)
-#         else:
-#             return Response("Unexpected error: %s" % e,status=status.HTTP_400_BAD_REQUEST)
-#     serializer_data = {}
 
-#     for item in user_dic['UserAttributes']:
-#         serializer_data[item['Name']] = item['Value']
-
-#     serializer_data['username'] = serializer_data['email']
-#     serializer = UserSerializer(data=serializer_data)
-
-#     if serializer.is_valid():
-#         user = serializer.save()
-#     else:
-#         user = User.objects.get(email=serializer_data['email'])
-
-#     token = Token.objects.get_or_create(user=user)
-#     return Response(token[0].key,status=status.HTTP_200_OK)
 def create_notification(send_by, send_to, subject, message, message_type):
     notification = Notification.objects.create(send_by=send_by,send_to=send_to,message_type=message_type,message=message)
     notification.save()
@@ -425,7 +397,11 @@ class AddressViewSet(APIView):
 
     def post(self,request):
         request.data['user']=request.user.id
-        serializer = AddressSerializer(data = request.data)
+        instance = request.user.address
+        if instance:
+            serializer = AddressSerializer(instance = instance,data=request.data,partial=False)
+        else:
+            serializer = AddressSerializer(data = request.data)
         if serializer.is_valid():
             address = serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)

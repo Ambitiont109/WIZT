@@ -35,6 +35,7 @@ def login(request):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
+
 def get_user_data_monthly():
     now = datetime.datetime.now()
     qs = (User.objects.all()
@@ -89,20 +90,28 @@ def updatePassword(request):
     return Response(serializer.data,status=status.HTTP_200_OK)
 
     
-@api_view(['POST'])
+@api_view(['POST','GET'])
 @permission_classes((IsAuthenticated,IsAdminUser))
 def updateProfile(request):
-    serializer = UpdateProfileSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    name = serializer.data['name']
-    email = serializer.data['email']
-    user = request.user
-    user.name = name
-    user.username = email
-    user.email = email
-    user.save()
-    serializer = UserSerializerForRead(instance=user)
-    return Response(serializer.data,status=status.HTTP_200_OK)
+    if request.method == 'POST':
+        serializer = UpdateProfileSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        name = serializer.data['name']
+        email = serializer.data['email']
+        user = request.user
+        user.name = name
+        user.username = email
+        user.email = email
+        user.save()
+        serializer = UserSerializerForRead(instance=user)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    if request.method == 'GET':
+        user = request.user
+        serializer = UpdateProfileSerializer(user)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    
 
 
 class UsersViewSet(viewsets.ModelViewSet,):
@@ -169,8 +178,8 @@ class NotificaionViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         notification = serializer.save()
-        
-        send_broadcast_notification(request.user.target_arn,"admin",notification.message)
+        topic_arn = "arn:aws:sns:ap-southeast-1:417479686763:wizt"
+        send_broadcast_notification(topic_arn,"admin",notification.message)
 
         headers = self.get_success_headers(serializer.data)
         serializer = NotificationReadSerializer(instance = notification)

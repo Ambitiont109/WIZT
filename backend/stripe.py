@@ -203,7 +203,7 @@ def doSubscription(request):
 	if not customerId:
 		if not serializer.validated_data['tokenId']:	# If email or tokenId is not present, use the already existing cusmoter.
 			return Response({'tokenId':'required'},status = status.HTTP_400_BAD_REQUEST)
-		if not email == '':
+		if email == '' or email == None:
 			return Response({'email':"You didn't provide email address"}, status = status.HTTP_400_BAD_REQUEST)
 
 
