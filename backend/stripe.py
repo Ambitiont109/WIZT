@@ -194,15 +194,19 @@ def doSubscription(request):
 		transaction.save()
 		
 		return Response('success')
-	# email = 
+	
 	print(serializer.validated_data)
-	if not serializer.validated_data['email'] or not serializer.validated_data['tokenId']:	# If email or tokenId is not present, use the already existing cusmoter.		
-		if not customerId:
-			return Response({'email':'required','tokenId':'required'},status = status.HTTP_400_BAD_REQUEST)
+	email = request.user.address.email
+	if not customerId:
+		if not serializer.validated_data['tokenId']:	# If email or tokenId is not present, use the already existing cusmoter.
+			return Response({'tokenId':'required'},status = status.HTTP_400_BAD_REQUEST)
+		if not email == '':
+			return Response({'email':"You didn't provide email address"}, status = status.HTTP_400_BAD_REQUEST)
+
 
 	try:
 		if not customerId:
-			res = stripe.Customer.create(email=serializer.validated_data['email'],source=serializer.validated_data['tokenId'])
+			res = stripe.Customer.create(email = email, source=serializer.validated_data['tokenId'])
 			customerId = res['id']
 		subscription_id = request.user.subscription_id
 		if not subscription_id:
@@ -214,7 +218,7 @@ def doSubscription(request):
 			request.user.subscribed_plan = plan
 			request.user.subscribed_token_id = serializer.validated_data['tokenId']
 			request.user.subscribed_customer_id = customerId
-			request.user.subscribed_email = serializer.validated_data['email']
+			request.user.subscribed_email = email
 
 		else:
 			print('modify')
@@ -222,9 +226,10 @@ def doSubscription(request):
 			# 	subscription_id,
 			# 	items = [{"plan":plan.product_id}])
 
-			subscription = stripe.Subscription.retrieve('sub_F90njAzkpg0qab')
+			# subscription = stripe.Subscription.retrieve('sub_F90njAzkpg0qab')
 			res = stripe.Subscription.modify(
-			  'sub_F90njAzkpg0qab',
+			  subscription_id,
+			  # 'sub_F90njAzkpg0qab',
 			  cancel_at_period_end=False,
 			  items=[{
 			    'id': subscription['items']['data'][0].id,

@@ -39,7 +39,7 @@ class FaceBookLoginSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=20, validators=[])
     class Meta:
         model = User
-        fields = ('name','email','phone_number','facebook_id','email_verified','phone_number_verified','picture')
+        fields = ('name','email','phone_number','facebook_id','email_verified','phone_number_verified','picture','target_arn','device_type')
 
     def create(self,validated_data):
         email = validated_data['email']
@@ -64,6 +64,8 @@ class FaceBookLoginSerializer(serializers.ModelSerializer):
             user.username = validated_data['email']
             user.set_password(randomString())
         user.email_verified = True
+        user.target_arn = validated_data['target_arn']
+        user.device_type = validated_data['device_type']
         user.save()
         return user
 
@@ -73,7 +75,7 @@ class GoogleLoginSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=20, validators=[])
     class Meta:
         model = User
-        fields = ('name','email','phone_number','google_id','email_verified','phone_number_verified','picture')
+        fields = ('name','email','phone_number','google_id','email_verified','phone_number_verified','picture','target_arn','device_type')
 
     def create(self,validated_data):
         email = validated_data['email']
@@ -97,6 +99,10 @@ class GoogleLoginSerializer(serializers.ModelSerializer):
                 user.phone_number_verified = True
             user.username = validated_data['email']
             user.set_password(randomString())
+
+        user.target_arn = validated_data['target_arn']
+        user.device_type = validated_data['device_type']
+
         user.email_verified = True
         user.save()
         return user
@@ -209,7 +215,7 @@ class FloorPlanReadSerializer(serializers.ModelSerializer):
 
 
 class SubscribeSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=False,default=None)
+    # email = serializers.EmailField(required=False,default=None)
     tokenId = serializers.CharField(max_length = 50,required=False,default=None)
     plan = serializers.PrimaryKeyRelatedField(queryset=Plan.objects.all())
 

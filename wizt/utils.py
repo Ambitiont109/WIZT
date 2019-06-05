@@ -21,3 +21,14 @@ def upload_file(file):
         bucket_location['LocationConstraint'],
         s3_bucket_name,
         key_name)
+
+
+def send_push_notification(target_arn, subject, message):
+    client = boto3.client('sns', region_name='ap-southeast-1')
+    # target_arn = "arn:aws:sns:ap-southeast-1:417479686763:endpoint/GCM/wizt-new/1a298313-61dd-3e04-9b33-99f0cfa90210"
+    response = client.publish(
+        TargetArn=target_arn,  # Target Amazon Resource Name
+        Message=message,
+        Subject=subject,
+        MessageStructure='string'
+    )

@@ -34,19 +34,6 @@ def login(request):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
-'''
-Polaris
-(2:19:55 AM) GET --- admin/dashbaords/
-(2:21:27 AM) 자료는 현재 총 유저수, image개수 , 라벨개수, 언닝액상.
-(2:21:31 AM) 이 돌려져야함
-(2:23:11 AM) 그리고 signup한 유저수가 올해 달별로 돌려져야함
-(2:23:27 AM) 그리고 올해 earning도 달별로 돌려져야 함.
-(2:23:29 AM) ---------------
-(2:23:31 AM) 이상
-(2:23:34 AM) -----------------
-(2:23:39 AM) 좀 골때릴거라구
-(2:24:04 AM) 질문받겠습니다... free feel to query
-'''
 def get_user_data_monthly():
     now = datetime.datetime.now()
     qs = (User.objects.all()
@@ -83,6 +70,29 @@ def dashboard(request):
     }
 
     return Response(statistics,status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,IsAdminUser))
+def updateAccount(request):
+    serializer = UpdateAccountSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    name = serializer.data['name']
+    email = serializer.data['email']
+    current_password = serializer.data['current_password']
+    new_password = serializer.data['new_password']
+    user = request.user
+    if not user.check_password(current_password):
+        return Response('current password is incorrect ',status=status.HTTP_400_BAD_REQUEST)
+    user.name = name
+    user.email = email
+    user.username = email
+    user.set_password(new_password)
+    user.save()
+    serializer = UserSerializerForRead(instance=user)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+    
 class UsersViewSet(viewsets.ModelViewSet,):
     permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = UserSerializer

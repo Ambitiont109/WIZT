@@ -32,8 +32,9 @@ urlpatterns = [
     path('stripe/createCustomer/',stripe.createCustomer),
     path('stripe/addCardToCustomer/',stripe.addCardToCustomer),
     path('stripe/createCustomerKey/',stripe.createCustomerKey),
-    path('stripe/doPayment/',stripe.doPayment),
-    path('stripe/doSubscription/',stripe.doSubscription),
+    # path('stripe/doPayment/',stripe.doPayment),
+    # path('stripe/doSubscription/',stripe.doSubscription),
+    path('subscriptions/',stripe.doSubscription),
     path('stripe/deleteSubscription/',stripe.deleteSubscription),
     path('', include(router.urls)),
 

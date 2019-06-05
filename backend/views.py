@@ -27,7 +27,7 @@ from .serializers import *
 from myadmin.serializers import UserSerializer as OtherUserSerializer
 from .models import *
 import boto3
-
+from wizt.utils import send_push_notification
 
 # @api_view(['POST'])
 # def login(request):
@@ -58,9 +58,11 @@ import boto3
 
 #     token = Token.objects.get_or_create(user=user)
 #     return Response(token[0].key,status=status.HTTP_200_OK)
-def create_notification(send_by,send_to,message,message_type):
+def create_notification(send_by, send_to, subject, message, message_type):
     notification = Notification.objects.create(send_by=send_by,send_to=send_to,message_type=message_type,message=message)
     notification.save()
+    target_arn = send_to.target_arn
+    send_push_notification(target_arn, subject, message)
 
 
 @api_view(['POST'])
@@ -79,12 +81,18 @@ def login(request):
     try:
         email = request.data['email']
         pwd = request.data['password']
+        target_arn = request.data['arn']
+        device_type = request.data['device_type']
     except Exception as e:
-        return Response('Must include "email" and "password"',status=status.HTTP_400_BAD_REQUEST)
+        return Response('Must include "email", "password", "arn" and "device_type"',status=status.HTTP_400_BAD_REQUEST)
     try:
         user = User.objects.get(email=email)    
         if not user.check_password(pwd):
             return Response('email or password is invalid',status=status.HTTP_400_BAD_REQUEST)
+
+        user.target_arn = target_arn
+        user.device_type = device_type
+        user.save()
         token = Token.objects.get_or_create(user=user)
         return Response(token[0].key,status=status.HTTP_200_OK)
     except ObjectDoesNotExist:
@@ -245,13 +253,13 @@ class FriendViewSet(viewsets.ModelViewSet):
         response = super().update(request,*args,**kwargs)
         friend = self.get_object()
         if friend.status == True:
-            create_notification(friend.from_user,friend.to_user,"Fried Request Has Been Accepted",1)
+            create_notification(friend.from_user,friend.to_user,'Friend Request',"Fried Request Has Been Accepted",1)
         return response
 
     def destroy(self, request, *args, **kwargs):
         friend = self.get_object()
         response = super().destroy(request,*args,**kwargs)
-        create_notification(friend.from_user,friend.to_user,"Fried Request Has Been Deleted",1)
+        create_notification(friend.from_user,friend.to_user,'Friend Request',"Fried Request Has Been Deleted",1)
         return response
 
     def create(self, request):
@@ -262,7 +270,7 @@ class FriendViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         friend = serializer.save()
-        create_notification(friend.from_user,friend.to_user,"Fried Request Has Been Sent",1)
+        create_notification(friend.from_user,friend.to_user,'Friend Request',"Fried Request Has Been Sent",1)
         serializer = FriendReadSerializer(instance=friend)
         return Response(serializer.data)
 
@@ -313,7 +321,7 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         share_label = self.get_object()
         response = super().destroy(request,*args,**kwargs)
-        create_notification(share_label.share_by,share_label.share_to,"Label has been shared to %s " % (share_label.share_to.name,),1)
+        create_notification(share_label.share_by,share_label.share_to,'Share Label',"Label has been shared to %s " % (share_label.share_to.name,),1)
 
     def list(self,request, *args, **kwargs):
         me = self.request.GET.get('me','true')
@@ -335,7 +343,7 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         share_label = serializer.save()
-        create_notification(share_label.share_by,share_label.share_to,"Label has been shared to %s" % (share_label.share_to.name,),1)
+        create_notification(share_label.share_by,share_label.share_to,'Share Label',"Label has been shared to %s" % (share_label.share_to.name,),1)
         headers = self.get_success_headers(serializer.data)
         serializer = ShareLabelReadSerializer(instance = share_label)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
