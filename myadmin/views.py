@@ -4,9 +4,9 @@ from backend.models import *
 from .serializers import *
 from backend.serializers import PlanSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes,action
 from rest_framework.authtoken.models import Token
-from rest_framework import viewsets,status
+from rest_framework import viewsets,status,pagination
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from wizt.utils import send_broadcast_notification
 import datetime
@@ -117,6 +117,7 @@ def updateProfile(request):
 class UsersViewSet(viewsets.ModelViewSet,):
     permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = UserSerializer
+    pagination_class = pagination.PageNumberPagination
 
     def get_queryset(self):
         return User.objects.all().exclude(is_superuser=True)
@@ -128,17 +129,41 @@ class UsersViewSet(viewsets.ModelViewSet,):
         return Response(serializer.data)
 
 
+    @action(methods=['POST'], detail=False,url_path='pagination')  # set pagination size
+    def set_pagination(self,request):
+        try:
+            print(request.data)
+            pagination_size = request.data['pagination_size']
+            self.pagination_class.page_size = pagination_size
+        except Exception as e:
+            return Response('{"pagination_size":"Require Pagination Size"}',status=status.HTTP_400_BAD_REQUEST)
+        return Response("success",status=status.HTTP_200_OK)
+
+
+
 class LabelViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = LabelSerializer
+    pagination_class = pagination.PageNumberPagination
 
     def get_queryset(self):
         return Label.objects.order_by('-updated_at').all()
+
+    @action(methods=['POST'], detail=False,url_path='pagination')  # set pagination size
+    def set_pagination(self,request):        
+        try:
+            print(request.data)
+            pagination_size = request.data['pagination_size']
+            self.pagination_class.page_size = pagination_size
+        except Exception as e:
+            return Response('{"pagination_size":"Require Pagination Size"}',status=status.HTTP_400_BAD_REQUEST)
+        return Response("success",status=status.HTTP_200_OK)
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = TransactionSerializer
+    pagination_class = pagination.PageNumberPagination
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -149,6 +174,16 @@ class TransactionViewSet(viewsets.ModelViewSet):
             return TransactionSerializer
     def get_queryset(self):
         return Transaction.objects.all()
+
+    @action(methods=['POST'], detail=False,url_path='pagination')  # set pagination size
+    def set_pagination(self,request):
+        try:
+            print(request.data)
+            pagination_size = request.data['pagination_size']
+            self.pagination_class.page_size = pagination_size
+        except Exception as e:
+            return Response('{"pagination_size":"Require Pagination Size"}',status=status.HTTP_400_BAD_REQUEST)
+        return Response("success",status=status.HTTP_200_OK)
 
 
 class PlanViewSet(viewsets.ModelViewSet):
@@ -162,6 +197,7 @@ class PlanViewSet(viewsets.ModelViewSet):
 class NotificaionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = NotificationWriteSerializer
+    pagination_class = pagination.PageNumberPagination
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
@@ -184,3 +220,14 @@ class NotificaionViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         serializer = NotificationReadSerializer(instance = notification)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+    @action(methods=['POST'], detail=False,url_path='pagination')  # set pagination size
+    def set_pagination(self,request):
+        try:
+            print(request.data)
+            pagination_size = request.data['pagination_size']
+            self.pagination_class.page_size = pagination_size
+        except Exception as e:
+            return Response('{"pagination_size":"Require Pagination Size"}',status=status.HTTP_400_BAD_REQUEST)
+        return Response("success",status=status.HTTP_200_OK)
