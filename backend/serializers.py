@@ -30,6 +30,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.username = validated_data['email']
         user.set_password(validated_data['password'])
+
+        plan = Plan.objects.filter(is_free=True,name="Free").first()
+        user.label_cnt = plan.label_count
+        user.photo_cnt = plan.photo_count
         user.save()
         return user
 
@@ -61,6 +65,11 @@ class FaceBookLoginSerializer(serializers.ModelSerializer):
                 user.phone_number_verified = True
             user.username = validated_data['email']
             user.set_password(randomString())
+
+            plan = Plan.objects.filter(is_free=True,name="Free").first()
+            user.label_cnt = plan.label_count
+            user.photo_cnt = plan.photo_count
+
         user.email_verified = True
         user.target_arn = validated_data['target_arn']
         user.device_type = validated_data['device_type']
@@ -95,6 +104,10 @@ class GoogleLoginSerializer(serializers.ModelSerializer):
                 user.phone_number_verified = True
             user.username = validated_data['email']
             user.set_password(randomString())
+            
+            plan = Plan.objects.filter(is_free=True,name="Free").first()
+            user.label_cnt = plan.label_count
+            user.photo_cnt = plan.photo_count
 
         user.target_arn = validated_data['target_arn']
         user.device_type = validated_data['device_type']

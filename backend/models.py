@@ -14,8 +14,11 @@ class User(AbstractUser):
     device_type = models.CharField(max_length=50)
     picture = models.URLField(max_length=100, null=True,blank=True)
     total_label_count = models.IntegerField(default=0)
-    label_in_use = models.IntegerField(default=100)
-    photo_in_use = models.IntegerField(default = 20)
+
+    label_in_use = models.IntegerField(default=0)
+    photo_in_use = models.IntegerField(default = 0)
+    label_cnt = models.IntegerField(default = 100)
+    photo_cnt = models.IntegerField(default = 20)
     friends_count = models.IntegerField(default=0)
     friends = models.ManyToManyField('User', through='Friend', symmetrical=False, related_name='friends+')
     #subscription part
@@ -24,7 +27,7 @@ class User(AbstractUser):
     subscribed_token_id = models.CharField(max_length=100,blank=True)   # customer source id
     subscribed_plan = models.ForeignKey('Plan',related_name='users',on_delete=models.CASCADE,null=True)
     subscription_id = models.CharField(max_length = 100,null=True)
-    subscribed_date = models.DateTimeField(null=True)
+    calling_date = models.DateTimeField(null=True)  # date that the label and photo count is updated
     #auth_part
     facebook_id = models.CharField(max_length = 100, blank=True,null=True)
     google_id = models.CharField(max_length=100,blank=True,null=True)

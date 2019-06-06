@@ -186,7 +186,7 @@ def doSubscription(request):
 	customerId = request.user.subscribed_customer_id
 	plan = serializer.validated_data['plan']
 	now = datetime.datetime.now()
-	request.user.subscribed_date = now
+	request.user.calling_date = now
 	if plan.is_free:
 		request.user.subscribed_plan = plan
 		request.user.save()
@@ -241,7 +241,11 @@ def doSubscription(request):
 			)
 			request.user.subscription_id = res.id
 			request.user.subscribed_plan = plan 
+
+		request.user.label_cnt += plan.label_count
+		request.user.photo_cnt += plan.photo_count
 		request.user.save()
+
 		transaction = SubscribeTransaction.objects.create(plan=plan,user=request.user)
 		transaction.subscribe_email = request.user.subscribed_email
 		transaction.subscribed_token_id = request.user.subscribed_token_id

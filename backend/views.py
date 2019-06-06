@@ -51,22 +51,23 @@ def file_upload(request):
 
 def handle_login(user):
     try:
+
         subscribe_transaction_history = SubscribeTransaction.objects.filter(user=user,
                 subscribed_token_id=user.subscribed_token_id,
                 subscription_id=user.subscription_id).first()
         if not subscribe_transaction_history:
             print("Do not subscribed yet. user: %s" %(user.email,))
-            return 
+            return
 
-        subscribed_date = user.subscribed_date
-        subscribed_date = subscribed_date + relativedelta(months=+1)
         now = datetime.datetime.now(datetime.timezone.utc)
+        calling_date = user.calling_date
+        calling_date = calling_date + relativedelta(months=+1)
         
-        if subscribed_date <= now :
+        if calling_date <= now :
             plan = user.subscribed_plan
-            user.label_in_use = user.label_in_use + plan.label_count
-            user.photo_in_use = user.label_in_use + plan.photo_count
-            user.subscribed_date = subscribed_date
+            user.label_cnt = user.label_cnt + plan.label_count
+            user.photo_cnt = user.photo_cnt + plan.photo_count
+            user.calling_date = calling_date
             user.save()
             print("did the monthly subscription")
 
@@ -180,39 +181,75 @@ class LabelViewSet(viewsets.ModelViewSet):
         serializer = LabelSerializer(instance=label, data=request.data,partial=True)
         print(serializer.initial_data)
         serializer.is_valid(raise_exception=True)
-        for image in label.image_set.all():
+
+        origin_images = label.image_set.all()
+        image_cnt = len(images) - len(origin_images)
+
+        if request.user.photo_cnt - img_cnt < 0 :
+            return Response("you have run out of images. please purchase image count",status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        for image in origin_images:
             image.delete()
         images = request.data['images']
         for image in images:
             record = Image(label=label, url=image['url'], thumbnail=image['thumbnail'], is_cover=image['is_cover'])
             record.save()
+
+        request.user.photo_in_use += img_cnt
+        request.user.photo_cnt -= img_cnt
+        request.user.save()
         label = serializer.save()
+
+        # send notification to all the users that are sharing this label.
+        sharelabels = ShareLabel.objects.filter(label = label)
+        sent_users = []
+        for item in sharelables:
+            if ( not item.share_by in sent_users) and (item.share_by != request.user):
+                create_notification(request.user,item.share_by,'ShareLabel',"Shared Label is updated",1)
+                sent_users.append(item.share_by)
+            if ( not item.share_to in sent_users) and (item.share_to != request.user):
+                create_notification(request.user,item.share_to,'ShareLabel',"Shared Label is updated",1)
+                sent_users.append(item.share_to)
+
         serializer = LabelSerializer(label)
         return Response(serializer.data)
 
     def create(self, request):
         request.data['user'] = request.user.id
-        if request.user.label_in_use <= 0:
+        if request.user.label_cnt <= 0:
             return Response("you have run out of label. please purchase label count",status=status.HTTP_405_METHOD_NOT_ALLOWED)
         serializer = LabelSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         images = request.data['images']
         img_cnt = len(images)
-        if request.user.photo_in_use - img_cnt < 0 :
+        if request.user.photo_cnt - img_cnt < 0 :
             return Response("you have run out of images. please purchase image count",status=status.HTTP_405_METHOD_NOT_ALLOWED)
         label = serializer.save()
-        request.user.label_in_use -= 1
+
+        request.user.label_in_use += 1
+        request.user.label_cnt -= 1
 
         for image in images:
             record = Image(label=label, url=image['url'], thumbnail=image['thumbnail'], is_cover=image['is_cover'])
             record.save()
-        request.user.photo_in_use -= img_cnt
+
+        request.user.photo_in_use += img_cnt
+        request.user.photo_cnt -= img_cnt
+
         request.user.save()
         serializer = LabelSerializer(label)
 
         return Response(serializer.data)
 
+    def destroy(self, request, *args, **kwargs):
+        label = self.get_object()
+        img_cnt = len(label.image_set.all())
+        response = super().destroy(request,*args,**kwargs)
+        request.user.label_in_use -= 1
+        request.user.photo_in_use -= img_cnt
+        request.user.save()        
+        return response
 
 class FriendsList(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
