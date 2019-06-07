@@ -315,6 +315,8 @@ class FriendViewSet(viewsets.ModelViewSet):
         serializer = FriendWriteSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.data['from_user'] == request.data['to_user']:
+            return Response("{'to_user':'It is same as from_user.'}",status=status.HTTP_400_BAD_REQUEST)
         friend = serializer.save()
         create_notification(friend.from_user,friend.to_user,'Friend Request',"Fried Request Has Been Sent",1)
         serializer = FriendReadSerializer(instance=friend)
@@ -388,6 +390,8 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
         request.data['share_by'] = self.request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if request.data['share_by'] == request.data['share_to']:
+            return Response("{'share_to':'It is same as share_by.'}",status=status.HTTP_400_BAD_REQUEST)
         share_label = serializer.save()
         create_notification(share_label.share_by,share_label.share_to,'Share Label',"Label has been shared to %s" % (share_label.share_to.name,),1)
         headers = self.get_success_headers(serializer.data)
