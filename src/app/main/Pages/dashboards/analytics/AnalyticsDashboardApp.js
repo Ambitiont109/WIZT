@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Typography} from '@material-ui/core';
+import {Typography, CardActionArea, CardContent, Paper} from '@material-ui/core';
 import {FuseAnimate} from '@fuse';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom'
@@ -9,15 +9,18 @@ import Widget1 from './widgets/Widget1';
 import Widget2 from './widgets/Widget2';
 import Widget3 from './widgets/Widget3';
 import Widget4 from './widgets/Widget4';
-import Widget5 from './widgets/Widget5';
-import Widget6 from './widgets/Widget6';
-import Widget7 from './widgets/Widget7';
-import Widget8 from './widgets/Widget8';
-import Widget9 from './widgets/Widget9';
 import withReducer from 'app/store/withReducer';
 import * as Actions from './store/actions'
 import reducer from './store/reducers';
 
+const classes = {
+  Card: {
+    color: "#fff",
+  },
+  media: {
+    height: 140,
+  },
+};
 class AnalyticsDashboardApp extends Component {
 
     constructor(props)
@@ -87,6 +90,28 @@ class AnalyticsDashboardApp extends Component {
         this.props.getWidgets();
     }
 
+    onClick = (e) => {
+        let route = "";
+        const {history} = this.props;
+        switch (e) {
+            case "users" : 
+                route = "/app/pages/users/";
+                break;
+            case "labels" : 
+                route = "/app/pages/labels";
+                break;
+            case "transactions" : 
+                route = "/app/pages/transactions";
+                break;
+            case "notifications" : 
+                route = "/admin/notifications";
+                break;
+        }
+        history.push({
+            pathname: route,
+        });
+    }
+
     render()
     {
         const {widgets} = this.props;
@@ -104,7 +129,6 @@ class AnalyticsDashboardApp extends Component {
                     <div className="flex flex-col md:flex-row sm:p-8 container">
 
                         <div className="flex flex-1 flex-col min-w-0">
-
                             <FuseAnimate delay={600}>
                                 <Typography className="p-16 pb-8 text-18 font-300">
                                     How are your active users trending over time?
@@ -112,79 +136,96 @@ class AnalyticsDashboardApp extends Component {
                             </FuseAnimate>
 
                             <div className="flex flex-col sm:flex sm:flex-row pb-32">
-
-                                <div className="widget flex w-full sm:w-1/3 p-16">
-                                    <Widget2 data={widgets.widget2}/>
+                                <div className="widget flex w-full sm:w-1/4 p-16">
+                                    <Widget4 data={widgets.widget4} isLoggedIn={false} />
                                 </div>
-
-                                <div className="widget flex w-full sm:w-1/3 p-16">
+                                <div className="widget flex w-full sm:w-1/4 p-16">
                                     <Widget3 data={widgets.widget3}/>
                                 </div>
-
-                                <div className="widget w-full sm:w-1/3 p-16">
-                                    <Widget4 data={widgets.widget4}/>
+                                <div className="widget w-full sm:w-1/4 p-16">
+                                    <Widget4 data={widgets.widget5} isLoggedIn={true} />
+                                </div>
+                                <div className="widget w-full sm:w-1/4 p-16">
+                                    <Widget2 data={widgets.widget2}/>
                                 </div>
                             </div>
-
-                            <FuseAnimate delay={600}>
-                                <Typography className="px-16 pb-8 text-18 font-300">
-                                    How many pages your users visit?
-                                </Typography>
-                            </FuseAnimate>
-
-                            <div className="widget w-full p-16 pb-32">
-                                <Widget5 data={widgets.widget5}/>
-                            </div>
-
-                            <FuseAnimate delay={600}>
-                                <Typography className="px-16 pb-8 text-18 font-300">
-                                    Where are your users?
-                                </Typography>
-                            </FuseAnimate>
-
-                            <div className="widget w-full p-16 pb-32">
-                                <Widget6 data={widgets.widget6}/>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-wrap w-full md:w-320 pt-16">
-
-                            <div className="mb-32 w-full sm:w-1/2 md:w-full">
-                                <FuseAnimate delay={600}>
-                                    <Typography className="px-16 pb-8 text-18 font-300">
-                                        What are your top devices?
-                                    </Typography>
-                                </FuseAnimate>
-
-                                <div className="widget w-full p-16">
-                                    <Widget7 data={widgets.widget7}/>
-                                </div>
-                            </div>
-
-                            <div className="mb-32 w-full sm:w-1/2 md:w-full">
-
-                                <FuseAnimate delay={600}>
-                                    <div className="px-16 pb-8 text-18 font-300">
-                                        How are your sales?
+                            <div className="flex flex-col sm:flex sm:flex-row pb-32">
+                                    <div className="widget w-full sm:w-1/4 p-16" >
+                                        <Paper style={{ backgroundColor: '#0091ea' }}>
+                                            <CardActionArea onClick={(ev) => {
+                                                ev.preventDefault();
+                                                this.onClick("users");
+                                            }}>
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                        Users
+                                                    </Typography>
+                                                    <Typography variant="body2" color="textSecondary" component="p" style={classes.Card}>
+                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                                        across all continents except Antarctica
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Paper>
                                     </div>
-                                </FuseAnimate>
-
-                                <div className="widget w-full p-16">
-                                    <Widget8 data={widgets.widget8}/>
-                                </div>
-                            </div>
-
-                            <div className="mb-32 w-full sm:w-1/2 md:w-full">
-                                <FuseAnimate delay={600}>
-                                    <Typography className="px-16 pb-8 text-18 font-300 lg:pt-0">
-                                        What are your top campaigns?
-                                    </Typography>
-                                </FuseAnimate>
-                                <div className="widget w-full p-16">
-                                    <Widget9 data={widgets.widget9}/>
-                                </div>
+                                    <div className="widget w-full sm:w-1/4 p-16" >
+                                        <Paper style={{ backgroundColor: '#388e3c' }}>
+                                            <CardActionArea onClick={ (ev) => {
+                                                ev.preventDefault();
+                                                this.onClick("labels");
+                                            }}>
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                        Labels
+                                                    </Typography>
+                                                    <Typography variant="body2" component="p" style={classes.Card}>
+                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                                        across all continents except Antarctica
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Paper>
+                                    </div>
+                                    <div className="widget w-full sm:w-1/4 p-16" >
+                                        <Paper style={{ backgroundColor: '#ff9800' }}>
+                                            <CardActionArea onClick={(ev) => {
+                                                ev.preventDefault();
+                                                this.onClick("transactions");
+                                            }}>
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                        Transactions
+                                                    </Typography>
+                                                    <Typography variant="body2" color="textSecondary" component="p" style={classes.Card}>
+                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                                        across all continents except Antarctica
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Paper>
+                                    </div>
+                                    <div className="widget w-full sm:w-1/4 p-16" >
+                                        <Paper style={{ backgroundColor: '#9c27b0' }}>
+                                            <CardActionArea onClick={(ev) => {
+                                                ev.preventDefault();
+                                                this.onClick("notifications");
+                                            }}>
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                        Notifications
+                                                    </Typography>
+                                                    <Typography variant="body2" color="textSecondary" component="p" style={classes.Card}>
+                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                                        across all continents except Antarctica
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Paper>
+                                    </div>
+                                
                             </div>
                         </div>
+                       
                     </div>
                 </FuseAnimate>
             </div>
@@ -202,7 +243,7 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({analyticsDashboardApp})
 {
     return {
-        widgets: analyticsDashboardApp.widgets.data
+        widgets: analyticsDashboardApp.widgets.widgets
     }
 }
 

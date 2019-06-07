@@ -1,10 +1,9 @@
 import React from 'react';
 import {AppBar, Hidden, MuiThemeProvider, Toolbar, withStyles} from '@material-ui/core';
-import {FuseSearch, FuseShortcuts} from '@fuse';
+import {FuseSearch} from '@fuse';
 import connect from 'react-redux/es/connect/connect';
 import {withRouter} from 'react-router-dom';
 import NavbarMobileToggleButton from 'app/fuse-layouts/shared-components/NavbarMobileToggleButton';
-// import QuickPanelToggleButton from 'app/fuse-layouts/shared-components/quickPanel/QuickPanelToggleButton';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
 
 const styles = theme => ({
@@ -32,9 +31,7 @@ const ToolbarLayout1 = ({classes, settings, toolbarTheme}) => {
                     )}
 
                     <div className="flex flex-1">
-                        <Hidden mdDown>
-                            <FuseShortcuts className="px-16"/>
-                        </Hidden>
+                        
                     </div>
 
                     <div className="flex">

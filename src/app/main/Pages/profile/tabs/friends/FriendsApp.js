@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {withStyles, Fab, Icon} from '@material-ui/core';
-import {FusePageSimple, FuseAnimate} from '@fuse';
+import {withStyles} from '@material-ui/core';
+import {FusePageSimple} from '@fuse';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import _ from '@lodash';
-import ContactsList from './ContactsList';
-// import ContactsHeader from './ContactsHeader';
-// import ContactsSidebarContent from './ContactsSidebarContent';
-import ContactDialog from './ContactDialog';
+import FriendsList from './FriendsList';
+import EditDialog from './EditDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 
@@ -41,7 +39,7 @@ class FriendsApp extends Component {
 
     render()
     {
-        const {classes, openNewContactDialog} = this.props;
+        // const {classes, openNewContactDialog} = this.props;
 
         return (
             <React.Fragment>
@@ -51,32 +49,16 @@ class FriendsApp extends Component {
                         leftSidebar       : "w-256 border-0",
                         header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
                     }}
-                    // header={
-                    //     <ContactsHeader pageLayout={() => this.pageLayout}/>
-                    // }
                     content={
-                        <ContactsList/>
+                        <FriendsList/>
                     }
-                    // leftSidebarContent={
-                    //     <ContactsSidebarContent/>
-                    // }
                     sidebarInner
                     onRef={instance => {
                         this.pageLayout = instance;
                     }}
                     innerScroll
                 />
-                <FuseAnimate animation="transition.expandIn" delay={300}>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        className={classes.addButton}
-                        onClick={openNewContactDialog}
-                    >
-                        <Icon>person_add</Icon>
-                    </Fab>
-                </FuseAnimate>
-                <ContactDialog/>
+                <EditDialog/>
             </React.Fragment>
         )
     };
@@ -91,14 +73,14 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({contactsApp})
+function mapStateToProps({friendsApp})
 {
     return {
-        contacts          : contactsApp.contacts.entities,
-        selectedContactIds: contactsApp.contacts.selectedContactIds,
-        searchText        : contactsApp.contacts.searchText,
-        user              : contactsApp.user
+        contacts          : friendsApp.contacts.entities,
+        selectedContactIds: friendsApp.contacts.selectedContactIds,
+        searchText        : friendsApp.contacts.searchText,
+        user              : friendsApp.user
     }
 }
 
-export default withReducer('contactsApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(FriendsApp))));
+export default withReducer('friendsApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(FriendsApp))));

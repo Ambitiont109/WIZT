@@ -1,5 +1,5 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
+// import _ from '@lodash';
 
 const initialState = {
     entities          : [],
@@ -22,7 +22,7 @@ const contactsReducer = function (state = initialState, action) {
         {
             return {
                 ...state,
-                entities   : [action.payload],
+                entities   : action.payload,
                 routeParams: action.routeParams
             };
         }

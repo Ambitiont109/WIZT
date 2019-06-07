@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withStyles, Button, MuiThemeProvider, Typography} from '@material-ui/core';
+import {withStyles, MuiThemeProvider, Typography} from '@material-ui/core';
 import {FuseAnimate} from '@fuse';
 import {Line} from 'react-chartjs-2';
 import _ from '@lodash';
@@ -14,7 +14,7 @@ const styles = theme => ({
 class Widget1 extends Component {
 
     state = {
-        dataset: '2017'
+        dataset: 'monthly_earning'
     };
 
     setDataSet = (dataset) => {
@@ -43,23 +43,15 @@ class Widget1 extends Component {
 
                         <FuseAnimate delay={100}>
                             <div className="flex-col">
-                                <Typography className="h2">Visitors</Typography>
-                                <Typography className="h5" color="textSecondary">Unique visitors by month</Typography>
+                                <Typography className="h2">Annual Earnings</Typography>
+                                <Typography className="h5" color="textSecondary">Unique earning by month</Typography>
                             </div>
                         </FuseAnimate>
 
                         <div className="flex flex-row items-center">
-                            {Object.keys(data.datasets).map((key) => (
-                                <Button
-                                    key={key}
-                                    className="py-8 px-12"
-                                    size="small"
-                                    onClick={() => this.setDataSet(key)}
-                                    disabled={key === dataset}
-                                >
-                                    {key}
-                                </Button>
-                            ))}
+                                <Typography>
+                                    {data.datasets[dataset][0].year}
+                                </Typography>
                         </div>
                     </div>
                     <div className="container relative h-200 sm:h-256 pb-16">
@@ -72,7 +64,7 @@ class Widget1 extends Component {
                         />
                     </div>
                 </div>
-            </MuiThemeProvider>
+            </MuiThemeProvider> 
         );
     }
 }

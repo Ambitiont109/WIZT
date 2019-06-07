@@ -14,10 +14,10 @@ const Widget3 = ({data, theme}) => {
     return (
         <Card className="w-full rounded-8 shadow-none border-1">
 
-            <div className="p-16 pb-0 flex flex-row items-end flex-wrap">
+            <div className="p-16  flex flex-row flex-wrap items-end">
 
                 <div className="pr-16">
-                    <Typography className="h3" color="textSecondary">Impressions</Typography>
+                    <Typography className="h3" color="textSecondary">Labels</Typography>
                     <Typography className="text-56 font-300 leading-none mt-8">
                         {data.impressions.value}
                     </Typography>
@@ -38,7 +38,7 @@ const Widget3 = ({data, theme}) => {
 
             </div>
 
-            <div className="h-96 w-100-p">
+            {/* <div className="h-96 w-100-p">
                 <Line
                     data={{
                         labels  : data.labels,
@@ -46,7 +46,7 @@ const Widget3 = ({data, theme}) => {
                     }}
                     options={data.options}
                 />
-            </div>
+            </div> */}
         </Card>
     );
 };

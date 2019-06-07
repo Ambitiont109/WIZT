@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Avatar, Button, Icon, ListItemIcon, ListItemText, Popover, MenuItem, Typography} from '@material-ui/core';
+import {Button, Icon, ListItemIcon, ListItemText, Popover, MenuItem, Typography} from '@material-ui/core';
 import {connect} from 'react-redux';
 import * as authActions from 'app/auth/store/actions';
 import {bindActionCreators} from 'redux';
@@ -28,7 +28,7 @@ class UserMenu extends Component {
             <React.Fragment>
 
                 <Button className="h-64" onClick={this.userMenuClick}>
-                    {user.data.photoURL ?
+                    {/* {user.data.photoURL ?
                         (
                             <Avatar className="" alt="user photo" src={user.data.photoURL}/>
                         )
@@ -38,11 +38,12 @@ class UserMenu extends Component {
                                 {user.data.displayName[0]}
                             </Avatar>
                         )
-                    }
+                    } */}
 
                     <div className="hidden md:flex flex-col ml-12 items-start">
                         <Typography component="span" className="normal-case font-600 flex">
-                            {user.data.displayName}
+                            {/* {user.data.displayName} */}
+                            Administrator
                         </Typography>
                         {/* <Typography className="text-11 capitalize" color="textSecondary">
                             {user.role}
@@ -85,11 +86,29 @@ class UserMenu extends Component {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
+                            <MenuItem 
+                                component={Link} 
+                                to={{
+                                    pathname: "/admin",
+                                    state: "admin"
+                                }} 
+                                onClick={this.userMenuClose}>
                                 <ListItemIcon>
                                     <Icon>account_circle</Icon>
                                 </ListItemIcon>
                                 <ListItemText className="pl-0" primary="My Profile"/>
+                            </MenuItem>
+                            <MenuItem 
+                                component={Link} 
+                                to={{
+                                    pathname: "/admin",
+                                    state: "password"
+                                }} 
+                                onClick={this.userMenuClose}>
+                                <ListItemIcon>
+                                    <Icon>vpn_key</Icon>
+                                </ListItemIcon>
+                                <ListItemText className="pl-0" primary="Change Password"/>
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {

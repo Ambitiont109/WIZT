@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {withStyles, Fab, Icon} from '@material-ui/core';
-import {FusePageSimple, FuseAnimate} from '@fuse';
+import {withStyles} from '@material-ui/core';
+import {FusePageSimple} from '@fuse';
 import {bindActionCreators} from 'redux';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import withReducer from 'app/store/withReducer';
 import _ from '@lodash';
-import ContactsList from './ContactsList';
-// import ContactsHeader from './ContactsHeader';
-// import ContactsSidebarContent from './ContactsSidebarContent';
-import ContactDialog from './ContactDialog';
+import LabelsList from './LabelsList';
+import EditDialog from './EditDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 
@@ -26,13 +24,12 @@ class LabelsApp extends Component {
 
     componentDidMount()
     {
-        console.log('this is labelsApp DidMount')
         var item_id = localStorage.getItem('item_id')
         this.props.getContacts(item_id);
         this.props.getUserData();
     }
 
-    componentDidUpdate(prevProps, prevState)
+    componentDidUpdate(prevProps)
     {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
@@ -42,8 +39,6 @@ class LabelsApp extends Component {
 
     render()
     {
-        const {classes, openNewContactDialog} = this.props;
-
         return (
             <React.Fragment>
                 <FusePageSimple
@@ -52,32 +47,16 @@ class LabelsApp extends Component {
                         leftSidebar       : "w-256 border-0",
                         header            : "min-h-72 h-72 sm:h-136 sm:min-h-136"
                     }}
-                    // header={
-                    //     <ContactsHeader pageLayout={() => this.pageLayout}/>
-                    // }
                     content={
-                        <ContactsList/>
+                        <LabelsList/>
                     }
-                    // leftSidebarContent={
-                    //     <ContactsSidebarContent/>
-                    // }
                     sidebarInner
                     onRef={instance => {
                         this.pageLayout = instance;
                     }}
                     innerScroll
                 />
-                <FuseAnimate animation="transition.expandIn" delay={300}>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        className={classes.addButton}
-                        onClick={openNewContactDialog}
-                    >
-                        <Icon>person_add</Icon>
-                    </Fab>
-                </FuseAnimate>
-                <ContactDialog/>
+                <EditDialog/>
             </React.Fragment>
         )
     };
@@ -92,14 +71,14 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({contactsApp})
+function mapStateToProps({LabelsApp})
 {
     return {
-        contacts          : contactsApp.contacts.entities,
-        selectedContactIds: contactsApp.contacts.selectedContactIds,
-        searchText        : contactsApp.contacts.searchText,
-        user              : contactsApp.user
+        contacts          : LabelsApp.contacts.entities,
+        selectedContactIds: LabelsApp.contacts.selectedContactIds,
+        searchText        : LabelsApp.contacts.searchText,
+        user              : LabelsApp.user
     }
 }
 
-export default withReducer('contactsApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(LabelsApp))));
+export default withReducer('LabelsApp', reducer)(withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(LabelsApp))));

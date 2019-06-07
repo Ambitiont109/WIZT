@@ -3,7 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {FusePageSimple, FuseAnimate} from '@fuse';
 import {Icon, Typography} from '@material-ui/core';
 // import Form from './Form';
-import Form from './Form1';
+import Form from './Form';
 // import Form from './InteractiveGrid';
 
 const styles = theme => ({

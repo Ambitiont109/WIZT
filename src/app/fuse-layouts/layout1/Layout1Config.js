@@ -14,7 +14,7 @@ const config = {
             position: 'below'
         },
         footer        : {
-            display : true,
+            display : false,
             style   : 'fixed',
             position: 'below'
         },

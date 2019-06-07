@@ -1,12 +1,12 @@
 import * as Actions from '../actions';
-import _ from '@lodash';
+import { number } from 'prop-types';
+// import _ from '@lodash';
 
 const initialState = {
     entities          : [],
     page              : {},
-    loading           : true,
+    totalPage         : "",
     searchText        : "",
-    selectedContactIds: [],
     routeParams       : {},
     contactDialog     : {
         type : 'new',
@@ -33,7 +33,7 @@ const contactsReducer = function (state = initialState, action) {
                 entities   : action.payload,
                 routeParams: action.routeParams,
                 page       : action.params,
-                loading    : false,
+                totalPage  : action.totalPage
             };
         }
         case Actions.SET_SEARCH_TEXT:
@@ -135,7 +135,7 @@ const contactsReducer = function (state = initialState, action) {
             };
         }
 
-        case Actions.OPEN_CONFIRM_DIALOG:  /**This part is added by myself */
+        case Actions.OPEN_CONFIRM_DIALOG:  /**This part is added*/
         {
             return {
                 ...state,
@@ -148,7 +148,7 @@ const contactsReducer = function (state = initialState, action) {
             };
         }
 
-        case Actions.CLOSE_CONFIRM_DIALOG: /**This part is added by myself */
+        case Actions.CLOSE_CONFIRM_DIALOG: /**This part is added*/
         {
             return {
                 ...state,

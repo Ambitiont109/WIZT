@@ -24,9 +24,9 @@ class ConfirmDialog extends React.Component {
   };
 
   render() {
-    const { removeContact, closeConfirmDialog, confirmDialog } = this.props;
+    const { closeConfirmDialog, confirmDialog } = this.props;
     return (
-
+      
       <Dialog
         open={confirmDialog.props.open} // added by myself
         onClose={this.handleClose}
@@ -43,13 +43,13 @@ class ConfirmDialog extends React.Component {
           <Button onClick={()=>{  // added by myself
             closeConfirmDialog();
           }} color="primary">
-            Disagree
+            Agree
           </Button>
           <Button onClick={() =>{ // added by myself
-            removeContact(this.props.confirmDialog.user_id);
+            // removeContact(this.props.confirmDialog.user_id);
             closeConfirmDialog();
           }} color="primary" autoFocus>
-            Agree
+            Disagree
           </Button>
         </DialogActions>
       </Dialog>
@@ -70,10 +70,10 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({contactsApp})
+function mapStateToProps({labelsApp})
 {
     return {
-      confirmDialog: contactsApp.contacts.confirmDialog
+      confirmDialog: labelsApp.contacts.confirmDialog
     }
 }
 

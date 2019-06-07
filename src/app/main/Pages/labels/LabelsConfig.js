@@ -16,7 +16,7 @@ export const LabelsConfig = {
         {
             path     : '/app/pages/labels',
             component: FuseLoadable({
-                loader: () => import('./ContactsApp')
+                loader: () => import('./LabelsApp')
             })
         },
         {

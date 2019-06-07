@@ -161,7 +161,7 @@ export function logoutUser()
 {
     return (dispatch, getState) => {
         
-        const user = getState().auth.user;
+        // const user = getState().auth.user;
         const login = getState().auth.login;
         console.log(login.success)
 
@@ -169,13 +169,12 @@ export function logoutUser()
         {
             return null;
         }
-
+        console.log(history)
         history.push({
             pathname: '/app/pages/auth/login'
         });
         
         jwtService.logout();
-
         dispatch(setInitialSettings());
 
         dispatch({

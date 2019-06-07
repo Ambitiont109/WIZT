@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { func } from 'prop-types';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -10,13 +10,13 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Fab from '@material-ui/core/Fab';
 import Typography from '@material-ui/core/Typography';
 import {FuseAnimate} from '@fuse';
-import {Icon, IconButton} from '@material-ui/core';
-
+import {Icon} from '@material-ui/core';
 
 const styles = {
   card: {
+    position: "relative",
     marginBottom: 20,
-    maxWidth: 345,
+    width: 345,
     backgroundColor:"#303030",
   },
   media: {
@@ -34,60 +34,66 @@ const styles = {
     backgroundColor:"#3c4252"
   }
 };
-const edit = () => {
-  alert("hang on me");
-}
 
-function MediaCard(props) {
-  const { classes, header_content, body_content, footer_content} = props;
-  
-  return (
-    <FuseAnimate animation="transition.flipBounceXIn"  duration={300}>
-      <Card className={classes.card}>
-        <CardHeader 
-          title={<div>membership</div>}
-          classes={{title:classes.color}}
-          // subheader={<div>plans</div>}
-          className={classes.backgroundColor}
-        />
-        <CardActionArea style={{justifyContent:"center"}}>
-          <CardMedia
-            className={classes.media}
-            image="/assets/images/home/house.svg"
-            title="Contemplative Reptile"
+class  MediaCard extends React.Component {
+
+  edit = (id) => {
+    const {history} = this.props;
+    history.push({
+      pathname: "/admin/plans/edit",
+      state: { plan_id : id }
+    });
+  }
+  render(){
+    const { classes, id, title, sub_name, currency, description, imageURL} = this.props;
+    const paragraph = description.split(',');
+
+    return (
+      <FuseAnimate animation="transition.flipBounceXIn"  duration={300}>
+        <Card className={classes.card}>
+          <CardHeader 
+            title={title}
+            classes={{title:classes.color}}
+            className={classes.backgroundColor}
           />
-          <CardContent>
-            <Typography  classes={{h6:classes.color}} variant="h6" component="h3" align="center">
-              {header_content}
-            </Typography>
-            <Typography  classes={{h6:classes.color}} variant="h6" component="h3" align="center">
-              {body_content}
-            </Typography>
-            <Typography  classes={{h6:classes.color}} variant="h6" component="h3" align="center">
-            {footer_content}
-            </Typography>
-            <Typography classes={{subtitle1:classes.color}} variant="subtitle1" component="p" align="center">
-              Get 10 additional Labels Take up to 100 Photos 
-              Customisable Floorplans 
-              Reusable Labels Unlimited Tags Billed
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions style={{ justifyContent:"flex-end", alignItems: "center", backgroundColor:"#303030"}}>
-          {/* <Button  size="small" color="primary" variant="outlined" style={{ color:"#fff", backgroundColor:"#039be5"}}>
-            Learn More
-          </Button> */}
-          <Fab color="secondary" aria-label="Edit" 
-            onClick={()=>{
-              edit()
-            }}
-          >
-            <Icon>edit_icon</Icon>
-          </Fab>
-        </CardActions>
-      </Card>
-    </FuseAnimate>
-  );
+          <CardActionArea style={{justifyContent:"center", position:"relative"}}>
+            <CardMedia
+              className={classes.media}
+              image={imageURL? imageURL: "/assets/images/plans/free_plan.png"}
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography  classes={{h6:classes.color}} variant="h6" component="h3" align="center">
+                {sub_name}
+              </Typography>
+              <Typography  classes={{h6:classes.color}} variant="h6" component="h3" align="center">
+                {currency}
+              </Typography>
+  
+              { paragraph.map((content, index) => {
+                  return(
+                    <Typography key={index} classes={{subtitle1:classes.color}} variant="subtitle1" component="p" align="center">
+                      {content}
+                    </Typography>
+                  );
+                }
+              )}
+            </CardContent>
+          </CardActionArea>
+          <CardActions style={{ justifyContent:"flex-end", alignItems: "flex-end", backgroundColor:"#3c4252", position:"absolute", top:4, right:0}}>
+            <Fab color="default" aria-label="Edit" 
+              onClick={()=>{
+                this.edit(id)
+              }}
+              size="small"
+            >
+              <Icon>edit_icon</Icon>
+            </Fab>
+          </CardActions>
+        </Card>
+      </FuseAnimate>
+    );
+  }
   
 }
 

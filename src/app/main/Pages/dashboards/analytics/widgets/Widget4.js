@@ -1,10 +1,9 @@
 import React from 'react';
 import {withStyles, Card, Icon, Typography} from '@material-ui/core';
-import {Bar} from 'react-chartjs-2';
 
-const Widget4 = ({data, theme}) => {
+const Widget4 = ({data, theme, isLoggedIn}) => {
 
-    const dataWithColors = data.datasets.map(obj => ({
+    data.datasets.map(obj => ({
         ...obj,
         borderColor    : theme.palette.error.main,
         backgroundColor: theme.palette.error.main
@@ -13,10 +12,12 @@ const Widget4 = ({data, theme}) => {
     return (
         <Card className="w-full rounded-8 shadow-none border-1">
 
-            <div className="p-16 pb-0 flex flex-row items-end flex-wrap">
+            <div className="p-16 flex flex-row items-end flex-wrap">
 
                 <div className="pr-16">
-                    <Typography className="h3" color="textSecondary">Visits</Typography>
+                    <Typography className="h3" color="textSecondary">
+                        {isLoggedIn? "Images" : "Users" }
+                   </Typography>
                     <Typography className="text-56 font-300 leading-none mt-8">
                         {data.visits.value}
                     </Typography>
@@ -35,16 +36,6 @@ const Widget4 = ({data, theme}) => {
                     <Typography className="ml-4 whitespace-no-wrap">of target</Typography>
                 </div>
 
-            </div>
-
-            <div className="h-96 w-100-p">
-                <Bar
-                    data={{
-                        labels  : data.labels,
-                        datasets: dataWithColors
-                    }}
-                    options={data.options}
-                />
             </div>
         </Card>
     );

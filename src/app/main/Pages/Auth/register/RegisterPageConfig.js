@@ -1,5 +1,4 @@
 import {FuseLoadable} from '@fuse';
-import {authRoles} from 'app/auth';
 export const RegisterPageConfig = {
     settings: {
         layout: {
@@ -28,7 +27,6 @@ export const RegisterPageConfig = {
         },
         customScrollbars: false,
     },
-    //auth    : authRoles.onlyGuest,
     routes  : [
         {
             path     : '/app/pages/auth/register',

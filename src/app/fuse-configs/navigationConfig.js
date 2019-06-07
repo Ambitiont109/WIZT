@@ -17,7 +17,7 @@ const navigationConfig = [
                 title: "Users",
                 type: "item",
                 icon: "people",
-                url: "/app/pages/users/all"
+                url: "/app/pages/users/"
             },
             {
                 'id'   : 'labels',
@@ -31,7 +31,14 @@ const navigationConfig = [
                 'title': 'Transactions',
                 'type' : 'item',
                 'icon' : 'payment',
-                'url'  : '/app/pages/transaction'
+                'url'  : '/app/pages/transactions'
+            },
+            {
+                'id'   : 'notifications',
+                'title': 'Notifications',
+                'type' : 'item',
+                'icon' : 'notifications',
+                'url'  : '/admin/notifications'
             },
             {
                 'id'   : 'plans',
@@ -40,13 +47,13 @@ const navigationConfig = [
                 'icon' : 'assessment',
                 'url'  : '/app/pages/plans'
             },
-            {
-                'id'   : 'settings',
-                'title': 'Settings',
-                'type' : 'item',
-                'icon' : 'settings',
-                'url'  : '/setting'
-            },
+            // {
+            //     'id'   : 'settings',
+            //     'title': 'Settings',
+            //     'type' : 'item',
+            //     'icon' : 'settings',
+            //     'url'  : '/setting'
+            // },
         ]
     }
 ];

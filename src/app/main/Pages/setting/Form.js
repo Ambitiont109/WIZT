@@ -1,272 +1,186 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import InputBase from '@material-ui/core/InputBase';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import {FuseAnimate, FuseAnimateGroup} from '@fuse';
 
 const styles = theme => ({
-  container: {
+  root: {
     display: 'flex',
     flexWrap: 'wrap',
   },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
+  margin: {
+    margin: theme.spacing.unit,
   },
-  dense: {
-    marginTop: 19,
+ 
+  
+  bootstrapInput: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: "#000",
+    border: '1px solid #ced4da',
   },
-  menu: {
-    width: 200,
-  },
+  marginLeft:{
+    marginLeft:23
+  }
+ 
 });
 
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-];
-
-class Form extends React.Component {
-  state = {
-    name: 'Cat in the Hat',
-    age: '',
-    multiline: 'Controlled',
-    currency: 'EUR',
-  };
-
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.value });
-  };
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <form className={classes.container} noValidate autoComplete="off">
-        <TextField
-          id="standard-name"
-          label="Name"
-          className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-uncontrolled"
-          label="Uncontrolled"
-          defaultValue="foo"
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          required
-          id="standard-required"
-          label="Required"
-          defaultValue="Hello World"
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          error
-          id="standard-error"
-          label="Error"
-          defaultValue="Hello World"
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          disabled
-          id="standard-disabled"
-          label="Disabled"
-          defaultValue="Hello World"
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-password-input"
-          label="Password"
-          className={classes.textField}
-          type="password"
-          autoComplete="current-password"
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-read-only-input"
-          label="Read Only"
-          defaultValue="Hello World"
-          className={classes.textField}
-          margin="normal"
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-
-        <TextField
-          id="standard-dense"
-          label="Dense"
-          className={classNames(classes.textField, classes.dense)}
-          margin="dense"
-        />
-
-        <TextField
-          id="standard-multiline-flexible"
-          label="Multiline"
-          multiline
-          rowsMax="4"
-          value={this.state.multiline}
-          onChange={this.handleChange('multiline')}
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-multiline-static"
-          label="Multiline"
-          multiline
-          rows="4"
-          defaultValue="Default Value"
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-helperText"
-          label="Helper text"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-with-placeholder"
-          label="With placeholder"
-          placeholder="Placeholder"
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-textarea"
-          label="With placeholder multiline"
-          placeholder="Placeholder"
-          multiline
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-number"
-          label="Number"
-          value={this.state.age}
-          onChange={this.handleChange('age')}
-          type="number"
-          className={classes.textField}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-search"
-          label="Search field"
-          type="search"
-          className={classes.textField}
-          margin="normal"
-        />
-
-        <TextField
-          id="standard-select-currency"
-          select
-          label="Select"
-          className={classes.textField}
-          value={this.state.currency}
-          onChange={this.handleChange('currency')}
-          SelectProps={{
-            MenuProps: {
-              className: classes.menu,
-            },
-          }}
-          helperText="Please select your currency"
-          margin="normal"
-        >
-          {currencies.map(option => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="standard-select-currency-native"
-          select
-          label="Native select"
-          className={classes.textField}
-          value={this.state.currency}
-          onChange={this.handleChange('currency')}
-          SelectProps={{
-            native: true,
-            MenuProps: {
-              className: classes.menu,
-            },
-          }}
-          helperText="Please select your currency"
-          margin="normal"
-        >
-          {currencies.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </TextField>
-        <TextField
-          id="standard-full-width"
-          label="Label"
-          style={{ margin: 8 }}
-          placeholder="Placeholder"
-          helperText="Full width!"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-
-        <TextField
-          id="standard-bare"
-          className={classes.textField}
-          defaultValue="Bare"
-          margin="normal"
-        />
-      </form>
-    );
-  }
+ function AddressForm() {
+  return (
+    <React.Fragment>
+      <FuseAnimateGroup animation="transition.shrinkIn" delay={300} duration={400}>
+        <Typography variant="h6" gutterBottom>
+          Settings
+        </Typography>
+        <Grid container spacing={16}>
+          <Grid 
+            item
+            container sm={12}
+            alignItems={"center"}
+            direction={"row"}
+            justify={"center"}
+          >
+            <Grid item sm={1}>
+              <Typography variant="subtitle1">
+                First name
+              </Typography>
+            </Grid>
+            <Grid item xs={6} sm={4}>
+              <TextField
+                id="firstName"
+                name="firstName"
+                // label="First name"
+                fullWidth
+                autoComplete="fname"
+                variant="outlined"
+                inputProps={{
+                  style: {
+                    padding: 10
+                  }
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid 
+            item
+            container sm={12}
+            alignItems={"center"}
+            direction={"row"}
+            justify={"center"}     
+          >
+            <Grid item sm={1}>
+              <Typography variant="subtitle1">
+                Last name
+              </Typography>
+            </Grid>
+            <Grid item xs={6} sm={4}>
+              <TextField
+                id="lastName"
+                name="lastName"
+                // label="First name"
+                fullWidth
+                autoComplete="fname"
+                variant="outlined"
+                inputProps={{
+                  style: {
+                    padding: 10
+                  }
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid 
+            item
+            container sm={12}
+            alignItems={"center"}
+            direction={"row"}
+            justify={"center"}     
+          >
+            <Grid item sm={1}>
+              <Typography variant="subtitle1">
+                Email 
+              </Typography>
+            </Grid>
+            <Grid item xs={6} sm={4}>
+              <TextField
+                id="address"
+                name="address"
+                fullWidth
+                variant="outlined"
+                placeholder="yahoo@gmail.com"
+                inputProps={{
+                  style: {
+                    padding: 10
+                  }
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid 
+            item
+            container sm={12}
+            alignItems={"center"}
+            direction={"row"}
+            justify={"center"}     
+          >
+            <Grid item sm={1}>
+              <Typography variant="subtitle1">
+                Address
+              </Typography>
+            </Grid>
+            <Grid item xs={6} sm={4}>
+              <TextField
+                required
+                id="address"
+                name="address"
+                fullWidth
+                variant="outlined"
+                placeholder="San Angelo, TX 76904, United States"
+                inputProps={{
+                  style: {
+                    padding: 10
+                  }
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid 
+            item
+            container sm={12}
+            alignItems={"center"}
+            direction={"row"}
+            justify={"center"}     
+          >
+            <Grid 
+              item
+              container 
+              xs={6} 
+              sm={5}
+              justify={"flex-end"}
+            >
+              <Button 
+                color="secondary" 
+                contained="raised"
+                variant="contained" 
+              >
+                  Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </FuseAnimateGroup>
+    </React.Fragment>
+  );
 }
-
-Form.propTypes = {
+AddressForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Form);
+export default withStyles(styles)(AddressForm);

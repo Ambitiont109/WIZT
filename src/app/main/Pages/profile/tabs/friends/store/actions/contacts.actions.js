@@ -21,9 +21,7 @@ export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
 
 export function getContacts(item_id)
 {
-    console.log("this is getContacs of friendsApp")
     const request = axios.get(requestConfig.baseUrl+"/admin/users/"+item_id+"/");
-
     return (dispatch) =>
         request.then((response) =>
             dispatch({

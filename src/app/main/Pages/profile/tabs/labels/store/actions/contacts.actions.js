@@ -22,11 +22,9 @@ export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
 
 export function getContacts(item_id)
 {
-    console.log('this is getcontasts of labels actions')
     const request = axios.get(requestConfig.baseUrl+"/admin/users/"+item_id+"/");
     return (dispatch) =>
         request.then((response) =>{
-            // console.log(response.data.labels);
             dispatch({
                 type   : GET_CONTACTS,
                 payload: response.data.labels,

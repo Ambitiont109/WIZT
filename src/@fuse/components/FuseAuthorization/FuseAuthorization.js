@@ -47,6 +47,7 @@ class FuseAuthorization extends Component {
         User is guest
         Redirect to Login Page
         */
+        console.log(login.success)
         if ( login.success === false )
         {
             history.push({

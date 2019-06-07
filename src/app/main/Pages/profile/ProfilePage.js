@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import {withStyles, Avatar, Button, Tab, Tabs, Typography} from '@material-ui/core';
+import {withStyles, Avatar, Tab, Tabs, Typography} from '@material-ui/core';
 import {FusePageSimple, FuseAnimate} from '@fuse';
-import TimelineTab from './tabs/TimelineTab';
-import PhotosVideosTab from './tabs/PhotosVideosTab';
-import Profile from './tabs/Profile';
+import Profile from './tabs/profile/Profile';
 import LabelsApp from './tabs/labels/LabelsApp';
 import FriendsApp from './tabs/friends/FriendsApp';
 import FloorPlansApp from './tabs/floorplans/FloorPlansApp';
@@ -37,6 +35,10 @@ class ProfilePage extends Component {
             name    : localStorage.getItem("name"),
             imgURL  : localStorage.getItem("imgURL")
         }
+        if(user.imgURL === "null") {
+
+            console.log("user.imgURL")
+        }
 
         return (
             <FusePageSimple
@@ -48,7 +50,7 @@ class ProfilePage extends Component {
                     <div className="p-24 flex flex-1 flex-col items-center justify-center md:flex-row">
                         <div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Avatar className="w-96 h-96" src={user.imgURL}/>
+                                <Avatar className="w-96 h-96" src={user.imgURL==="null"? "" : user.imgURL}/>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                                 <Typography className="md:ml-24" variant="h4" color="inherit">{user.name}</Typography>

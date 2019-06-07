@@ -21,11 +21,9 @@ export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
 
 export function getContacts(item_id)
 {
-    console.log("this is getContacs of floorplans")
     const request = axios.get(requestConfig.baseUrl+"/admin/users/"+item_id+"/");
     return (dispatch) =>
         request.then((response) => {
-                console.log(response.data.floorplans)
                 dispatch({
                     type   : GET_CONTACTS,
                     payload: response.data.floorplans,

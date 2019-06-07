@@ -1,9 +1,7 @@
 import React from 'react';
 import {withStyles, Card, Icon, Typography} from '@material-ui/core';
-import {Bar} from 'react-chartjs-2';
 
 const Widget2 = ({data, theme}) => {
-
     const dataWithColors = data.datasets.map(obj => ({
         ...obj,
         borderColor    : theme.palette.secondary.main,
@@ -13,10 +11,10 @@ const Widget2 = ({data, theme}) => {
     return (
         <Card className="w-full rounded-8 shadow-none border-1">
 
-            <div className="p-16 pb-0 flex flex-row flex-wrap items-end">
+            <div className="p-16  flex flex-row flex-wrap items-end">
 
                 <div className="pr-16">
-                    <Typography className="h3" color="textSecondary">Conversion</Typography>
+                    <Typography className="h3" color="textSecondary">Earnings</Typography>
                     <Typography className="text-56 font-300 leading-none mt-8">
                         {data.conversion.value}
                     </Typography>
@@ -37,12 +35,12 @@ const Widget2 = ({data, theme}) => {
 
             </div>
 
-            <div className="h-96 w-100-p">
+            {/* <div className="h-96 w-100-p">
                 <Bar data={{
                     labels  : data.labels,
                     datasets: dataWithColors
                 }} options={data.options}/>
-            </div>
+            </div> */}
         </Card>
     );
 };

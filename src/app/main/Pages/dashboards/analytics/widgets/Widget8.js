@@ -32,8 +32,8 @@ class Widget8 extends Component {
                     <div className="p-16 pr-4 flex flex-row items-center justify-between">
 
                         <div className="pr-16">
-                            <Typography className="h1 font-300" color="inherit">Sales</Typography>
-                            <Typography className="h5" color="inherit">Lifetime sum of your sales</Typography>
+                            <Typography className="h1 font-300" color="inherit">Sup Up</Typography>
+                            <Typography className="h5" color="inherit">Lifetime sum of you site</Typography>
                         </div>
 
                         <div>
@@ -43,16 +43,16 @@ class Widget8 extends Component {
                         </div>
                     </div>
                     <div className="p-16 pt-8 flex flex-row justify-between items-end">
-                        <Typography className="text-48 font-300 leading-none" color="inherit">{data.today}</Typography>
+                        <Typography className="text-48 font-300 leading-none" color="inherit">{data.datasets[tabIndex][0].Sum}</Typography>
                         <div className="flex flex-row items-center">
-                            {data.change.value > 0 && (
+                            {data.datasets[tabIndex][0].value > 0 && (
                                 <Icon className="text-green">trending_up</Icon>
                             )}
-                            {data.change.value < 0 && (
+                            {data.datasets[tabIndex][0].value < 0 && (
                                 <Icon className="text-red">trending_down</Icon>
                             )}
                             <div className="ml-8">
-                                {data.change.value}
+                                {data.datasets[tabIndex][0].value}
                                 ({data.change.percentage}%)
                             </div>
                         </div>
@@ -62,18 +62,18 @@ class Widget8 extends Component {
                         onChange={this.handleChange}
                         variant="fullWidth"
                     >
-                        <Tab label="1Day" className="min-w-0"/>
-                        <Tab label="1Week" className="min-w-0"/>
-                        <Tab label="1Month" className="min-w-0"/>
+                        <Tab label="Earnings" className="min-w-0"/>
+                        <Tab label="Labels" className="min-w-0"/>
+                        <Tab label="LoggedIns" className="min-w-0"/>
                     </Tabs>
                 </AppBar>
-                <Line
+                {/* <Line
                     data={{
                         labels  : data.labels,
                         datasets: dataWithColors
                     }}
                     options={data.options}
-                />
+                /> */}
             </Card>
         );
     }

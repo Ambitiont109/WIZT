@@ -40,14 +40,12 @@ class JWTLoginTab extends Component {
             this.props.login.error = null;
             this.disableButton();
         }
-
         return null;
     }
 
     render()
     {
         const {canSubmit} = this.state;
-
         return (
             <div className="w-full">
                 <Formsy
@@ -72,7 +70,6 @@ class JWTLoginTab extends Component {
                         variant="outlined"
                         required
                     />
-
                     <TextFieldFormsy
                         className="mb-16"
                         type="password"
@@ -90,7 +87,6 @@ class JWTLoginTab extends Component {
                         variant="outlined"
                         required
                     />
-
                     <Button
                         type="submit"
                         variant="contained"
@@ -99,11 +95,11 @@ class JWTLoginTab extends Component {
                         aria-label="LOG IN"
                         disabled={!canSubmit}
                         value="legacy"
+                        style={{height: 58}}
                     >
-                        Login
+                        LOGIN
                     </Button>
                 </Formsy>
-
             </div>
         );
     }

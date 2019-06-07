@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {withStyles, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Typography} from '@material-ui/core';
+import {withStyles, Card, CardContent, Divider, Typography} from '@material-ui/core';
 import {darken} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimate} from '@fuse';
 import classNames from 'classnames';
-import {Link} from 'react-router-dom';
 import JWTLoginTab from './tabs/JWTLoginTab';
 import _ from '@lodash';
 
@@ -30,8 +29,6 @@ class LoginPage extends Component {
     render()
     {
         const {classes} = this.props;
-        const {email, password, remember} = this.state;
-
         return (
             <div className={classNames(classes.root, "flex flex-col flex-auto flex-no-shrink items-center justify-center p-32")}>
 
@@ -41,7 +38,7 @@ class LoginPage extends Component {
 
                         <Card className="w-full max-w-384">
 
-                            <CardContent className="flex flex-col items-center justify-center p-32">
+                            <CardContent className="flex flex-col items-center justify-center p-32 pb-56">
 
                                 <img className="w-128 m-32" src="assets/images/logos/logo.svg" alt="logo"/>
 
@@ -50,9 +47,9 @@ class LoginPage extends Component {
                                     <JWTLoginTab/>
 
                                 <div className="my-24 flex items-center justify-center">
-                                    <Divider className="w-32"/>
-                                    <span className="mx-8 font-bold">OR</span>
-                                    <Divider className="w-32"/>
+                                    {/* <Divider className="w-32"/> */}
+                                    {/* <span className="mx-8 font-bold">OR</span> */}
+                                    {/* <Divider className="w-32"/> */}
                                 </div>
                             </CardContent>
                         </Card>
