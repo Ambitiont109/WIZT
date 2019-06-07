@@ -104,7 +104,7 @@ class GoogleLoginSerializer(serializers.ModelSerializer):
                 user.phone_number_verified = True
             user.username = validated_data['email']
             user.set_password(randomString())
-            
+
             plan = Plan.objects.filter(is_free=True,name="Free").first()
             user.label_cnt = plan.label_count
             user.photo_cnt = plan.photo_count
@@ -151,7 +151,7 @@ class LabelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_images(self, instance):        
-        images = instance.image_set.all().order_by('-created_at')
+        images = instance.image_set.all().order_by('created_at')
         return ImageSerializer(images, many=True).data
 
 
