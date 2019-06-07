@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "product_id": "plan_EwPfO61ETAM03m",
-      "icon":"https://s3-ap-southeast-1.amazonaws.com/wizt/site/plan_images/master.png",
+      "icon":"master.png",
       "price":130.00,
       "currency":"USD",
       "name":"Master",
@@ -22,7 +22,7 @@
     "pk": 2,
     "fields": {
       "product_id": "plan_EwPfmvhX72lCn6",      
-      "icon":"https://s3-ap-southeast-1.amazonaws.com/wizt/site/plan_images/junior.png",
+      "icon":"junior.png",
       "price":70.00,
       "currency":"USD",
       "name":"Junior",

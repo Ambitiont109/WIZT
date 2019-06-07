@@ -181,16 +181,16 @@ class LabelViewSet(viewsets.ModelViewSet):
         serializer = LabelSerializer(instance=label, data=request.data,partial=True)
         print(serializer.initial_data)
         serializer.is_valid(raise_exception=True)
-
+        images = request.data['images']
         origin_images = label.image_set.all()
-        image_cnt = len(images) - len(origin_images)
+        img_cnt = len(images) - len(origin_images)
 
         if request.user.photo_cnt - img_cnt < 0 :
             return Response("you have run out of images. please purchase image count",status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
         for image in origin_images:
             image.delete()
-        images = request.data['images']
+        
         for image in images:
             record = Image(label=label, url=image['url'], thumbnail=image['thumbnail'], is_cover=image['is_cover'])
             record.save()
@@ -203,7 +203,7 @@ class LabelViewSet(viewsets.ModelViewSet):
         # send notification to all the users that are sharing this label.
         sharelabels = ShareLabel.objects.filter(label = label)
         sent_users = []
-        for item in sharelables:
+        for item in sharelabels:
             if ( not item.share_by in sent_users) and (item.share_by != request.user):
                 create_notification(request.user,item.share_by,'ShareLabel',"Shared Label is updated",1)
                 sent_users.append(item.share_by)
@@ -370,6 +370,7 @@ class ShareLabelViewSet(viewsets.ModelViewSet):
         share_label = self.get_object()
         response = super().destroy(request,*args,**kwargs)
         create_notification(share_label.share_by,share_label.share_to,'Share Label',"Label has been shared to %s " % (share_label.share_to.name,),1)
+        return response
 
     def list(self,request, *args, **kwargs):
         me = self.request.GET.get('me','true')
@@ -438,11 +439,13 @@ class AddressViewSet(APIView):
 
     def post(self,request):
         request.data['user']=request.user.id
-        instance = request.user.address
-        if instance:
+        serializer = None
+        try:
+            instance = request.user.address
             serializer = AddressSerializer(instance = instance,data=request.data,partial=False)
-        else:
+        except Address.DoesNotExist:
             serializer = AddressSerializer(data = request.data)
+
         if serializer.is_valid():
             address = serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
