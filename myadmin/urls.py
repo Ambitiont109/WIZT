@@ -15,11 +15,15 @@ router.register('notifications',NotificaionViewSet,basename='notifications')
 urlpatterns = [
     # Authentication
     path('login/', login),
-    path('users/<int:pk>/',UsersViewSet.as_view({'get':'retrieve'})),
+    path('users/<int:pk>/friends/<int:friend_pk>/',delete_user_friend),
+    path('users/<int:pk>/labels/<int:label_pk>/',delete_user_label),
+    path('users/<int:pk>/floorplans/<uuid:floorplan_pk>/',delete_user_floorplan),
+    
+    path('users/<int:pk>/',UsersViewSet.as_view({'get':'retrieve','delete':'destroy'})),
     path('users/',UsersViewSet.as_view({'get':'list'})),
     path('users/pagination/',UsersViewSet.as_view({'post':'set_pagination'})),
     path('labels/',LabelViewSet.as_view({'get':'list'})),
-    path('labels/<int:pk>/',LabelViewSet.as_view({'get':'retrieve'})),
+    path('labels/<int:pk>/',LabelViewSet.as_view({'get':'retrieve','delete':'destroy'})),
     path('labels/pagination/',LabelViewSet.as_view({'post':'set_pagination'})),
     path('transactions/',TransactionViewSet.as_view({'get':'list'})),
     path('transactions/pagination/',TransactionViewSet.as_view({'post':'set_pagination'})),

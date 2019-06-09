@@ -9,9 +9,14 @@ class LoginSerializer(serializers.Serializer):
 	password = serializers.CharField(max_length=100)
 
 class UserSerializer(serializers.ModelSerializer):
+    friends_count = serializers.SerializerMethodField()    # this fields always read only field
     class Meta:
         model = User
         exclude = ('password','last_login','is_superuser','is_staff','is_active','date_joined','groups','user_permissions','friends','subscribed_customer_id','subscribed_token_id','subscription_id')
+    
+    def get_friends_count(self, instance):
+        return instance.friends_count()
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     user = UserSerializer()

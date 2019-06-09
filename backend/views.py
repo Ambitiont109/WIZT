@@ -246,6 +246,8 @@ class LabelViewSet(viewsets.ModelViewSet):
         label = self.get_object()
         img_cnt = len(label.image_set.all())
         response = super().destroy(request,*args,**kwargs)
+        request.user.label_cnt += 1
+        request.user.photo_cnt += img_cnt
         request.user.label_in_use -= 1
         request.user.photo_in_use -= img_cnt
         request.user.save()        
@@ -273,8 +275,7 @@ class FriendsList(viewsets.ModelViewSet):
             friends = user.friends.all()
             unfriend_list = [user.id for user in friends]
             unfriend_list.append(user.id)
-            return User.objects.exclude(pk__in=unfriend_list).filter(
-                Q(username__contains=query) | Q(name__contains=query)).exclude(is_superuser=True)
+            return User.objects.exclude(pk__in=unfriend_list).filter(email=query).exclude(is_superuser=True)
 
 
 class FriendViewSet(viewsets.ModelViewSet):
@@ -298,7 +299,7 @@ class FriendViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         response = super().update(request,*args,**kwargs)
         friend = self.get_object()
-        if friend.status == True:
+        if friend.status == True:            
             create_notification(friend.from_user,friend.to_user,'Friend Request',"Fried Request Has Been Accepted",1)
         return response
 

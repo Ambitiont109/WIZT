@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 from backend.models import *
 from .serializers import *
 from backend.serializers import PlanSerializer
@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import viewsets,status,pagination
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from wizt.utils import send_broadcast_notification
+from rest_framework.exceptions import MethodNotAllowed,NotFound
 import datetime
 # Create your views here.
 
@@ -34,6 +35,38 @@ def login(request):
     else:
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+@permission_classes((IsAuthenticated, IsAdminUser))
+def delete_user_friend(request,pk,friend_pk):
+    try:
+        user = User.objects.get(pk=pk)
+        friend = User.objects.get(pk=friend_pk)
+        Friend.objects.filter(Q(from_user = user)|Q(to_user= user)).filter(Q(from_user=friend)|Q(to_user=friend)).delete()
+        return Response("",status=status.HTTP_204_NO_CONTENT)
+    except Exception as e:
+        raise NotFound()
+
+
+@api_view(['DELETE'])
+@permission_classes((IsAuthenticated, IsAdminUser))
+def delete_user_label(request,pk,label_pk):
+    try:
+        user = User.objects.get(pk=pk)
+        Label.objects.filter(user = user,pk=label_pk).delete()
+        return Response("",status=status.HTTP_204_NO_CONTENT)
+    except Exception as e:
+        raise NotFound()
+
+
+@api_view(['DELETE'])
+@permission_classes((IsAuthenticated, IsAdminUser))
+def delete_user_floorplan(request,pk,floorplan_pk):
+    try:
+        user = User.objects.get(pk=pk)
+        FloorPlan.objects.filter(user = user,pk=floorplan_pk).delete()
+        return Response("",status=status.HTTP_204_NO_CONTENT)
+    except Exception as e:
+        raise NotFound()
 
 
 def get_user_data_monthly():

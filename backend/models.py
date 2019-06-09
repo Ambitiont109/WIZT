@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import AbstractUser
 import uuid
 
@@ -19,7 +20,7 @@ class User(AbstractUser):
     photo_in_use = models.IntegerField(default = 0)
     label_cnt = models.IntegerField(default = 100)
     photo_cnt = models.IntegerField(default = 20)
-    friends_count = models.IntegerField(default=0)
+    # friends_count = models.IntegerField(default=0)
     friends = models.ManyToManyField('User', through='Friend', symmetrical=False, related_name='friends+')
     #subscription part
     subscribed_email = models.EmailField(blank=True)
@@ -35,7 +36,10 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
+    
+    def friends_count(self):
+        return Friend.objects.filter(Q(from_user=self)|Q(to_user=self),status=True).count()
+        
     def __str__(self):
         return "{}".format(self.name)
 
@@ -48,7 +52,7 @@ class Label(models.Model):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, related_name="labels", on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
+    location = models.CharField(max_length=100,blank=True,null=True)
     tags = models.CharField(max_length=200)
     ar_mark_image = models.CharField(max_length=150,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
