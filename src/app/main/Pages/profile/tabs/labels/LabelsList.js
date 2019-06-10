@@ -50,7 +50,7 @@ class LabelsList extends Component {
 
     render()
     {
-        const { contacts, user, searchText, selectedContactIds, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred} = this.props;
+        const { contacts, user, searchText, selectedContactIds, confirmDialog, selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
 
@@ -90,7 +90,7 @@ class LabelsList extends Component {
                             ),
                             width    : 64,
                             filterable: false,
-                            className : "font-bold  justify-center"
+                            className : "justify-center"
                         },
                         {
                             Header   : () => (
@@ -160,7 +160,6 @@ class LabelsList extends Component {
                             Header    : "Name",
                             accessor  : "name",
                             filterable: false,
-                            className : "font-bold"
                         },
                         {
                             Header    : "Location",
@@ -192,7 +191,7 @@ class LabelsList extends Component {
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            removeContact(row.original.id);
+                                            confirmDialog(row.original.id);
                                         }}
                                     >
                                         <Icon>delete</Icon>
@@ -209,7 +208,6 @@ class LabelsList extends Component {
     }
 }
 
-
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
@@ -224,7 +222,8 @@ function mapDispatchToProps(dispatch)
         toggleStarredContact    : Actions.toggleStarredContact,
         toggleStarredContacts   : Actions.toggleStarredContacts,
         setContactsStarred      : Actions.setContactsStarred,
-        setContactsUnstarred    : Actions.setContactsUnstarred
+        setContactsUnstarred    : Actions.setContactsUnstarred,
+        confirmDialog           : Actions.confirmDialog,
     }, dispatch);
 }
 

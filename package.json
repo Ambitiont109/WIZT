@@ -39,6 +39,7 @@
         "react-beautiful-dnd": "10.0.3",
         "react-big-calendar": "0.20.2",
         "react-chartjs-2": "2.7.4",
+        "react-circular-progressbar": "^2.0.1",
         "react-dnd": "2.6.0",
         "react-dnd-html5-backend": "2.6.0",
         "react-dom": "16.7.0",

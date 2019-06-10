@@ -8,6 +8,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
 import {connect} from 'react-redux';
+import axios from "axios";
+import requestConfig from "../../config/requestConfig";
+
 
 class ConfirmDialog extends React.Component {
   state = {
@@ -22,6 +25,22 @@ class ConfirmDialog extends React.Component {
 
     this.setState({ open: false });
   };
+
+  removeContact = (userId) => {
+    console.log(userId)
+    axios.delete(requestConfig.baseUrl+"/admin/labels/"+userId+"/").then((res)=>this.ReturnMainPage());
+  };
+
+  ReturnMainPage = () => {
+    const {history, page} = this.props;
+    history.push(
+      {
+       pathname: "/app/pages/labels",
+       page : page
+      }
+    )
+    this.props.closeConfirmDialog()
+  }
 
   render() {
     const { closeConfirmDialog, confirmDialog } = this.props;
@@ -41,7 +60,7 @@ class ConfirmDialog extends React.Component {
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>{  // added by myself
-            closeConfirmDialog();
+              this.removeContact(confirmDialog.user_id);
           }} color="primary">
             Agree
           </Button>
@@ -73,7 +92,8 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({labelsApp})
 {
     return {
-      confirmDialog: labelsApp.contacts.confirmDialog
+      confirmDialog: labelsApp.contacts.confirmDialog,
+      page: labelsApp.contacts.page
     }
 }
 

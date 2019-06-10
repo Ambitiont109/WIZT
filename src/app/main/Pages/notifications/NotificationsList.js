@@ -46,7 +46,6 @@ class NotificationsList extends Component {
 
     fetchData = (state) => {
         //Running when changes occure on table.
-        console.log(state.page)
         this.setState({
             pageSize: state.pageSize,
         })
@@ -75,7 +74,6 @@ class NotificationsList extends Component {
         const data = this.getFilteredArray(contacts, searchText);
         let pages = Math.floor(totalPage/x);
         const remainder = totalPage % x;
-        console.log(page)
         if(pages && remainder) 
         {
             pages++; 
@@ -87,9 +85,8 @@ class NotificationsList extends Component {
         }
         else
         {
-            var pageNum = 0;
+            pageNum = 0;
         }
-        console.log(pageNum)
         
         if ( !data && data.length === 0 )
         {

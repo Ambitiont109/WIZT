@@ -15,6 +15,7 @@ import axios from 'axios';
 import requestConfig from "../../../config/requestConfig";
 import {withRouter} from 'react-router-dom';
 import Snackbar from "../../../../main/components/snackbar/snackbar";
+import ConfirmDialog from "./ConfirmDialog";
 
    const styles = theme => ({
       root: {
@@ -92,6 +93,7 @@ class Plan extends Component {
          fileURL: "",
          fileName: "",
          imgChanged: false,
+         delete : false,
       }
    }
 
@@ -204,6 +206,10 @@ class Plan extends Component {
       }
    }
 
+   onClick = () => {
+      this.setState({delete: true})
+   }
+
    onDelete = () => {
       const id = this.state.id;
       axios.delete(requestConfig.baseUrl+"/admin/plans/"+id+"/")
@@ -220,6 +226,7 @@ class Plan extends Component {
       const {classes} = this.props;
       const infor = this.state.infor;
       const data = this.state;
+      console.log(this.props)
       return (
       <React.Fragment>
          <FuseAnimateGroup animation="transition.shrinkIn" delay={300} duration={400}>
@@ -234,6 +241,7 @@ class Plan extends Component {
                /> 
                : ""
          }
+
          <form  noValidate autoComplete="off">
             <Typography variant="h6" gutterBottom>
                {/* Plan */}
@@ -647,7 +655,7 @@ class Plan extends Component {
                               color="primary" 
                               contained="raised"
                               variant="contained"
-                              onClick={this.onDelete}
+                              onClick={this.onClick}
                            >
                               Delete
                            </Button>
@@ -670,6 +678,7 @@ class Plan extends Component {
             </Grid>
             </form>
          </FuseAnimateGroup>
+            <ConfirmDialog is_delete={this.state.delete} parent={this.state} history={this.props} />
       </React.Fragment>
      );
    }; 

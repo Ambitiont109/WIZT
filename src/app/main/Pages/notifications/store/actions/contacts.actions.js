@@ -2,7 +2,6 @@ import axios from 'axios';
 import {getUserData} from './user.actions';
 import requestConfig from "../../../../config/requestConfig"
 
-
 export const GET_CONTACTS = '[CONTACTS APP] GET CONTACTS';
 export const SET_SEARCH_TEXT = '[CONTACTS APP] SET SEARCH TEXT';
 export const TOGGLE_IN_SELECTED_CONTACTS = '[CONTACTS APP] TOGGLE IN SELECTED CONTACTS';
@@ -24,7 +23,6 @@ export const CLOSE_CONFIRM_DIALOG = '[CONTACTS APP] CLOSE CONFIRM DIALOG';
 
 export function getContacts(params)
 {
-    console.log(params)
     const request = axios.get(requestConfig.baseUrl+"/admin/notifications/", {params});
     return (dispatch) =>
         request.then((response) =>
@@ -52,7 +50,6 @@ export function toggleInSelectedContacts(contactId)
         contactId
     }
 }
-
 
 export function selectAllContacts()
 {

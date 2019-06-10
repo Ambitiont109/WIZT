@@ -112,7 +112,7 @@ class Example extends Component {
                         </div>
                     )
                 }
-               content={
+                content={
                     <div className="p-24">
                     {
                         this.state.add_plan? (

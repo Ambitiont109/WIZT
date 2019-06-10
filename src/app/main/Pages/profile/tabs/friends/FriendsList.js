@@ -32,7 +32,7 @@ class ContactsList extends Component {
 
     render()
     {
-        const { contacts, searchText, selectedContactIds, openEditContactDialog, removeContacts, setContactsUnstarred, setContactsStarred} = this.props;
+        const { contacts, searchText, selectedContactIds, openEditContactDialog, confirmDialog, removeContacts, setContactsUnstarred, setContactsStarred} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
         if ( !data && data.length === 0 )
@@ -71,7 +71,7 @@ class ContactsList extends Component {
                             ),
                             width    : 64,
                             filterable: false,
-                            className : "font-bold  justify-center"
+                            className : "justify-center"
                         },
                         {
                             Header   : () => (
@@ -141,13 +141,11 @@ class ContactsList extends Component {
                             Header    : "Name",
                             accessor  : "name",
                             filterable: false,
-                            className : "font-bold"
                         },
                         {
                             Header    : "User name",
                             accessor  : "username",
                             filterable: false,
-                            className : "font-bold"
                         },
                         {
                             Header    : "Email",
@@ -185,7 +183,23 @@ class ContactsList extends Component {
                             accessor  : "photo_in_use",
                             filterable: false
                         },
-                       
+                        {
+                            Header: "",
+                            width : 64,
+                            className : "justify-center",
+                            Cell  : row => (
+                                <div className="flex items-center">
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            confirmDialog(row.original.id);
+                                        }}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                </div>
+                            )
+                        }
                     ]}
                     defaultPageSize={10}
                     noDataText="No contacts found"
@@ -206,11 +220,11 @@ function mapDispatchToProps(dispatch)
         deSelectAllContacts     : Actions.deSelectAllContacts,
         openEditContactDialog   : Actions.openEditContactDialog,
         removeContacts          : Actions.removeContacts,
-        removeContact           : Actions.removeContact,
         toggleStarredContact    : Actions.toggleStarredContact,
         toggleStarredContacts   : Actions.toggleStarredContacts,
         setContactsStarred      : Actions.setContactsStarred,
-        setContactsUnstarred    : Actions.setContactsUnstarred
+        setContactsUnstarred    : Actions.setContactsUnstarred,
+        confirmDialog           : Actions.confirmDialog,
     }, dispatch);
 }
 

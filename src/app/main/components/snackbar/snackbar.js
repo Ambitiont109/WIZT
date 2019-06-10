@@ -11,7 +11,6 @@ const styles = theme => ({
     padding: theme.spacing.unit / 2,
   },
 });
-
 class SimpleSnackbar extends React.Component {
       constructor(props) {
             super(props)
@@ -21,7 +20,7 @@ class SimpleSnackbar extends React.Component {
       }
 
       handleClick = () => {
-      this.setState({ open: true });
+            this.setState({ open: true });
       };
 
       handleClose = (event, reason) => {

@@ -11,7 +11,6 @@ import plans_reducer from "../store/reducer/plans_reducer";
 const styles = theme => ({
     layoutRoot: {}
 });
-
 class Edit extends Component {
 
     render()
@@ -40,12 +39,9 @@ class Edit extends Component {
                         </FuseAnimate>
                     </div>
                 }
-                // contentToolbar={
-                //     <div className="px-24"><h4></h4></div>
-                // }
                 content={
                     <div className="p-24">
-                        <Plan data={plan_data} />
+                        <Plan data={plan_data} history={this.props} />
                     </div>
                 }
             />

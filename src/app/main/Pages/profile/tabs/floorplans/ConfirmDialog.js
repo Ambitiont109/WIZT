@@ -9,7 +9,8 @@ import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
 import {connect} from 'react-redux';
 import axios from "axios";
-import requestConfig from "../../config/requestConfig";
+import requestConfig from "../../../../config/requestConfig";
+
 
 class ConfirmDialog extends React.Component {
   state = {
@@ -21,18 +22,21 @@ class ConfirmDialog extends React.Component {
   };
 
   handleClose = () => {
+
     this.setState({ open: false });
   };
 
-  removeContact = (userId) => {
-    axios.delete(requestConfig.baseUrl+"/admin/notifications/"+userId+"/").then((res)=>this.ReturnMainPage());
-  }
+  removeContact = (item_id) => {
+    let user_id = localStorage.getItem("item_id")
+    console.log(item_id)
+    axios.delete(requestConfig.baseUrl+"/admin/users/"+user_id+"/floorplans/"+item_id+"/").then((res)=>this.ReturnMainPage());
+  };
 
   ReturnMainPage = () => {
     const {history, page} = this.props;
     history.push(
       {
-       pathname: "/admin/notifications",
+       pathname: "/app/pages/profile",
        page : page
       }
     )
@@ -40,8 +44,9 @@ class ConfirmDialog extends React.Component {
   }
 
   render() {
-    const {closeConfirmDialog, confirmDialog} = this.props;
+    const { closeConfirmDialog, confirmDialog } = this.props;
     return (
+      
       <Dialog
         open={confirmDialog.props.open} // added by myself
         onClose={this.handleClose}
@@ -55,18 +60,19 @@ class ConfirmDialog extends React.Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() =>{ // added by myself
+          <Button onClick={()=>{  // added by myself
             this.removeContact(confirmDialog.user_id);
-          }} color="primary" autoFocus>
+          }} color="primary">
             Agree
           </Button>
-          <Button onClick={()=>{ // added by myself
+          <Button onClick={() =>{ // added by myself
             closeConfirmDialog();
-          }} color="primary">
+          }} color="primary" autoFocus>
             Disagree
           </Button>
         </DialogActions>
       </Dialog>
+      
     );
   }
 }
@@ -82,11 +88,11 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({NotificationsApp})
+function mapStateToProps({floorplansApp})
 {
     return {
-      confirmDialog: NotificationsApp.contacts.confirmDialog,
-      page: NotificationsApp.contacts.page
+      confirmDialog: floorplansApp.contacts.confirmDialog,
+      page: floorplansApp.contacts.page
     }
 }
 

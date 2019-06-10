@@ -3,9 +3,7 @@ import * as Actions from '../actions';
 
 const initialState = {
     entities          : [],
-    page              : {
-        page: 1
-    },
+    page              : "",  
     totalPage         : "",
     searchText        : '',
     selectedContactIds: [],

@@ -92,7 +92,7 @@ class TransactionsList extends Component {
         }
         else
         {
-            var pageNum = 0;
+            pageNum = 0;
         }
 
         if ( !data && data.length === 0 )
@@ -169,23 +169,6 @@ class TransactionsList extends Component {
                             filterable: false,
                             sortable  : false,
                         },
-                        {
-                            Header: "",
-                            width : 64,
-                            Cell  : row => (
-                                <div className="flex items-center">
-                                    <IconButton
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            confirmDialog(row.original.id);
-                                        }}
-                                    >
-                                        <Icon>delete</Icon>
-                                    </IconButton>
-                                </div>
-                            ),
-                            className : "justify-center"
-                        }
                     ]}
                     pages={pages}
                     manual

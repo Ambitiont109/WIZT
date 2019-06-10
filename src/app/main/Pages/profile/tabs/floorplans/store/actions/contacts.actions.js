@@ -18,6 +18,8 @@ export const REMOVE_CONTACTS = '[CONTACTS APP] REMOVE CONTACTS';
 export const TOGGLE_STARRED_CONTACT = '[CONTACTS APP] TOGGLE STARRED CONTACT';
 export const TOGGLE_STARRED_CONTACTS = '[CONTACTS APP] TOGGLE STARRED CONTACTS';
 export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
+export const OPEN_CONFIRM_DIALOG = '[CONTACTS APP] OPEN CONFIRM DIALOG';
+export const CLOSE_CONFIRM_DIALOG = '[CONTACTS APP] CLOSE CONFIRM DIALOG';
 
 export function getContacts(item_id)
 {
@@ -75,6 +77,22 @@ export function closeNewContactDialog()
 {
     return {
         type: CLOSE_NEW_CONTACT_DIALOG
+    }
+}
+
+export function confirmDialog(user_id) 
+{
+    console.log("====================>"+user_id)
+    return {
+        type: OPEN_CONFIRM_DIALOG,
+        data: user_id
+    }
+}
+
+export function closeConfirmDialog() 
+{
+    return {
+        type: CLOSE_CONFIRM_DIALOG,
     }
 }
 

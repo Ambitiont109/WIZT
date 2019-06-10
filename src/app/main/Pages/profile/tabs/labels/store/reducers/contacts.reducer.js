@@ -12,6 +12,12 @@ const initialState = {
             open: false
         },
         data : null
+    },
+    confirmDialog: {
+        props: {
+            open: false
+        },
+        user_id : null
     }
 };
 
@@ -121,6 +127,31 @@ const contactsReducer = function (state = initialState, action) {
                         open: false
                     },
                     data : null
+                }
+            };
+        }
+        case Actions.OPEN_CONFIRM_DIALOG:  /**This part is added*/
+        {
+            return {
+                ...state,
+                confirmDialog: {
+                    props: {
+                        open: true
+                    },
+                    user_id : action.data
+                }
+            };
+        }
+
+        case Actions.CLOSE_CONFIRM_DIALOG: /**This part is added*/
+        {
+            return {
+                ...state,
+                confirmDialog: {
+                    props: {
+                        open: false
+                    },
+                    user_id : null
                 }
             };
         }

@@ -9,7 +9,6 @@ import * as Actions from './store/actions';
 import ChipsArray from '../../components/chips/ChipsArray';
 import axios from 'axios';
 import requestConfig from '../../config/requestConfig';
-
 class LabelsList extends Component {
 
     constructor() {
@@ -101,7 +100,7 @@ class LabelsList extends Component {
         }
         else
         {
-            var pageNum = 0;
+            pageNum = 0;
         }
 
         if ( !data && data.length === 0 )
@@ -162,7 +161,6 @@ class LabelsList extends Component {
                             filterable: false,
                             sortable  : false,
                             width     : 250, 
-                            className : "font-bold "
                         },
                         {
                             Header    : "Location",

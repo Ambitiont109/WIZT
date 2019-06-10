@@ -12,6 +12,8 @@ import Widget4 from './widgets/Widget4';
 import withReducer from 'app/store/withReducer';
 import * as Actions from './store/actions'
 import reducer from './store/reducers';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 const classes = {
   Card: {
@@ -115,6 +117,7 @@ class AnalyticsDashboardApp extends Component {
     render()
     {
         const {widgets} = this.props;
+        const percentage = 66;
         if ( !widgets )
         {
             return 'Loading..';
@@ -125,16 +128,13 @@ class AnalyticsDashboardApp extends Component {
                 <Widget1 data={widgets.widget1}/>
 
                 <FuseAnimate animation="transition.slideUpIn" delay={200}>
-
                     <div className="flex flex-col md:flex-row sm:p-8 container">
-
                         <div className="flex flex-1 flex-col min-w-0">
                             <FuseAnimate delay={600}>
                                 <Typography className="p-16 pb-8 text-18 font-300">
                                     How are your active users trending over time?
                                 </Typography>
                             </FuseAnimate>
-
                             <div className="flex flex-col sm:flex sm:flex-row pb-32">
                                 <div className="widget flex w-full sm:w-1/4 p-16">
                                     <Widget4 data={widgets.widget4} isLoggedIn={false} />
@@ -150,82 +150,112 @@ class AnalyticsDashboardApp extends Component {
                                 </div>
                             </div>
                             <div className="flex flex-col sm:flex sm:flex-row pb-32">
-                                    <div className="widget w-full sm:w-1/4 p-16" >
-                                        <Paper style={{ backgroundColor: '#0091ea' }}>
-                                            <CardActionArea onClick={(ev) => {
-                                                ev.preventDefault();
-                                                this.onClick("users");
-                                            }}>
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
-                                                        Users
-                                                    </Typography>
-                                                    <Typography variant="body2" color="textSecondary" component="p" style={classes.Card}>
-                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                                        across all continents except Antarctica
-                                                    </Typography>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Paper>
-                                    </div>
-                                    <div className="widget w-full sm:w-1/4 p-16" >
-                                        <Paper style={{ backgroundColor: '#388e3c' }}>
-                                            <CardActionArea onClick={ (ev) => {
-                                                ev.preventDefault();
-                                                this.onClick("labels");
-                                            }}>
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
-                                                        Labels
-                                                    </Typography>
-                                                    <Typography variant="body2" component="p" style={classes.Card}>
-                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                                        across all continents except Antarctica
-                                                    </Typography>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Paper>
-                                    </div>
-                                    <div className="widget w-full sm:w-1/4 p-16" >
-                                        <Paper style={{ backgroundColor: '#ff9800' }}>
-                                            <CardActionArea onClick={(ev) => {
-                                                ev.preventDefault();
-                                                this.onClick("transactions");
-                                            }}>
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
-                                                        Transactions
-                                                    </Typography>
-                                                    <Typography variant="body2" color="textSecondary" component="p" style={classes.Card}>
-                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                                        across all continents except Antarctica
-                                                    </Typography>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Paper>
-                                    </div>
-                                    <div className="widget w-full sm:w-1/4 p-16" >
-                                        <Paper style={{ backgroundColor: '#9c27b0' }}>
-                                            <CardActionArea onClick={(ev) => {
-                                                ev.preventDefault();
-                                                this.onClick("notifications");
-                                            }}>
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
-                                                        Notifications
-                                                    </Typography>
-                                                    <Typography variant="body2" color="textSecondary" component="p" style={classes.Card}>
-                                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                                        across all continents except Antarctica
-                                                    </Typography>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Paper>
-                                    </div>
-                                
+                                <div className="widget w-full sm:w-1/4 p-16" >
+                                    <Paper style={{ backgroundColor: '#0091ea' }}>
+                                        <CardActionArea onClick={(ev) => {
+                                            ev.preventDefault();
+                                            this.onClick("users");
+                                        }}>
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                    Users
+                                                </Typography>
+                                                <div style={{ width: "100px", margin: "auto"}}>
+                                                    <CircularProgressbar 
+                                                        value={percentage} 
+                                                        text={`${percentage}%`} 
+                                                        strokeWidth={10} 
+                                                        styles={buildStyles({
+                                                            textColor: "#fff",
+                                                            pathColor: "#FF9800",
+                                                            // trailColor: "gold"
+                                                        })}
+                                                    />
+                                                </div>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Paper>
+                                </div>
+                                <div className="widget w-full sm:w-1/4 p-16" >
+                                    <Paper style={{ backgroundColor: '#388e3c' }}>
+                                        <CardActionArea onClick={ (ev) => {
+                                            ev.preventDefault();
+                                            this.onClick("labels");
+                                        }}>
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                    Labels
+                                                </Typography>
+                                                <div style={{ width: "100px", margin: "auto"}}>
+                                                    <CircularProgressbar 
+                                                        value={percentage} 
+                                                        strokeWidth={10} 
+                                                        text={`${percentage}%`}
+                                                        styles={buildStyles({
+                                                            textColor: "#fff",
+                                                            pathColor: "#9C27B0",
+                                                            // trailColor: "gold"
+                                                        })}
+                                                    />
+                                                </div>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Paper>
+                                </div>
+                                <div className="widget w-full sm:w-1/4 p-16" >
+                                    <Paper style={{ backgroundColor: '#ff9800' }}>
+                                        <CardActionArea onClick={(ev) => {
+                                            ev.preventDefault();
+                                            this.onClick("transactions");
+                                        }}>
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                    Transactions
+                                                </Typography>
+                                                <div style={{ width: "100px", margin: "auto"}}>
+                                                    <CircularProgressbar 
+                                                        value={percentage} 
+                                                        text={`${percentage}%`}
+                                                        strokeWidth={10} 
+                                                        styles={buildStyles({
+                                                            textColor: "#fff",
+                                                            pathColor: "#388E3C",
+                                                            // trailColor: "gold"
+                                                        })}    
+                                                    />
+                                                </div>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Paper>
+                                </div>
+                                <div className="widget w-full sm:w-1/4 p-16" >
+                                    <Paper style={{ backgroundColor: '#9c27b0' }}>
+                                        <CardActionArea onClick={(ev) => {
+                                            ev.preventDefault();
+                                            this.onClick("notifications");
+                                        }}>
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="h2" style={classes.Card}>
+                                                    Notifications
+                                                </Typography>
+                                                <div style={{ width: "100px", margin: "auto"}}>
+                                                    <CircularProgressbar 
+                                                        value={percentage} 
+                                                        text={`${percentage}%`}
+                                                        strokeWidth={10}  
+                                                        styles={buildStyles({
+                                                            textColor: "#fff",
+                                                            pathColor: "#0091EA",
+                                                            // trailColor: "gold"
+                                                        })}    
+                                                    />
+                                                </div>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Paper>
+                                </div>
                             </div>
                         </div>
-                       
                     </div>
                 </FuseAnimate>
             </div>

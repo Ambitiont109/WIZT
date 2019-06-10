@@ -8,7 +8,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {bindActionCreators} from 'redux';
 import * as Actions from './store/actions';
 import {connect} from 'react-redux';
-
+import axios from 'axios';
+import requestConfig from "../../config/requestConfig";
 class ConfirmDialog extends React.Component {
   state = {
     open: false,
@@ -22,6 +23,22 @@ class ConfirmDialog extends React.Component {
 
     this.setState({ open: false });
   };
+
+  removeContact = (userId) => {
+    console.log(userId)
+    axios.delete(requestConfig.baseUrl+"/admin/users/"+userId+"/").then((res)=>this.ReturnMainPage());
+  };
+
+  ReturnMainPage = () => {
+    const {history, page} = this.props;
+    history.push(
+      {
+       pathname: "/app/pages/users/",
+       page : page
+      }
+    )
+    this.props.closeConfirmDialog()
+  }
 
   render() {
     const { closeConfirmDialog, confirmDialog } = this.props;
@@ -39,16 +56,15 @@ class ConfirmDialog extends React.Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          <Button onClick={() =>{ // added by myself
+            this.removeContact(confirmDialog.user_id);
+          }} color="primary" autoFocus>
+            Agree
+          </Button>
           <Button onClick={()=>{  // added by myself
             closeConfirmDialog();
           }} color="primary">
             Disagree
-          </Button>
-          <Button onClick={() =>{ // added by myself
-            // removeContact(this.props.confirmDialog.user_id);
-            closeConfirmDialog();
-          }} color="primary" autoFocus>
-            Agree
           </Button>
         </DialogActions>
       </Dialog>
@@ -71,9 +87,9 @@ function mapDispatchToProps(dispatch)
 function mapStateToProps({usersApp})
 {
     return {
-      confirmDialog: usersApp.contacts.confirmDialog
+      confirmDialog: usersApp.contacts.confirmDialog,
+      page: usersApp.contacts.page
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmDialog);

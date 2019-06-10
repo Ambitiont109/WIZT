@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 import ReactTable from "react-table";
 import * as Actions from './store/actions';
 import ChipsArray from '../../../../components/chips/ChipsArray';
+import confirmDialog from "./ConfirmDialog";
 
 class FloorPlansList extends Component {
 
@@ -39,7 +40,7 @@ class FloorPlansList extends Component {
 
     render()
     {
-        const { contacts, searchText, selectedContactIds, openEditContactDialog, removeContacts, removeContact, setContactsUnstarred, setContactsStarred} = this.props;
+        const { contacts, searchText, selectedContactIds, openEditContactDialog, removeContacts, confirmDialog, removeContact, setContactsUnstarred, setContactsStarred} = this.props;
         const data = this.getFilteredArray(contacts, searchText);
         const {selectedContactsMenu} = this.state;
 
@@ -79,7 +80,7 @@ class FloorPlansList extends Component {
                             ),
                             width    : 64,
                             filterable: false,
-                            className : "font-bold  justify-center"
+                            className : "justify-center"
                         },
                         {
                             Header   : () => (
@@ -149,7 +150,6 @@ class FloorPlansList extends Component {
                             Header    : "Name",
                             accessor  : "name",
                             filterable: false,
-                            className : "font-bold"
                         },
                         {
                             Header    : "Created at",
@@ -177,7 +177,7 @@ class FloorPlansList extends Component {
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            removeContact(row.original.id);
+                                            confirmDialog(row.original.id);
                                         }}
                                     >
                                         <Icon>delete</Icon>
@@ -205,11 +205,11 @@ function mapDispatchToProps(dispatch)
         deSelectAllContacts     : Actions.deSelectAllContacts,
         openEditContactDialog   : Actions.openEditContactDialog,
         removeContacts          : Actions.removeContacts,
-        removeContact           : Actions.removeContact,
         toggleStarredContact    : Actions.toggleStarredContact,
         toggleStarredContacts   : Actions.toggleStarredContacts,
         setContactsStarred      : Actions.setContactsStarred,
-        setContactsUnstarred    : Actions.setContactsUnstarred
+        setContactsUnstarred    : Actions.setContactsUnstarred,
+        confirmDialog           : Actions.confirmDialog,
     }, dispatch);
 }
 

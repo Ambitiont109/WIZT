@@ -9,14 +9,19 @@ export function getWidgets()
     return (dispatch) =>
     request.then((response) =>{
         let earning = response.data.earnings.map(a => a.sum);
-        let sum = earning.reduce((partial_sum, a) => partial_sum + a,0); 
+        let sum = earning.reduce((partial_sum, a) => partial_sum + a,0);
+        let year;
+        if(response.data.earning) {
+            year = response.data.earning[0].year
+        } 
+        year = null
             dispatch({
                 type   : GET_WIDGETS,
                 monthlyEarning: {
                     datasets: {
                         'monthly_earning': [
                             {
-                                year : response.data.earnings[0].year,
+                                year : year,
                                 label: 'Sales',
                                 data : earning,
                                 fill : 'start'

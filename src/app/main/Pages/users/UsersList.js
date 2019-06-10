@@ -101,7 +101,7 @@ class UsersList extends Component {
         }
         else
         {
-            var pageNum = 0;
+            pageNum = 0;
         }
 
         if ( !data && data.length === 0 )
@@ -194,7 +194,7 @@ class UsersList extends Component {
                             Cell     : row => (
                                 <Avatar  alt={row.original.name} src={row.value}/>
                             ),
-                            className: "justify-center",
+                            // className: "justify-center",
                             width    : 64,
                             sortable : false
                         },
@@ -203,14 +203,12 @@ class UsersList extends Component {
                             accessor  : "name",
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center"
                         },
                         {
                             Header    : "Email",
                             accessor  : "email",
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center"
                         },
                         {
                             Header    : "Phone number",
@@ -220,14 +218,12 @@ class UsersList extends Component {
                             ),
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center"
                         },
                         {
                             Header    : "Label in use",
                             accessor  : "label_in_use",
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center",
                             width     : 94,
                         },
                         {
@@ -235,7 +231,6 @@ class UsersList extends Component {
                             accessor  : "photo_in_use",
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center",
                             width     : 94,
                         },
                         {
@@ -243,7 +238,6 @@ class UsersList extends Component {
                             accessor  : "total_label_count",
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center",
                             width     : 125,
                         },
                         {
@@ -251,7 +245,6 @@ class UsersList extends Component {
                             accessor  : "friends_count",
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center",
                             width     : 100,
                         },
                         {
@@ -259,7 +252,6 @@ class UsersList extends Component {
                             accessor  : "created_at",
                             filterable: false,
                             sortable  : false,
-                            className : "justify-center",
                             Cell      : row => (
                                 this.dateFormat(row.value)
                             )
@@ -299,7 +291,6 @@ class UsersList extends Component {
         );
     }
 }
-
 
 function mapDispatchToProps(dispatch)
 {

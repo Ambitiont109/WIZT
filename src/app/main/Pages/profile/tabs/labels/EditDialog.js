@@ -107,7 +107,7 @@ class EditDialog extends Component {
                     <div className="flex">
                         <TextField
                             disabled = {this.state.disableEdit}
-                            className="mb-24"
+                            className="mb-16"
                             label="Name"
                             autoFocus
                             id="name"
@@ -119,7 +119,17 @@ class EditDialog extends Component {
                             fullWidth
                         />
                     </div>
-
+                    <div className="flex mb-24">
+                        <fieldset style={{border:"1px solid #c4c4c4", borderRadius: 4, width:312
+                        }} >
+                            <legend style={{color:"#757575", marginLeft: 10, fontSize: 12
+                        }}>Tags</legend>
+                            <div>
+                                <ChipsArray data={this.state.tags} isEdit={false} />
+                            </div>
+                            
+                        </fieldset>
+                    </div>
                     <div className="flex">
                         <TextField
                             disabled = {this.state.disableEdit}
@@ -137,7 +147,7 @@ class EditDialog extends Component {
                         <TextField
                             disabled = {this.state.disableEdit}
                             className="mb-24"
-                            label="Address"
+                            label="Location"
                             id="address"
                             name="address"
                             value={this.state.location}
@@ -146,20 +156,9 @@ class EditDialog extends Component {
                             fullWidth
                         />
                     </div>
-                    <div className="flex">
-                        <fieldset style={{border:"1px solid #c4c4c4", borderRadius: 4, width:312
-                        }} >
-                            <legend style={{color:"#757575", marginLeft: 10, fontSize: 12
-                        }}>Tags</legend>
-                            <div>
-                                <ChipsArray data={this.state.tags} isEdit={false} />
-                            </div>
-                            
-                        </fieldset>
-                    </div>
                 </DialogContent>
 
-                {contactDialog.type === 'new' ? (
+                {/* {contactDialog.type === 'new' ? (
                     <DialogActions className="justify-between pl-16">
                         <Button
                             variant="contained"
@@ -196,7 +195,7 @@ class EditDialog extends Component {
                             <Icon>delete</Icon>
                         </IconButton>
                     </DialogActions>
-                )}
+                )} */}
             </Dialog>
         );
     }

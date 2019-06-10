@@ -10,6 +10,7 @@ import LabelsList from './LabelsList';
 import EditDialog from './EditDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import ConfirmDialog from './ConfirmDialog';
 
 const styles = theme => ({
     addButton: {
@@ -33,7 +34,8 @@ class LabelsApp extends Component {
     {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
-            this.props.getContacts(this.props.match.params);
+            const item_id = localStorage.getItem("item_id")
+            this.props.getContacts(item_id);
         }
     }
 
@@ -57,6 +59,7 @@ class LabelsApp extends Component {
                     innerScroll
                 />
                 <EditDialog/>
+                <ConfirmDialog history={this.props.history} /> 
             </React.Fragment>
         )
     };

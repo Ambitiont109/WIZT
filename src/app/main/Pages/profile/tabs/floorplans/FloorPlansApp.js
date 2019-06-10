@@ -10,6 +10,7 @@ import FloorPlansList from './FloorPlansList';
 import EditDialog from './EditDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
+import ConfirmDialog from './ConfirmDialog';
 
 const styles = theme => ({
     addButton: {
@@ -33,14 +34,14 @@ class FloorPlansApp extends Component {
     {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
-            this.props.getContacts(this.props.match.params);
+            const item_id = localStorage.getItem("item_id")
+            this.props.getContacts(item_id);
         }
     }
 
     render()
     {
         // const {classes, openNewContactDialog} = this.props;
-
         return (
             <React.Fragment>
                 <FusePageSimple
@@ -59,6 +60,7 @@ class FloorPlansApp extends Component {
                     innerScroll
                 />
                 <EditDialog/>
+                <ConfirmDialog history={this.props.history} /> 
             </React.Fragment>
         )
     };

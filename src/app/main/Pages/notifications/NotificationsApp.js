@@ -35,13 +35,12 @@ class NotificationsApp extends Component {
     {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
-            this.props.getContacts(this.props.match.params);
+            this.props.getContacts(this.props.location.page);
         }
     }
 
     render()
     {
-        console.log('this is notifications')
         return (
             <React.Fragment>
                 <FusePageSimple

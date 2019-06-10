@@ -13,7 +13,6 @@ import ConfirmDialog from './ConfirmDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 
-
 const styles = theme => ({
     addButton: {
         position: 'absolute',
@@ -22,7 +21,6 @@ const styles = theme => ({
         zIndex  : 99
     }
 });
-
 class UsersApp extends Component {
 
     componentDidMount()
@@ -35,7 +33,7 @@ class UsersApp extends Component {
     {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
-            this.props.getContacts(this.props.match.params);
+            this.props.getContacts(this.props.location.page);
         }
     }
 
@@ -63,18 +61,8 @@ class UsersApp extends Component {
                     }}
                     innerScroll
                 />
-                {/* <FuseAnimate animation="transition.expandIn" delay={300}>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        className={classes.addButton}
-                        onClick={openNewContactDialog}
-                    >
-                        <Icon>person_add</Icon>
-                    </Fab>
-                </FuseAnimate> */}
                 <EditDialog/>
-                <ConfirmDialog/>  
+                <ConfirmDialog history={this.props.history} /> 
             </React.Fragment>
         )
     };

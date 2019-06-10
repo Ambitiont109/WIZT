@@ -34,7 +34,7 @@ class LabelsApp extends Component {
     {
         if ( !_.isEqual(this.props.location, prevProps.location) )
         {
-            this.props.getContacts(this.props.match.params);
+            this.props.getContacts(this.props.location.page);
         }
     }
 
@@ -62,7 +62,7 @@ class LabelsApp extends Component {
                     innerScroll
                 />
                 <EditDialog/>
-                <ConfirmDialog/>
+                <ConfirmDialog history={this.props.history} />
             </React.Fragment>
         )
     };
