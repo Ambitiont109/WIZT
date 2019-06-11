@@ -14,16 +14,16 @@ const Widget4 = ({data, theme, isLoggedIn}) => {
 
             <div className="p-16 flex flex-row items-end flex-wrap">
 
-                <div className="pr-16">
+                <div className="w-full">
                     <Typography className="h3" color="textSecondary">
                         {isLoggedIn? "Images" : "Users" }
                    </Typography>
-                    <Typography className="text-56 font-300 leading-none mt-8">
+                    <Typography className="text-64 font-300 leading-none mt-8" align="center">
                         {data.visits.value}
                     </Typography>
                 </div>
 
-                <div className="py-4 text-16 flex flex-row items-center">
+                {/* <div className="py-4 text-16 flex flex-row items-center">
                     <div className="flex flex-row items-center">
                         {data.visits.ofTarget > 0 && (
                             <Icon className="text-green mr-4">trending_up</Icon>
@@ -34,7 +34,7 @@ const Widget4 = ({data, theme, isLoggedIn}) => {
                         <Typography>{data.visits.ofTarget}%</Typography>
                     </div>
                     <Typography className="ml-4 whitespace-no-wrap">of target</Typography>
-                </div>
+                </div> */}
 
             </div>
         </Card>

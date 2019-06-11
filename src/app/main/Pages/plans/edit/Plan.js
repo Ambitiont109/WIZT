@@ -53,8 +53,8 @@ import ConfirmDialog from "./ConfirmDialog";
         label: '$',
       },
       {
-        value: 'EUR',
-        label: '€',
+        value: 'SGD',
+        label: 'S$',
       },
    ];
 
@@ -98,8 +98,13 @@ class Plan extends Component {
    }
 
    componentDidMount() {
-      if(this.props.data) {
-         const icon = this.props.data.icon.toString().slice(33);
+      let icon;
+      if(!this.props.data.icon) {
+         icon = "";
+         this.setState({ ...this.props.data, fileName: icon})
+      }
+      else {
+         icon = this.props.data.icon.toString().slice(33);
          this.setState({ ...this.props.data, fileName: icon})
       }
    }

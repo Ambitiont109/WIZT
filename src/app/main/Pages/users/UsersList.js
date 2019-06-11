@@ -51,23 +51,39 @@ class UsersList extends Component {
         this.setState({
             pageSize: state.pageSize,
         })
-        axios.post(requestConfig.baseUrl+"/admin/users/pagination/", {pagination_size: state.pageSize})
         var params = {
             page: ""
         }
 
-        if(state.page === 0){
+        if(this.state.pageSize !== state.pageSize ) {
+            console.log("========================>other page")
             params = {
-                page: 1
+                page: 1,
+                page_size: state.pageSize
             }
             this.props.getContacts(params);
         }
-        else{
+        else {
             params = {
-                page:state.page+1,
+                page: state.page+1,
+                page_size: state.pageSize
             }
             this.props.getContacts(params)
         }
+        // if(state.page === 0){
+        //     params = {
+        //         page: 1,
+        //         page_size: state.pageSize
+        //     }
+        //     this.props.getContacts(params);
+        // }
+        // else{
+        //     params = {
+        //         page: state.page+1,
+        //         page_size: state.pageSize
+        //     }
+        //     this.props.getContacts(params)
+        // }
     };
 
     dateFormat = (date) => {

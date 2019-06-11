@@ -60,7 +60,7 @@ export function getWidgets()
                 },
                 dailyVisitors : {
                     visits   : {
-                        value   : response.data.users,
+                        value   : response.data.users-1,
                         ofTarget: -9
                     },
                     chartType: 'bar',

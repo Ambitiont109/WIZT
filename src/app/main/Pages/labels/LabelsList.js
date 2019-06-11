@@ -45,23 +45,25 @@ class LabelsList extends Component {
     fetchData = (state, instance) => {
         //Running when changes occure on table.
         // Request the data however you want.  Here, we'll use our mocked service we created earlier
+        console.log(state.pageSize)
         this.setState({
             pageSize: state.pageSize,
         })
-        axios.post(requestConfig.baseUrl+"/admin/labels/pagination/", {pagination_size: state.pageSize})
         var params = {
             page: ""
         }
 
         if(state.page === 0){
             params = {
-                page: 1
+                page: 1,
+                page_size: state.pageSize
             }
             this.props.getContacts(params);
         }
         else{
             params = {
-                page:state.page+1,
+                page: state.page+1,
+                page_size: state.pageSize
             }
             this.props.getContacts(params)
         }
@@ -73,7 +75,7 @@ class LabelsList extends Component {
             var result = jsObjects.filter(obj => {
                     return obj.is_cover === true
                 })
-            let results = result.map(a => a.url);
+            let results = result.map(a => a.thumbnail);
             return  <Avatar  alt={row.original.name} src={results[0]} style={{borderRadius:0}} />
         }
     }

@@ -37,7 +37,7 @@ class LabelsList extends Component {
             var result = jsObjects.filter(obj => {
                     return obj.is_cover === true
                 })
-            let results = result.map(a => a.url);
+            let results = result.map(a => a.thumbnail);
             return  <Avatar  alt={row.original.name} src={results[0]} style={{borderRadius:0}} />
         }
     };

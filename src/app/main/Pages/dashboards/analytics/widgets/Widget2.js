@@ -13,14 +13,14 @@ const Widget2 = ({data, theme}) => {
 
             <div className="p-16  flex flex-row flex-wrap items-end">
 
-                <div className="pr-16">
+                <div className="w-full">
                     <Typography className="h3" color="textSecondary">Earnings</Typography>
-                    <Typography className="text-56 font-300 leading-none mt-8">
+                    <Typography className="text-64 font-300 leading-none mt-8" align="center">
                         {data.conversion.value}
                     </Typography>
                 </div>
 
-                <div className="py-4 text-16 flex flex-row items-center">
+                {/* <div className="py-4 text-16 flex flex-row items-center">
                     <div className="flex flex-row items-center">
                         {data.conversion.ofTarget > 0 && (
                             <Icon className="text-green mr-4">trending_up</Icon>
@@ -31,7 +31,7 @@ const Widget2 = ({data, theme}) => {
                         <Typography>{data.conversion.ofTarget}%</Typography>
                     </div>
                     <Typography className="ml-4 whitespace-no-wrap">of target</Typography>
-                </div>
+                </div> */}
 
             </div>
 
