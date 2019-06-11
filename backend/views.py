@@ -488,9 +488,60 @@ class FloorPlanViewSet(viewsets.ModelViewSet):
 
 class TrainViewSet(viewsets.ModelViewSet):
     serializer_class = TrainSerializer
-    queryset = Train.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
 
-    
+    def get_queryset(self):
+        self.request.data['user'] = self.request.user.id
+        return Train.objects.filter(user=self.request.user)
+
+    def update(self,request,pk):
+        try:
+            train = Train.objects.get(pk=pk)
+        except Train.DoesNotExist:
+            raise NotFound()
+        self.request.data['user'] = self.request.user.id
+        serializer = TrainSerializer(instance=train, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        images = request.data['images']
+        origin_images = train.trainimage_set.all()
+
+        for image in origin_images:
+            image.delete()
+        
+        for image in images:
+            record = TrainImage(train=train, url=image['url'], thumbnail=image['thumbnail'])
+            record.save()
+
+        train = serializer.save()
+        serializer = TrainSerializer(train)
+        return Response(serializer.data)
+
+    def create(self, request):
+        self.request.data['user'] = self.request.user.id
+        serializer = TrainSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        images = request.data['images']
+        train = serializer.save()
+        for image in images:
+            record = TrainImage(train=train, url=image['url'], thumbnail=image['thumbnail'])
+            record.save()
+        serializer = TrainSerializer(train)
+        return Response(serializer.data)
+
+
+# @api_view(['GET'])
+# def get_all_trains(request):
+#     trains = Train.objects.all()
+#     serializer = TrainSerializer(trains,many=True)
+#     return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+class TrainAllViewSet(viewsets.ModelViewSet):
+    serializer_class = TrainSerializer
+    queryset = Train.objects.all()
+        
+
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer

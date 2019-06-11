@@ -234,7 +234,19 @@ class FileSerializer(serializers.Serializer):
     name = serializers.CharField()
 
 
+class TrainImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrainImage
+        extra_kwargs = {'train': {'write_only': True}}
+        fields = '__all__'
+
+
 class TrainSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()    # this fields always read only field
     class Meta:
         model = Train
         fields = '__all__'
+
+    def get_images(self, instance):        
+        images = instance.trainimage_set.all().order_by('created_at')
+        return TrainImageSerializer(images, many=True).data

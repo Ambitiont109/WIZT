@@ -226,6 +226,19 @@ class Train(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     train_class = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
-    url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class TrainImage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    train = models.ForeignKey(Train, on_delete=models.CASCADE)
+    url = models.URLField(max_length=150)
+    thumbnail = models.URLField(max_length=150)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = "train_images"
+        indexes = [
+            models.Index(fields=['train']),
+        ]

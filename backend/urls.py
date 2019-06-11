@@ -36,6 +36,7 @@ urlpatterns = [
     # path('stripe/doSubscription/',stripe.doSubscription),
     path('subscriptions/',stripe.doSubscription),
     path('stripe/deleteSubscription/',stripe.deleteSubscription),
+    path('trains/all/',TrainAllViewSet.as_view({'get':'list'})),
     path('', include(router.urls)),
 
 ]
