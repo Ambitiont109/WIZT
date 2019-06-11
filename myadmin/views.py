@@ -153,6 +153,7 @@ class UsersViewSet(viewsets.ModelViewSet,):
     pagination_class = pagination.PageNumberPagination
 
     def get_queryset(self):
+        self.pagination_class.page_size_query_param = 'page_size'
         return User.objects.all().exclude(is_superuser=True)
 
     def retrieve(self, request, pk=None):
@@ -180,6 +181,7 @@ class LabelViewSet(viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_queryset(self):
+        self.pagination_class.page_size_query_param = 'page_size'
         return Label.objects.order_by('-updated_at').all()
 
     @action(methods=['POST'], detail=False,url_path='pagination')  # set pagination size
@@ -206,6 +208,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         else:
             return TransactionSerializer
     def get_queryset(self):
+        self.pagination_class.page_size_query_param = 'page_size'
         return Transaction.objects.all()
 
     @action(methods=['POST'], detail=False,url_path='pagination')  # set pagination size
@@ -233,6 +236,7 @@ class NotificaionViewSet(viewsets.ModelViewSet):
     pagination_class = pagination.PageNumberPagination
 
     def get_serializer_class(self):
+        self.pagination_class.page_size_query_param = 'page_size'
         if self.action == 'list' or self.action == 'retrieve':
             return NotificationReadSerializer
         else:
