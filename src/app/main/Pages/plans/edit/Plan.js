@@ -99,7 +99,7 @@ class Plan extends Component {
 
    componentDidMount() {
       let icon;
-      if(!this.props.data.icon) {
+      if(this.props.data === null) {
          icon = "";
          this.setState({ ...this.props.data, fileName: icon})
       }

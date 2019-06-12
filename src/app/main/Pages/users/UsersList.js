@@ -14,7 +14,8 @@ class UsersList extends Component {
     constructor() {
         super();
         this.state = {
-            pageSize: "",
+            pageSize: 10,
+            page: 0
         };
     }
     state = {
@@ -44,47 +45,37 @@ class UsersList extends Component {
         this.props.history.push('/app/pages/profile')
     }
 
-    fetchData = (state, instance) => {
-        //Running when changes occure on table.
-        // Request the data however you want.  Here, we'll use our mocked service we created earlier
-        console.log(state.page)
-        this.setState({
-            pageSize: state.pageSize,
-        })
-        var params = {
-            page: ""
+    componentDidMount() {
+        let params;
+        params = {
+            page: 1,
+            page_size: 10
         }
+        this.props.getContacts(params);
+    }
 
-        if(this.state.pageSize !== state.pageSize ) {
-            console.log("========================>other page")
-            params = {
-                page: 1,
-                page_size: state.pageSize
-            }
-            this.props.getContacts(params);
+    onPageChange = (pageIndex) => {
+        let params;
+        this.setState({page:pageIndex});
+        params = {
+            page: pageIndex+1,
+            page_size: this.state.pageSize,
         }
-        else {
-            params = {
-                page: state.page+1,
-                page_size: state.pageSize
-            }
-            this.props.getContacts(params)
+        this.props.getContacts(params);
+    }
+
+    onPageSizeChange = (pageIndex, pageSize) => {
+        let params;
+        this.setState({
+            page: 0,
+            pageSize:pageIndex
+        });
+        params = {
+            page: 1,
+            page_size: pageIndex,
         }
-        // if(state.page === 0){
-        //     params = {
-        //         page: 1,
-        //         page_size: state.pageSize
-        //     }
-        //     this.props.getContacts(params);
-        // }
-        // else{
-        //     params = {
-        //         page: state.page+1,
-        //         page_size: state.pageSize
-        //     }
-        //     this.props.getContacts(params)
-        // }
-    };
+        this.props.getContacts(params);
+    }
 
     dateFormat = (date) => {
         var d = new Date(date);
@@ -297,10 +288,14 @@ class UsersList extends Component {
                             )
                         }
                     ]}
+                    page={this.state.page}
+                    pageSize={this.state.pageSize}
                     pages={pages}
-                    manual
+                    onPageChange={this.onPageChange}
+                    onPageSizeChange={this.onPageSizeChange}
                     onFetchData={this.fetchData}
                     defaultPageSize={10}
+                    manual
                     noDataText="No contacts found"
                 />
             </FuseAnimate>
