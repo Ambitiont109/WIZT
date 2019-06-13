@@ -37,6 +37,7 @@ urlpatterns = [
     path('subscriptions/',stripe.doSubscription),
     path('stripe/deleteSubscription/',stripe.deleteSubscription),
     path('trains/all/',TrainAllViewSet.as_view({'get':'list'})),
+    path('trains/all/<uuid:pk>/',TrainAllViewSet.as_view({'patch':'patch'})),
     path('', include(router.urls)),
 
 ]

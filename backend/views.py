@@ -494,6 +494,24 @@ class TrainViewSet(viewsets.ModelViewSet):
         self.request.data['user'] = self.request.user.id
         return Train.objects.filter(user=self.request.user)
 
+    def list(self,request, *args, **kwargs):
+        
+        self.request.data['user'] = self.request.user.id
+        is_trained = self.request.GET.get('is_trained',None)
+        queryset = None
+        if is_trained:
+            queryset = Train.objects.filter(user=self.request.user,is_trained=is_trained)
+        else:
+            queryset = Train.objects.filter(user=self.request.user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def update(self,request,pk):
         try:
             train = Train.objects.get(pk=pk)
@@ -540,7 +558,36 @@ class TrainViewSet(viewsets.ModelViewSet):
 class TrainAllViewSet(viewsets.ModelViewSet):
     serializer_class = TrainSerializer
     queryset = Train.objects.all()
-        
+    
+    def list(self,request, *args, **kwargs):
+        is_trained = self.request.GET.get('is_trained',None)
+        queryset = None
+        if is_trained:
+            queryset = Train.objects.filter(is_trained=is_trained)
+        else:
+            queryset = Train.objects.all()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def patch(self,request,**kwargs):
+        instance = self.get_object()
+        is_trained = request.data.get('is_trained',False)
+        serializer = self.get_serializer(instance, data={'is_trained':is_trained}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

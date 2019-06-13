@@ -226,6 +226,7 @@ class Train(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     train_class = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
+    is_trained =  models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

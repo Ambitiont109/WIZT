@@ -234,7 +234,7 @@ class NotificaionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,IsAdminUser)
     serializer_class = NotificationWriteSerializer
     pagination_class = pagination.PageNumberPagination
-
+    
     def get_serializer_class(self):
         self.pagination_class.page_size_query_param = 'page_size'
         if self.action == 'list' or self.action == 'retrieve':
