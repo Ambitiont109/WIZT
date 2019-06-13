@@ -163,13 +163,11 @@ export function logoutUser()
         
         // const user = getState().auth.user;
         const login = getState().auth.login;
-        console.log(login.success)
 
         if ( login.success === false )
         {
             return null;
         }
-        console.log(history)
         history.push({
             pathname: '/app/pages/auth/login'
         });

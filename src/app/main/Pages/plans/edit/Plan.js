@@ -99,7 +99,7 @@ class Plan extends Component {
 
    componentDidMount() {
       let icon;
-      if(this.props.data === null) {
+      if(this.props.data.icon === null) {
          icon = "";
          this.setState({ ...this.props.data, fileName: icon})
       }
@@ -231,7 +231,6 @@ class Plan extends Component {
       const {classes} = this.props;
       const infor = this.state.infor;
       const data = this.state;
-      console.log(this.props)
       return (
       <React.Fragment>
          <FuseAnimateGroup animation="transition.shrinkIn" delay={300} duration={400}>

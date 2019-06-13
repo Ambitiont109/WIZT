@@ -27,7 +27,6 @@ class ConfirmDialog extends React.Component {
   };
 
   removeContact = (userId) => {
-    console.log(userId)
     axios.delete(requestConfig.baseUrl+"/admin/labels/"+userId+"/").then((res)=>this.ReturnMainPage());
   };
 

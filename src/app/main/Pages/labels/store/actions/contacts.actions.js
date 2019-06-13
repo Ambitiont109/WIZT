@@ -24,11 +24,9 @@ export const CLOSE_CONFIRM_DIALOG = '[CONTACTS APP] CLOSE CONFIRM DIALOG';
 
 export function getContacts(params)
 {
-    console.log(params);
     const request = axios.get(requestConfig.baseUrl+"/admin/labels/", {params});
     return (dispatch) =>
         request.then((response) => {
-            console.log(response.data.results)
             dispatch({
                 type   : GET_CONTACTS,
                 payload: response.data.results,

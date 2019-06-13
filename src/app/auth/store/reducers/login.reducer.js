@@ -17,7 +17,6 @@ const login = function (state = initialState, action) {
         }
         case Actions.LOGIN_ERROR:
         {
-            console.log(action.payload)
             return {
                 success: false,
                 error  : action.payload

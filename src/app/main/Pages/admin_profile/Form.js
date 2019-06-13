@@ -74,8 +74,6 @@ const styles = theme => ({
   }
 
   render(){
-    console.log(this.state)
-    // const {name, email} = this.props.profile
     const {canSubmit} = this.state;
     return(
       <React.Fragment>

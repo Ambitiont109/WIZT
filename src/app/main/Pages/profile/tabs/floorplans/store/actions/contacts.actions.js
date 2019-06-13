@@ -82,7 +82,6 @@ export function closeNewContactDialog()
 
 export function confirmDialog(user_id) 
 {
-    console.log("====================>"+user_id)
     return {
         type: OPEN_CONFIRM_DIALOG,
         data: user_id

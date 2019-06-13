@@ -30,7 +30,7 @@ class AddPlan extends Component {
                 }
                 content={
                     <div className="p-24">
-                        <Plan data={null}/>
+                        <Plan data={{icon: null}}/>
                     </div>
                 }
             />

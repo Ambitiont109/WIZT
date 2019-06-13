@@ -72,9 +72,7 @@ const styles = theme => ({
     }
 
     render(){
-        console.log(this.state)
         const {canSubmit, new_password, confirm_password} = this.state;
-        
         return(
         <React.Fragment>
         <FuseAnimateGroup animation="transition.shrinkIn" delay={300} duration={400}>

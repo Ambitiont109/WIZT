@@ -285,7 +285,8 @@ class UsersList extends Component {
                                         <Icon>delete</Icon>
                                     </IconButton>
                                 </div>
-                            )
+                            ),
+                            className: "justify-center"
                         }
                     ]}
                     page={this.state.page}

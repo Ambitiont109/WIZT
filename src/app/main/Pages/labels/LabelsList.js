@@ -218,7 +218,8 @@ class LabelsList extends Component {
                                         <Icon>delete</Icon>
                                     </IconButton>
                                 </div>
-                            )
+                            ),
+                            className: "justify-center"
                         }
                     ]}
                     loading={loading}

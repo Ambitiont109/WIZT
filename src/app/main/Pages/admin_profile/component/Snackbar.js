@@ -16,8 +16,6 @@ class SimpleSnackbar extends React.Component {
     }
     
     static getDerivedStateFromProps(props, prevState) {
-        console.log(props)
-        console.log(prevState)
         if(props.open !== prevState.open) {
             return {open: props.open};
         }

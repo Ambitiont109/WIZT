@@ -28,7 +28,6 @@ class ConfirmDialog extends React.Component {
 
   removeContact = (item_id) => {
     let user_id = localStorage.getItem("item_id")
-    console.log(item_id)
     axios.delete(requestConfig.baseUrl+"/admin/users/"+user_id+"/floorplans/"+item_id+"/").then((res)=>this.ReturnMainPage());
   };
 

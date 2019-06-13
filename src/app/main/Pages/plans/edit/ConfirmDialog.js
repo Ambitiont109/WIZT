@@ -24,7 +24,6 @@ class ConfirmDialog extends React.Component {
   }
 
   static getDerivedStateFromProps(props, prevState) {
-    console.log(prevState.open)
     if(props.is_delete !== prevState.open) {
       return {
         open: true,

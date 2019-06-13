@@ -55,7 +55,6 @@ class AddNote extends Component {
 
     render()
     {
-        console.log(this.state)
         return (
             <FusePageSimple
                 header={
