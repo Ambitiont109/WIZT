@@ -69,7 +69,7 @@ class UserMenu extends Component {
                         paper: "py-8"
                     }}
                 >
-                    {login.success === false ? (
+                    {!localStorage.getItem("jwt_access_token") ? (
                         <React.Fragment>
                             <MenuItem component={Link} to="/app/pages/auth/login">
                                 <ListItemIcon>

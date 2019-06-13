@@ -130,11 +130,6 @@ class AnalyticsDashboardApp extends Component {
                 <FuseAnimate animation="transition.slideUpIn" delay={200}>
                     <div className="flex flex-col md:flex-row sm:p-8 container">
                         <div className="flex flex-1 flex-col min-w-0">
-                            <FuseAnimate delay={600}>
-                                <Typography className="p-16 pb-8 text-18 font-300">
-                                    How are your active users trending over time?
-                                </Typography>
-                            </FuseAnimate>
                             <div className="flex flex-col sm:flex sm:flex-row pb-32">
                                 <div className="widget flex w-full sm:w-1/4 p-16">
                                     <Widget4 data={widgets.widget4} isLoggedIn={false} />

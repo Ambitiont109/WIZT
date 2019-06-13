@@ -3,6 +3,7 @@ import {matchRoutes} from 'react-router-config';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import AppContext from 'app/AppContext';
+import axios from "axios";
 
 class FuseAuthorization extends Component {
 
@@ -12,6 +13,7 @@ class FuseAuthorization extends Component {
         const {routes} = context;
         this.state = {
             login:false,
+            location: "",
             accessGranted: true,
         };
     }
@@ -26,11 +28,15 @@ class FuseAuthorization extends Component {
         this.redirectRoute(this.props);
     }
 
+    
     static getDerivedStateFromProps(props, state)
     {
         const {location, user, login} = props;
+        console.log(location)
+        console.log(login.success)
         return {
             login:login.success,
+            location: location
         };
     }
 
@@ -47,8 +53,16 @@ class FuseAuthorization extends Component {
         User is guest
         Redirect to Login Page
         */
-        if ( login.success === false )
+       let position = pathname;
+       console.log(localStorage.getItem("jwt_access_token"))
+       if(pathname === "/app/pages/auth/login"){
+           position = '/app/pages/dashboards';
+       }
+       console.log(position)
+       
+        if ( !localStorage.getItem("jwt_access_token") )
         {
+            console.log(login.success)
             history.push({
                 pathname: '/app/pages/auth/login',
                 state   : {redirectUrl: pathname}
@@ -61,7 +75,8 @@ class FuseAuthorization extends Component {
         */
         else
         {
-            const redirectUrl =  '/';
+            axios.defaults.headers.common['Authorization'] = localStorage.getItem("jwt_access_token");
+            const redirectUrl = position ? position : '/app/pages/dashboards';
             history.push({
                 pathname: redirectUrl
             });

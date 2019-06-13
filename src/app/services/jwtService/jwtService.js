@@ -122,6 +122,7 @@ class jwtService extends FuseUtils.EventEmitter {
         }
         else
         {
+            console.log("==================>Jwtlogout")
             localStorage.removeItem('jwt_access_token');
             delete axios.defaults.headers.common['Authorization'];
         }

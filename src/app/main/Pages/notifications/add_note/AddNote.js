@@ -68,7 +68,7 @@ class AddNote extends Component {
                     </div>
                 }
                 contentToolbar={
-                    <div className="px-24"><h4></h4></div>
+                    <div className="px-24"></div>
                 }
                 content={
                     <div className="p-24 flex items-center justify-center" >

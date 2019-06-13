@@ -163,21 +163,22 @@ export function logoutUser()
         
         // const user = getState().auth.user;
         const login = getState().auth.login;
+        console.log(localStorage.getItem('jwt_access_token'))
 
-        if ( login.success === false )
-        {
-            return null;
-        }
-        history.push({
-            pathname: '/app/pages/auth/login'
-        });
+        // if ( !localStorage.getItem('jwt_access_token') )
+        // {
+        //     return null;
+        // }
         
         jwtService.logout();
         dispatch(setInitialSettings());
-
+        
         dispatch({
             type: ADMIN_LOGGED_OUT
         })
+        history.push({
+            pathname: '/app/pages/auth/login'
+        });
     }
 }
 

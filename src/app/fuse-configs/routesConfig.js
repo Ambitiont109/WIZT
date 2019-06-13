@@ -13,7 +13,7 @@ const routeConfigs = [
     ...FuseUtils.generateRoutesFromConfigs(routeConfigs),
     {
         path     : '/',
-        component: () => <Redirect to="/app/pages/dashboards"/>
+        component: () => <Redirect to="/app/pages/auth/login"/>
     }
 ];
 

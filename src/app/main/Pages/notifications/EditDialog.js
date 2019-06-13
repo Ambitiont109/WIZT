@@ -147,7 +147,7 @@ class EditDialog extends Component {
                                 this.closeComposeDialog();
                             }}
                         >
-                          Send
+                          Send 
                         </Button>
                     </DialogActions>
                 )}
