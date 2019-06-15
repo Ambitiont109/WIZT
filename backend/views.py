@@ -6,7 +6,7 @@ from django.db.models import Q
 from rest_framework import viewsets,mixins
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.exceptions import MethodNotAllowed,NotFound
+from rest_framework.exceptions import MethodNotAllowed,NotFound, AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
@@ -19,6 +19,7 @@ from rest_framework.decorators import api_view, permission_classes,action,parser
 from rest_framework import permissions,parsers
 from rest_framework.permissions import IsAuthenticated
 from botocore.exceptions import ClientError
+from base64 import b64encode
 
 from django.http import Http404
 from rest_framework.viewsets import ModelViewSet
@@ -29,6 +30,20 @@ from .models import *
 import boto3,datetime
 from dateutil.relativedelta import relativedelta
 from wizt.utils import send_push_notification
+
+from rest_framework import authentication
+
+
+class CustomBasicAuthentication(authentication.BaseAuthentication):
+    def authenticate(self, request):
+        userAndPass = b64encode(b"ai:BB5SfDH8xk2hLdm0s1UrfiMBIyRIfsanDCYmTzSkzCeUYS5RdOlQl50HbW0UXHHd").decode("ascii")
+        auth = 'Basic %s' %  userAndPass
+        header = request.META
+        
+        if not header['HTTP_AUTHORIZATION'] == auth:
+            raise AuthenticationFailed()
+        return None
+
 
 
 def create_notification(send_by, send_to, subject, message, message_type):
@@ -559,13 +574,29 @@ class TrainAllViewSet(viewsets.ModelViewSet):
     serializer_class = TrainSerializer
     queryset = Train.objects.all()
     
+    def custom_authenticate(self,request):
+        userAndPass = b64encode(b"ai:BB5SfDH8xk2hLdm0s1UrfiMBIyRIfsanDCYmTzSkzCeUYS5RdOlQl50HbW0UXHHd").decode("ascii")
+        auth = 'Basic %s' %  userAndPass
+        header = request.META
+        return header['HTTP_AUTHORIZATION'] == auth
+
     def list(self,request, *args, **kwargs):
+        if not self.custom_authenticate(request):
+            raise AuthenticationFailed()         
         is_trained = self.request.GET.get('is_trained',None)
+        user_id = self.request.GET.get('user_id',None)
         queryset = None
         if is_trained:
             queryset = Train.objects.filter(is_trained=is_trained)
         else:
             queryset = Train.objects.all()
+
+        if user_id:
+            try:
+                user = User.objects.get(pk=user_id)
+            except User.DoesNotExist:
+                raise NotFound()
+            queryset = queryset.filter(user = user)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -576,6 +607,8 @@ class TrainAllViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def patch(self,request,**kwargs):
+        if not self.custom_authenticate(request):
+            raise AuthenticationFailed() 
         instance = self.get_object()
         is_trained = request.data.get('is_trained',False)
         serializer = self.get_serializer(instance, data={'is_trained':is_trained}, partial=True)
@@ -588,6 +621,42 @@ class TrainAllViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
         return Response(serializer.data)
 
+class TrainModelViewSet(viewsets.ModelViewSet):     # for AI api, so it uses Basic Authentication
+
+    serializer_class = TrainModelSerializer
+    queryset = TrainModel.objects.all()
+    authentication_classes = (CustomBasicAuthentication,)
+
+    def create(self,request, *args, **kwargs):
+        try:
+            user = User.objects.get(pk=request.data['user'])
+            instance = TrainModel.objects.filter(user=user).first()
+            serializer = self.get_serializer(instance = instance, data=request.data)
+        except User.DoesNotExist:
+            serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        train_model = serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        serializer = TrainModelSerializer(instance = train_model)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class TrainModelViewSetForApi(viewsets.ModelViewSet):     # for mobile api, so it uses Token Authentication
+
+    serializer_class = TrainModelSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        self.request.data['user'] = self.request.user.id
+        return TrainModel.objects.filter(user=self.request.user)
+
+    def create(self,request, *args, **kwargs):
+        request.data['user'] = self.request.user.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        train_model = serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        serializer = TrainModelSerializer(instance = train_model)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -627,3 +696,4 @@ def test1(request):
     response = client.get_user(AccessToken=access_token.replace('Bearer ', ''))
 
     return Response(response)
+

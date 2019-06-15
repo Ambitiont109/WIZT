@@ -13,17 +13,17 @@ stripe.api_key = "sk_test_gCC3ppShZfCsyYgOHZ2L22iN"
 def handle_error(e):
 	error_text = ""
 	if(type(e) == stripe.error.CardError):
-		error_text =  "Strip Card Error"
+		error_text =  "Stripe Card Error"
 	elif(type(e) == stripe.error.StripeError ):
-		error_text =  "Strip InvalidRequestError"
+		error_text =  "Stripe InvalidRequestError"
 	elif(type(e) == stripe.error.InvalidRequestError ):
-		error_text =  "Strip InvalidRequestError"
+		error_text =  "Stripe InvalidRequestError"
 	elif(type(e) == stripe.error.AuthenticationError ):
-		error_text =  "Strip InvalidRequestError"
+		error_text =  "Stripe InvalidRequestError"
 	elif(type(e) == stripe.error.APIConnectionError ):
-		error_text =  "Strip InvalidRequestError"
+		error_text =  "Stripe InvalidRequestError"
 	elif(type(e) == stripe.error.InvalidRequestError ):
-		error_text =  "Strip InvalidRequestError"
+		error_text =  "Stripe InvalidRequestError"
 	else:
 		error_text =  str(type(e))
 	return Response(error_text,status=status.HTTP_400_BAD_REQUEST)

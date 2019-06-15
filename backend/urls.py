@@ -14,7 +14,11 @@ router.register('notifications',NotificaionViewSet,basename='notification')
 router.register('share/labels',ShareLabelViewSet,basename='sharelabel')
 router.register('plans',PlanViewSet,basename='plan')
 router.register('floorplans',FloorPlanViewSet,basename='floorplan')
+router.register('trains/models',TrainModelViewSetForApi,basename='train_models_for_mobile')
 router.register('trains',TrainViewSet,basename='train')
+router.register('train_models',TrainModelViewSet,basename='train_models')
+
+
 
 urlpatterns = [
     # Authentication

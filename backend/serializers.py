@@ -250,3 +250,10 @@ class TrainSerializer(serializers.ModelSerializer):
     def get_images(self, instance):        
         images = instance.trainimage_set.all().order_by('created_at')
         return TrainImageSerializer(images, many=True).data
+
+
+class TrainModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TrainModel
+        fields = '__all__'
