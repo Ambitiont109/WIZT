@@ -38,6 +38,7 @@ class UsersList extends Component {
     closeSelectedContactsMenu = () => {
         this.setState({selectedContactsMenu: null});
     };
+    
     onClickEdit = (id, name, imgURL) => {
         localStorage.setItem('item_id', id)
         localStorage.setItem('name', name)

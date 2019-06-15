@@ -12,6 +12,7 @@ export const PlansConfig = {
     },
     routes  : [
         {
+            exact    : true,
             path     : '/app/pages/plans',
             component: Plans
         }

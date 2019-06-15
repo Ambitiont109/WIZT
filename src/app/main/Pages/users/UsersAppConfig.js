@@ -16,14 +16,15 @@ export const UsersAppConfig = {
     // auth    : authRoles.admin,
     routes  : [
         {
-            path     : '/app/pages/users/',
+            exact    : true,
+            path     : '/app/pages/users',
             component: FuseLoadable({
                 loader: () => import('./UsersApp')
             })
         },
         {
             path     : '/app/users',
-            component: () => <Redirect to="/app/pages/users/"/>
+            component: () => <Redirect to="/app/pages/users"/>
         }
     ]
 };

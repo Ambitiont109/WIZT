@@ -13,6 +13,7 @@ export const AnalyticsDashboardAppConfig = {
     routes  : [
         {
             path     : '/app/pages/dashboards',
+            exact    : true,
             component: FuseLoadable({
                 loader: () => import('./AnalyticsDashboardApp')
             })

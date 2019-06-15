@@ -12,6 +12,7 @@ export const SettingConfig = {
     },
     routes  : [
         {
+            exact    : true,
             path     : '/setting',
             component: Setting
         }

@@ -53,16 +53,19 @@ class FuseAuthorization extends Component {
         User is guest
         Redirect to Login Page
         */
-       let position = pathname;
-       console.log(localStorage.getItem("jwt_access_token"))
-       if(pathname === "/app/pages/auth/login"){
-           position = '/app/pages/dashboards';
-       }
-       console.log(position)
+        let position = pathname;
+        if(pathname === "/app/pages/auth/login"){
+            position = '/app/pages/dashboards';
+        }
+        if(pathname === "/"){
+            position = '/app/pages/dashboards';
+            history.push({
+                pathname: position
+            });
+        }
        
         if ( !localStorage.getItem("jwt_access_token") )
         {
-            console.log(login.success)
             history.push({
                 pathname: '/app/pages/auth/login',
                 state   : {redirectUrl: pathname}
@@ -77,6 +80,7 @@ class FuseAuthorization extends Component {
         {
             axios.defaults.headers.common['Authorization'] = localStorage.getItem("jwt_access_token");
             const redirectUrl = position ? position : '/app/pages/dashboards';
+            console.log(redirectUrl)
             history.push({
                 pathname: redirectUrl
             });

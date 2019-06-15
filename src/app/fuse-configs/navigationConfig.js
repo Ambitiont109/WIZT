@@ -17,7 +17,7 @@ const navigationConfig = [
                 title: "Users",
                 type: "item",
                 icon: "people",
-                url: "/app/pages/users/"
+                url: "/app/pages/users"
             },
             {
                 'id'   : 'labels',
