@@ -224,7 +224,7 @@ class Transaction(models.Model):
 class Train(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    train_class = models.CharField(max_length=50)
+    label = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     is_trained =  models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)
