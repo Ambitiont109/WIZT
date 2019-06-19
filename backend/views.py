@@ -334,7 +334,7 @@ class FriendViewSet(viewsets.ModelViewSet):
         if request.data['from_user'] == request.data['to_user']:
             return Response("{'to_user':'It is same as from_user.'}",status=status.HTTP_400_BAD_REQUEST)
         friend = serializer.save()
-        create_notification(friend.from_user,friend.to_user,'Friend Request',"Fried Request Has Been Sent",1)
+        create_notification(friend.from_user,friend.to_user,'Friend Request',"Friend Request Has Been Sent",1)
         serializer = FriendReadSerializer(instance=friend)
         return Response(serializer.data)
 
