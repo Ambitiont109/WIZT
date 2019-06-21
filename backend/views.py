@@ -195,7 +195,15 @@ class LabelViewSet(viewsets.ModelViewSet):
             raise NotFound()
         serializer = LabelSerializer(instance=label, data=request.data,partial=True)
         print(serializer.initial_data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            if 'floor_plan' in serializer.errors:
+                data = request.data
+                data.pop('floor_plan')
+                serializer = LabelSerializer(instance=label, data=data,partial=True)
+                if not serializer.is_valid():
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         images = request.data['images']
         origin_images = label.image_set.all()
         img_cnt = len(images) - len(origin_images)
@@ -235,7 +243,15 @@ class LabelViewSet(viewsets.ModelViewSet):
             return Response("you have run out of label. please purchase label count",status=status.HTTP_405_METHOD_NOT_ALLOWED)
         serializer = LabelSerializer(data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if 'floor_plan' in serializer.errors:
+                data = request.data
+                data.pop('floor_plan')
+                serializer = LabelSerializer(data=data)
+                if not serializer.is_valid():
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
         images = request.data['images']
         img_cnt = len(images)
         if request.user.photo_cnt - img_cnt < 0 :

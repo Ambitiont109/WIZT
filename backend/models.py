@@ -54,6 +54,7 @@ class Label(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100,blank=True,null=True)
     tags = models.CharField(max_length=200)
+    floor_plan = models.OneToOneField('FloorPlan',on_delete=models.SET_NULL,null=True)
     ar_mark_image = models.CharField(max_length=150,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
