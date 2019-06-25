@@ -13,7 +13,7 @@ class User(AbstractUser):
     phone_number_verified = models.BooleanField(default=False)
     target_arn = models.CharField(max_length=100)
     device_type = models.CharField(max_length=50)
-    picture = models.URLField(max_length=100, null=True,blank=True)
+    picture = models.URLField(max_length=150, null=True,blank=True)
     total_label_count = models.IntegerField(default=0)
 
     label_in_use = models.IntegerField(default=0)
@@ -144,8 +144,8 @@ class FloorPlan(models.Model):
     user = models.ForeignKey(User, related_name='floor_plans', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     tags = models.CharField(max_length=300)
-    thumbnail = models.URLField()
-    image = models.URLField()
+    thumbnail = models.URLField(max_length=150)
+    image = models.URLField(max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -237,6 +237,7 @@ class TrainImage(models.Model):
     train = models.ForeignKey(Train, on_delete=models.CASCADE)
     url = models.URLField(max_length=150)
     thumbnail = models.URLField(max_length=150)
+    embedding = models.CharField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:
@@ -250,5 +251,6 @@ class TrainModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     url = models.URLField(max_length=150)
+    embedding = models.CharField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

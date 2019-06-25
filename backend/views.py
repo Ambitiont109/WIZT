@@ -27,7 +27,7 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from myadmin.serializers import UserSerializer as OtherUserSerializer
 from .models import *
-import boto3,datetime
+import boto3,datetime,requests
 from dateutil.relativedelta import relativedelta
 from wizt.utils import send_push_notification
 
@@ -517,6 +517,24 @@ class FloorPlanViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+def run_ai_train(user_id,records):
+    r=requests.get("http://127.0.0.1:5000/train?user_id=%d"%(user_id), headers={"content-type":"application/json","cache-control":"no-cache"})
+    if r.status_code == requests.codes.ok:        
+        for record in records:
+            # url = 'http://127.0.0.1:5000/embedding?image_url=https://s3.ap-southeast-1.amazonaws.com/wizt/image/aaa_000.jpg'
+            url = 'http://127.0.0.1:5000/embedding?image_url=' + record.url
+
+            headers = {"content-type":"application/json","cache-control":"no-cache"}
+            r = requests.get(url,headers=headers)
+            if r.status_code != requests.codes.ok:
+                return None
+            else:
+                record.embedding = r.text
+                record.save()
+        return True
+    return None
+
+
 class TrainViewSet(viewsets.ModelViewSet):
     serializer_class = TrainSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -563,7 +581,15 @@ class TrainViewSet(viewsets.ModelViewSet):
 
         train = serializer.save()
         serializer = TrainSerializer(train)
-        return Response(serializer.data)
+        try:
+            if run_ai_train(self.request.user.id,images) != None:
+                train.is_trained = True
+                train.save()
+                return Response(serializer.data)
+        except Exception as e:
+            return Response('Getting Exception in Train',status=status.HTTP_400_BAD_REQUEST) 
+        return Response('Getting Exception in Train',status=status.HTTP_400_BAD_REQUEST) 
+
 
     def create(self, request):
         self.request.data['user'] = self.request.user.id
@@ -572,11 +598,25 @@ class TrainViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         images = request.data['images']
         train = serializer.save()
+        records = []
         for image in images:
             record = TrainImage(train=train, url=image['url'], thumbnail=image['thumbnail'])
             record.save()
+            records.append(record)
+
         serializer = TrainSerializer(train)
-        return Response(serializer.data)
+        if run_ai_train(self.request.user.id,records) != None:
+            train.is_trained = True
+            train.save()
+            return Response(serializer.data)
+        try:
+            if run_ai_train(self.request.user.id,records) != None:
+                train.is_trained = True
+                train.save()
+                return Response(serializer.data)
+        except Exception as e:
+            return Response('Getting Exception in Train',status=status.HTTP_400_BAD_REQUEST) 
+        return Response('Getting Exception in Train',status=status.HTTP_400_BAD_REQUEST) 
 
 
 # @api_view(['GET'])
