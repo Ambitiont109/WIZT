@@ -518,20 +518,21 @@ class FloorPlanViewSet(viewsets.ModelViewSet):
 
 
 def run_ai_train(user_id,records):
-    r=requests.get("http://127.0.0.1:5000/train?user_id=%d"%(user_id), headers={"content-type":"application/json","cache-control":"no-cache"})
-    if r.status_code == requests.codes.ok:        
-        for record in records:
-            # url = 'http://127.0.0.1:5000/embedding?image_url=https://s3.ap-southeast-1.amazonaws.com/wizt/image/aaa_000.jpg'
-            url = 'http://127.0.0.1:5000/embedding?image_url=' + record.url
+    for record in records:
+        # url = 'http://127.0.0.1:5000/embedding?image_url=https://s3.ap-southeast-1.amazonaws.com/wizt/image/aaa_000.jpg'
+        url = 'http://127.0.0.1:5000/embedding?image_url=' + record.url
 
-            headers = {"content-type":"application/json","cache-control":"no-cache"}
-            r = requests.get(url,headers=headers)
-            if r.status_code != requests.codes.ok:
-                return None
-            else:
-                record.embedding = r.text
-                record.save()
+        headers = {"content-type":"application/json","cache-control":"no-cache"}
+        r = requests.get(url,headers=headers)
+        if r.status_code != requests.codes.ok:
+            return None
+        else:
+            record.embedding = r.text
+            record.save()        
+    r=requests.get("http://127.0.0.1:5000/train?user_id=%d"%(user_id), headers={"content-type":"application/json","cache-control":"no-cache"})
+    if r.status_code == requests.codes.ok:
         return True
+
     return None
 
 
