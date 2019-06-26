@@ -580,6 +580,7 @@ class TrainViewSet(viewsets.ModelViewSet):
             record.save()
 
         train = serializer.save()
+        train.is_trained = False
         serializer = TrainSerializer(train)
         try:
             if run_ai_train(self.request.user.id,images) != None:
@@ -605,10 +606,6 @@ class TrainViewSet(viewsets.ModelViewSet):
             records.append(record)
 
         serializer = TrainSerializer(train)
-        if run_ai_train(self.request.user.id,records) != None:
-            train.is_trained = True
-            train.save()
-            return Response(serializer.data)
         try:
             if run_ai_train(self.request.user.id,records) != None:
                 train.is_trained = True
