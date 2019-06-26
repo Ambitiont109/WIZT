@@ -574,16 +574,18 @@ class TrainViewSet(viewsets.ModelViewSet):
 
         for image in origin_images:
             image.delete()
-        
+
+        records = []
         for image in images:
             record = TrainImage(train=train, url=image['url'], thumbnail=image['thumbnail'])
             record.save()
+            records.append(record)
 
         train = serializer.save()
         train.is_trained = False
         serializer = TrainSerializer(train)
         try:
-            if run_ai_train(self.request.user.id,images) != None:
+            if run_ai_train(self.request.user.id,records) != None:
                 train.is_trained = True
                 train.save()
                 return Response(serializer.data)
