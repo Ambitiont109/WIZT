@@ -163,6 +163,7 @@ class Plan extends Component {
          const id = this.state.id;
          /**update plan.*/
          if(id) {
+            console.log(data)
             if(!this.state.imgChanged) {
                axios.patch(requestConfig.baseUrl+"/admin/plans/"+id+"/", data)
                .then((response) => {
@@ -458,12 +459,8 @@ class Plan extends Component {
                      <TextField
                         id="price"
                         name="price"
-                        value={this.state.age}
                         onChange={this.handleChange('price')}
                         type="number"
-                        InputLabelProps={{
-                           shrink: true,
-                        }}
                         variant="outlined"
                         inputProps={{
                            style: {
@@ -541,9 +538,6 @@ class Plan extends Component {
                            id="photo_count"
                            name="photo_count"
                            type="number"
-                           InputLabelProps={{
-                              shrink: true,
-                           }}
                            variant="outlined"
                            inputProps={{
                               style: {
@@ -579,9 +573,6 @@ class Plan extends Component {
                         id="outlined-number"
                         name="label_count"
                         type="number"
-                        InputLabelProps={{
-                           shrink: true,
-                        }}
                         variant="outlined"
                         inputProps={{
                            style: {

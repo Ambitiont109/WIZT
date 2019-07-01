@@ -206,7 +206,6 @@ class LabelsList extends Component {
                         {
                             Header: "",
                             width : 64,
-                            className: "justify-center",
                             Cell  : row => (
                                 <div className="flex items-center">
                                     <IconButton
