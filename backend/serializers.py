@@ -52,8 +52,8 @@ class FaceBookLoginSerializer(serializers.ModelSerializer):
                 if not pre_val or pre_val == '':
                     setattr(user,key,val)
         except ObjectDoesNotExist:
-            if User.objects.filter(phone_number=validated_data['phone_number']).exists():
-                raise serializers.ValidationError({"phone_number":["user with this phone_number already exists."]})
+            # if User.objects.filter(phone_number=validated_data['phone_number']).exists():
+            #     raise serializers.ValidationError({"phone_number":["user with this phone_number already exists."]})
             user = User.objects.create()
             for key,val in validated_data.items():
                 setattr(user,key,val)
@@ -86,8 +86,8 @@ class GoogleLoginSerializer(serializers.ModelSerializer):
                 if not pre_val or pre_val == '':
                     setattr(user,key,val)
         except ObjectDoesNotExist:
-            if User.objects.filter(phone_number=validated_data['phone_number']).exists():
-                raise serializers.ValidationError({"phone_number":["user with this phone_number already exists."]})
+            # if User.objects.filter(phone_number=validated_data['phone_number']).exists():
+            #     raise serializers.ValidationError({"phone_number":["user with this phone_number already exists."]})
             user = User.objects.create()
             for key,val in validated_data.items():
                 setattr(user,key,val)
