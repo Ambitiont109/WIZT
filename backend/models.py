@@ -8,7 +8,7 @@ class User(AbstractUser):
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=50, unique=True)
     email_verified = models.BooleanField(default=False)
-    phone_number = models.CharField(max_length=20, unique=True, null=True,blank=True)
+    phone_number = models.CharField(max_length=20, null=True,blank=True)
     phone_number_verified = models.BooleanField(default=False)
     target_arn = models.CharField(max_length=100)
     device_type = models.CharField(max_length=50)

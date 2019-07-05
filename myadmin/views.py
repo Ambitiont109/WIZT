@@ -82,7 +82,7 @@ def updatePassword(request):
     new_password = serializer.data['new_password']
     user = request.user
     if not user.check_password(current_password):
-        return Response('current password is incorrect ',status=status.HTTP_400_BAD_REQUEST)
+        return Response('current password is incorrect ',status=status.HTTP_401_UNAUTHORIZED)
     user.set_password(new_password)
     user.save()
     serializer = UserSerializerForRead(instance=user)

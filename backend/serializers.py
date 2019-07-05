@@ -36,7 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class FaceBookLoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=50, validators=[])
-    phone_number = serializers.CharField(max_length=20, validators=[])
+    phone_number = serializers.CharField(max_length=20, validators=[],required=False,allow_blank=True)
     class Meta:
         model = User
         fields = ('name','email','phone_number','facebook_id','email_verified','phone_number_verified','picture','target_arn','device_type')
@@ -57,9 +57,7 @@ class FaceBookLoginSerializer(serializers.ModelSerializer):
             user = User.objects.create()
             for key,val in validated_data.items():
                 setattr(user,key,val)
-            if user.phone_number == '':
-                user.phone_number = None
-            else:
+            if user.phone_number != '':
                 user.phone_number_verified = True
             user.username = validated_data['email']
             user.set_password(randomString())
@@ -72,7 +70,7 @@ class FaceBookLoginSerializer(serializers.ModelSerializer):
 
 class GoogleLoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=50, validators=[])
-    phone_number = serializers.CharField(max_length=20, validators=[])
+    phone_number = serializers.CharField(max_length=20, validators=[],required=False,allow_blank=True)
     class Meta:
         model = User
         fields = ('name','email','phone_number','google_id','email_verified','phone_number_verified','picture','target_arn','device_type')
@@ -93,9 +91,7 @@ class GoogleLoginSerializer(serializers.ModelSerializer):
             user = User.objects.create()
             for key,val in validated_data.items():
                 setattr(user,key,val)
-            if user.phone_number == '':
-                user.phone_number = None
-            else:
+            if user.phone_number != '':
                 user.phone_number_verified = True
             user.username = validated_data['email']
             user.set_password(randomString())
