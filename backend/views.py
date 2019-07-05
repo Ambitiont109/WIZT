@@ -26,7 +26,8 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from myadmin.serializers import UserSerializer as OtherUserSerializer
 from .models import *
-import boto3
+import boto3,datetime
+from dateutil.relativedelta import relativedelta
 from wizt.utils import send_push_notification
 
 # @api_view(['POST'])
@@ -76,6 +77,31 @@ def file_upload(request):
     return Response(file_serializer.data,status=status.HTTP_200_OK)
 
 
+def handle_login(user):
+    try:
+        subscribe_transaction_history = SubscribeTransaction.objects.filter(user=user,
+                subscribed_token_id=user.subscribed_token_id,
+                subscription_id=user.subscription_id).first()
+        if not subscribe_transaction_history:
+            print("Do not subscribed yet. user: %s" %(user.email,))
+            return 
+
+        subscribed_date = user.subscribed_date
+        subscribed_date = subscribed_date + relativedelta(months=+1)
+        now = datetime.datetime.now(datetime.timezone.utc)
+        
+        if subscribed_date <= now :
+            plan = user.subscribed_plan
+            user.label_in_use = user.label_in_use + plan.label_count
+            user.photo_in_use = user.label_in_use + plan.photo_count
+            user.subscribed_date = subscribed_date
+            user.save()
+            print("did the monthly subscription")
+
+    except ObjectDoesNotExist:
+        print("Do not subscribed yet. user: %s" %(user.email,))
+
+
 @api_view(['POST'])
 def login(request):
     try:
@@ -93,6 +119,7 @@ def login(request):
         user.target_arn = target_arn
         user.device_type = device_type
         user.save()
+        handle_login(user)
         token = Token.objects.get_or_create(user=user)
         return Response(token[0].key,status=status.HTTP_200_OK)
     except ObjectDoesNotExist:
@@ -113,6 +140,7 @@ def login_facebook(request):
     serializer = FaceBookLoginSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
+        handle_login(user)
         token = Token.objects.get_or_create(user=user)
         return Response(token[0].key,status=status.HTTP_200_OK)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
@@ -123,6 +151,7 @@ def login_google(request):
     serializer = GoogleLoginSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
+        handle_login(user)
         token = Token.objects.get_or_create(user=user)
         return Response(token[0].key,status=status.HTTP_200_OK)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
@@ -191,15 +220,23 @@ class LabelViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         request.data['user'] = request.user.id
+        if request.user.label_in_use <= 0:
+            return Response("you have run out of label. please purchase label count",status=status.HTTP_405_METHOD_NOT_ALLOWED)
         serializer = LabelSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        label = serializer.save()
-
         images = request.data['images']
+        img_cnt = len(images)
+        if request.user.photo_in_use - img_cnt < 0 :
+            return Response("you have run out of images. please purchase image count",status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        label = serializer.save()
+        request.user.label_in_use -= 1
+
         for image in images:
             record = Image(label=label, url=image['url'], thumbnail=image['thumbnail'], is_cover=image['is_cover'])
             record.save()
+        request.user.photo_in_use -= img_cnt
+        request.user.save()
         serializer = LabelSerializer(label)
 
         return Response(serializer.data)

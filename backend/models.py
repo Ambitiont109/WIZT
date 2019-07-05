@@ -24,6 +24,7 @@ class User(AbstractUser):
     subscribed_token_id = models.CharField(max_length=100,blank=True)   # customer source id
     subscribed_plan = models.ForeignKey('Plan',related_name='users',on_delete=models.CASCADE,null=True)
     subscription_id = models.CharField(max_length = 100,null=True)
+    subscribed_date = models.DateTimeField(null=True)
     #auth_part
     facebook_id = models.CharField(max_length = 100, blank=True,null=True)
     google_id = models.CharField(max_length=100,blank=True,null=True)
@@ -190,6 +191,8 @@ class SubscribeTransaction(models.Model):
     plan_name = models.CharField(max_length=100)
     plan_price = models.FloatField(null=True)
     plan_product_id = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Transaction(models.Model):

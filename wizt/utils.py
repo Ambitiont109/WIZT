@@ -32,3 +32,14 @@ def send_push_notification(target_arn, subject, message):
         Subject=subject,
         MessageStructure='string'
     )
+
+
+def send_broadcast_notification(topic_arn, subject, message):
+    client = boto3.client('sns', region_name='ap-southeast-1')
+    # target_arn = "arn:aws:sns:ap-southeast-1:417479686763:endpoint/GCM/wizt-new/1a298313-61dd-3e04-9b33-99f0cfa90210"
+    response = client.publish(
+        TopicArn=topic_arn,  # Target Amazon Resource Name
+        Message=message,
+        Subject=subject,
+        MessageStructure='string'
+    )
