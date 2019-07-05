@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import Plan,User,SubscribeTransaction,Transaction
 from .serializers import SubscribeSerializer
 import stripe
+import datetime
 from django.shortcuts import get_object_or_404
 stripe.api_key = "sk_test_gCC3ppShZfCsyYgOHZ2L22iN"
 
@@ -184,6 +185,8 @@ def doSubscription(request):
 	serializer.is_valid(raise_exception = True)
 	customerId = request.user.subscribed_customer_id
 	plan = serializer.validated_data['plan']
+	now = datetime.datetime.now()
+	request.user.subscribed_date = now
 	if plan.is_free:
 		request.user.subscribed_plan = plan
 		request.user.save()

@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
 from rest_framework import viewsets,status
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from wizt.utils import send_broadcast_notification
 import datetime
 # Create your views here.
 
@@ -97,6 +98,7 @@ def updateProfile(request):
     email = serializer.data['email']
     user = request.user
     user.name = name
+    user.username = email
     user.email = email
     user.save()
     serializer = UserSerializerForRead(instance=user)
@@ -167,6 +169,9 @@ class NotificaionViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         notification = serializer.save()
+        
+        send_broadcast_notification(request.user.target_arn,"admin",notification.message)
+
         headers = self.get_success_headers(serializer.data)
         serializer = NotificationReadSerializer(instance = notification)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
