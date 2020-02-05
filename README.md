@@ -1,4 +1,7 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
+This project is admin panel of WIZT app of google playstore
+Playstore link: https://play.google.com/store/apps/details?id=com.wizt&hl=en
+
 
 ## Available Scripts
 
